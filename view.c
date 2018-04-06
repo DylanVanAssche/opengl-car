@@ -7,32 +7,34 @@
 */
 #include "car.h"
 
-void drawAxes() {
-    printf("Drawing axes\n");
-    glLineWidth(AXIS_LINE_WIDTH);
-    glColor4fv(RED);
+void drawAxes(int axes) {
+    if(axes) {
+        printf("Drawing axes\n");
+        glLineWidth(AXIS_LINE_WIDTH);
+        glColor4fv(RED);
 
-    // Z axis
-	glBegin(GL_LINES);
-		glVertex3d(0.0, 0.0, 0.0);
-		glVertex3d(0.0, 0.0, AXIS_LENGTH);
-	glEnd();
-
-    // X axis
-    glPushMatrix();
-        glRotatef(90.0, 0.0, 1.0, 0.0);
-        glBegin(GL_LINES);
+        // Z axis
+    	glBegin(GL_LINES);
     		glVertex3d(0.0, 0.0, 0.0);
     		glVertex3d(0.0, 0.0, AXIS_LENGTH);
     	glEnd();
-    glPopMatrix();
 
-    // Y axis
-    glPushMatrix();
-    	glRotatef(-90.0, 1.0, 0.0, 0.0);
-        glBegin(GL_LINES);
-    		glVertex3d(0.0, 0.0, 0.0);
-    		glVertex3d(0.0, 0.0, AXIS_LENGTH);
-    	glEnd();
-    glPopMatrix();
+        // X axis
+        glPushMatrix();
+            glRotatef(90.0, 0.0, 1.0, 0.0);
+            glBegin(GL_LINES);
+        		glVertex3d(0.0, 0.0, 0.0);
+        		glVertex3d(0.0, 0.0, AXIS_LENGTH);
+        	glEnd();
+        glPopMatrix();
+
+        // Y axis
+        glPushMatrix();
+        	glRotatef(-90.0, 1.0, 0.0, 0.0);
+            glBegin(GL_LINES);
+        		glVertex3d(0.0, 0.0, 0.0);
+        		glVertex3d(0.0, 0.0, AXIS_LENGTH);
+        	glEnd();
+        glPopMatrix();
+    }
 }

@@ -8,11 +8,171 @@
 #include "car.h"
 
 // Draw the vehicle suspension
-void drawSuspension() {
+void drawSuspension(int wireFrame) {
     printf("Drawing suspension\n");
     glLineWidth(CAR_LINE_WIDTH);
+
+    // Main beam X axis
 	glPushMatrix();
-	   glColor3f(1.0, 0.0, 0.0);
-	   glutWireCube(1.0);
+        glColor3f(1.0, 0.0, 0.0);
+        glScalef(2.0, 0.125, 0.25);
+        glTranslatef(0.75, 0.5, 0.5);
+        if(wireFrame) {
+            glutWireCube(1.0);
+        }
+        else {
+            glutSolidCube(1.0);
+        }
 	glPopMatrix();
+
+    // Main beam Y axis
+    glPushMatrix();
+        glColor3f(1.0, 0.0, 0.0);
+        glScalef(0.4, 0.125, 1.0);
+        glTranslatef(4.25, 0.5, 0.125);
+        if(wireFrame) {
+            glutWireCube(1.0);
+        }
+        else {
+            glutSolidCube(1.0);
+        }
+	glPopMatrix();
+
+    // Wheel holder X axis
+    glPushMatrix();
+        glColor3f(1.0, 0.0, 0.0);
+        glScalef(0.5, 0.125, 0.0625);
+        glTranslatef(0.5, 0.5, 0.5);
+        if(wireFrame) {
+            glutWireCube(1.0);
+        }
+        else {
+            glutSolidCube(1.0);
+        }
+	glPopMatrix();
+
+    // Seat
+    GLUquadricObj *seatBottom = gluNewQuadric();
+    GLUquadricObj *seatTop = gluNewQuadric();
+
+	glPushMatrix();
+        glRotatef(-90.0, 1.0, 0.0, 0.0);
+    	glScalef(0.5, 1.0, 0.15);
+        glTranslatef(4.25, 0.5, 0.5);
+    	if(wireFrame)
+        {
+        	gluQuadricDrawStyle(seatBottom, GLU_SILHOUETTE);
+            gluQuadricDrawStyle(seatTop, GLU_SILHOUETTE);
+        }
+    	else
+        {
+        	gluQuadricDrawStyle(seatBottom, GLU_FILL);
+            gluQuadricDrawStyle(seatTop, GLU_FILL);
+        }
+        glColor3f(0.0, 1.0, 0.0);
+    	gluCylinder(seatBottom, 1.0, 0.5, 1.0, CAR_SUBDIVIONS, CAR_SUBDIVIONS); // cone
+        gluDisk(seatTop, 0.0, 1.0, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
+
+	glPopMatrix();
+	gluDeleteQuadric(seatBottom);
+    gluDeleteQuadric(seatTop);
+}
+
+void drawTires(int wireFrame) {
+    GLUquadricObj *wheelFrontSide = gluNewQuadric();
+    GLUquadricObj *wheelFrontTop = gluNewQuadric();
+	GLUquadricObj *wheelFrontBottom = gluNewQuadric();
+
+    // Front wheel
+	glPushMatrix();
+    	glScalef(0.2, 0.2, 0.150);
+        glTranslatef(0.5, 0.5, 0.45);
+    	if(wireFrame)
+        {
+        	gluQuadricDrawStyle(wheelFrontSide, GLU_SILHOUETTE);
+            gluQuadricDrawStyle(wheelFrontTop, GLU_SILHOUETTE);
+            gluQuadricDrawStyle(wheelFrontBottom, GLU_SILHOUETTE);
+        }
+    	else
+        {
+        	gluQuadricDrawStyle(wheelFrontSide, GLU_FILL);
+            gluQuadricDrawStyle(wheelFrontTop, GLU_FILL);
+            gluQuadricDrawStyle(wheelFrontBottom, GLU_FILL);
+        }
+        glColor3f(0.0, 0.0, 0.0);
+    	gluCylinder(wheelFrontSide, 1.0, 1.0, 1.0, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
+        gluDisk(wheelFrontBottom, 0.0, 1.0, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
+        glTranslatef(0.0, 0.0, 1.0);
+        gluDisk(wheelFrontTop, 0.0, 1.0, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
+
+	glPopMatrix();
+	gluDeleteQuadric(wheelFrontSide);
+    gluDeleteQuadric(wheelFrontTop);
+    gluDeleteQuadric(wheelFrontBottom);
+
+    // Back wheel 1
+    GLUquadricObj *wheelBack1Side = gluNewQuadric();
+    GLUquadricObj *wheelBack1Top = gluNewQuadric();
+	GLUquadricObj *wheelBack1Bottom = gluNewQuadric();
+
+    glPushMatrix();
+    	glScalef(0.2, 0.2, 0.33);
+        glTranslatef(11.25, 0.5, 0.75);
+    	if(wireFrame)
+        {
+        	gluQuadricDrawStyle(wheelBack1Side, GLU_SILHOUETTE);
+            gluQuadricDrawStyle(wheelBack1Top, GLU_SILHOUETTE);
+            gluQuadricDrawStyle(wheelBack1Bottom, GLU_SILHOUETTE);
+        }
+    	else
+        {
+        	gluQuadricDrawStyle(wheelBack1Side, GLU_FILL);
+            gluQuadricDrawStyle(wheelBack1Top, GLU_FILL);
+            gluQuadricDrawStyle(wheelBack1Bottom, GLU_FILL);
+        }
+        glColor3f(0.0, 0.0, 0.0);
+    	gluCylinder(wheelBack1Side, 1.0, 1.0, 1.0, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
+        gluDisk(wheelBack1Bottom, 0.0, 1.0, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
+        glTranslatef(0.0, 0.0, 1.0);
+        gluDisk(wheelBack1Top, 0.0, 1.0, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
+
+	glPopMatrix();
+	gluDeleteQuadric(wheelFrontSide);
+    gluDeleteQuadric(wheelFrontTop);
+    gluDeleteQuadric(wheelFrontBottom);
+
+    // Back wheel 2
+    GLUquadricObj *wheelBack2Side = gluNewQuadric();
+    GLUquadricObj *wheelBack2Top = gluNewQuadric();
+	GLUquadricObj *wheelBack2Bottom = gluNewQuadric();
+
+    glPushMatrix();
+    	glScalef(0.2, 0.2, 0.33);
+        glTranslatef(11.25, 0.5, -1.0);
+    	if(wireFrame)
+        {
+        	gluQuadricDrawStyle(wheelBack2Side, GLU_SILHOUETTE);
+            gluQuadricDrawStyle(wheelBack2Top, GLU_SILHOUETTE);
+            gluQuadricDrawStyle(wheelBack2Bottom, GLU_SILHOUETTE);
+        }
+    	else
+        {
+        	gluQuadricDrawStyle(wheelBack2Side, GLU_FILL);
+            gluQuadricDrawStyle(wheelBack2Top, GLU_FILL);
+            gluQuadricDrawStyle(wheelBack2Bottom, GLU_FILL);
+        }
+        glColor3f(0.0, 0.0, 0.0);
+    	gluCylinder(wheelBack2Side, 1.0, 1.0, 1.0, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
+        gluDisk(wheelBack2Bottom, 0.0, 1.0, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
+        glTranslatef(0.0, 0.0, 1.0);
+        gluDisk(wheelBack2Top, 0.0, 1.0, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
+
+	glPopMatrix();
+	gluDeleteQuadric(wheelFrontSide);
+    gluDeleteQuadric(wheelFrontTop);
+    gluDeleteQuadric(wheelFrontBottom);
+}
+
+void drawCoachwork() {
+    // TODO: Bezier curve
 }
