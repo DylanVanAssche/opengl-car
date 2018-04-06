@@ -4,11 +4,12 @@ A futuristic soapbox car in OpenGL for the course Computergraphics by Herman Cra
 ## Features
 - [ ] Basic car
 - [ ] Basic finish
-- [ ] Multiple 3D transformations (orthogonal, symmetric, ...)
+- [x] Multiple 3D transformations (orthogonal, symmetric, ...)
 - [ ] Multiple cars on the screen
 - [ ] Show axes, light sources, ... controlled with a keyboard key
 - [ ] Improved finish
 - [ ] 4 different light sources
+- [x] Switch between several shade models
 - [ ] Menu to configure the materials used to create the car
 - [ ] Keyboard shortcuts
 - [ ] Animates the wheels of the car
