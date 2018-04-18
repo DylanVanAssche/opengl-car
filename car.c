@@ -20,13 +20,17 @@ GLint checkpoints = 0;
 GLint wireFrame = 0;
 GLint animateWheels = 0;
 GLint animateCar = 0;
-GLint animateSpeed = 1;
 GLint clear = 0;
 GLint fog = 0;
 GLint texture = 0;
 GLubyte projectionMode = 'g';
 
-// Spot
+// Lights
+GLint lightsLocked = 0;
+GLint ambientLight = 0;
+GLint diffuseLight = 0;
+GLint specularLight = 0;
+GLint spotLight = 0;
 GLdouble spotHeight = 0.0;
 GLdouble spotAngle = 0.0;
 GLdouble spotExponent = 20.0;
@@ -81,19 +85,28 @@ void init(void)
 }
 
 // OpenGL callback: timer animation
-void beweeg(void) {
+void animation(int value) {
+	// Wheels turning
 	if(animateWheels) {
-		print("Wielen bewegen\n")
+		printf("Wielen bewegen\n");
 	}
 
+	// Car movement
 	if(animateCar) {
-		print("Auto bewegen\n")
+		printf("Auto bewegen\n");
 	}
-	glutTimerFunc(animateSpeed, animatie, NULL);
+
+	// Only update when animations are activated
+	if(animateWheels || animateCar) {
+		glutSwapBuffers();
+    	glutPostRedisplay();
+	}
+
+	glutTimerFunc(ANIMATION_SPEED, animation, 0);
 }
 
 // OpenGL callback: keyboard input
-void toetsen(unsigned char key, int x, int y)
+void keyboardWatcher(unsigned char key, int x, int y)
 {
 	switch(key)
 	{
@@ -107,9 +120,13 @@ void toetsen(unsigned char key, int x, int y)
 		case 'i': xLens = yLens = zLens = 3.0; break;
 
 		// Projection modes
-		case '1': projectionMode = 'o'; printf("Projection mode ORTHOGONAL\n"); break;
-		case '2': projectionMode = 's'; printf("Projection mode SYMMETRIC\n"); break;
-		case '3': projectionMode = 'g'; printf("Projection mode GENERAL\n"); break;
+		case '1': ambientLight = !ambientLight; printf("Ambient light TOGGLE\n"); break;
+		case '2': diffuseLight = !diffuseLight; printf("Diffuse light TOGGLE\n"); break;
+		case '3': specularLight = !specularLight; printf("Specular light TOGGLE\n"); break;
+		case '4': spotLight = !spotLight; printf("Spotlight TOGGLE\n"); break;
+		case '5': projectionMode = 'o'; printf("Projection mode ORTHOGONAL\n"); break;
+		case '6': projectionMode = 's'; printf("Projection mode SYMMETRIC\n"); break;
+		case '7': projectionMode = 'g'; printf("Projection mode GENERAL\n"); break;
 
 		// Features
 		case 's': flat = 0; printf("Shading mode SMOOTH\n"); break;
@@ -120,13 +137,11 @@ void toetsen(unsigned char key, int x, int y)
 		case 'J': axes = 1; printf("Axes ON\n"); break;
 		case 'k': checkpoints = 0; printf("Checkpoints surfaces OFF\n"); break;
 		case 'K': checkpoints = 1; printf("Checkpoints surfaces ON\n"); break;
-		case 'g': animateWheels != animateWheels; printf("Animation wheels TOGGLE\n"); break;
-		case 'G': animateCar != animateCar; printf("Animation car TOGGLE\n"); break;
-		case 't': texture != texture; printf("Texture TOGGLE\n"); break;
-		case 'm': fog != fog; printf("Fog TOGGLE\n"); break;
-		case 'f': clear != clear; printf("Transparancy TOGGLE"); break;
-		case 'a': animateSpeed++; break;
-		case 'A': animateSpeed--; break;
+		case 'g': animateWheels = !animateWheels; printf("Animation wheels TOGGLE\n"); break;
+		case 'G': animateCar = !animateCar; printf("Animation car TOGGLE\n"); break;
+		case 't': texture = !texture; printf("Texture TOGGLE\n"); break;
+		case 'm': fog = !fog; printf("Fog TOGGLE\n"); break;
+		case 'f': clear = !clear; printf("Transparancy TOGGLE\n"); break;
 
 		// Spot
 		case 'h': spotHeight++; break;
@@ -135,10 +150,11 @@ void toetsen(unsigned char key, int x, int y)
 		case 'V': spotAngle--; break;
 		case 'w': spotExponent = spotExponent + 5; break;
 		case 'W': spotExponent = spotExponent - 5; break;
+		case 'b': lightsLocked = !lightsLocked; printf("Lights locked TOGGLE\n"); break;
 
 		// Material
 		case 'e': materialShininess = materialShininess + 5; break;
-		case 'E': materialShininess = materialShininess - 5; break;
+		case 'E': materialShininess > 0? materialShininess = materialShininess - 5: printf("Material SHININESS must be > 0\n"); break;
 
 		// Quit
 		case 'q':
@@ -149,29 +165,49 @@ void toetsen(unsigned char key, int x, int y)
 		printf("Unsupported action!\n");
 		return; // Nothing happened, don't redraw
 	}
-	printf("Eye X=%5.1f Y=%5.1f Z=%5.1f\n", xLens, yLens, zLens);
-	printf("Spot HEIGHT=%5.1f ANGLE=%5.1f EXPONENT=%5.1f\n", spotHeight, spotAngle, spotExponent);
+	printf("Eye X=%f Y=%f Z=%f\n", xLens, yLens, zLens);
+	printf("Ambient ENABLED=%d\n", ambientLight);
+	printf("Diffuse ENABLED=%d\n", diffuseLight);
+	printf("Specular ENABLED=%d\n", specularLight);
+	printf("Spot ENABLED=%d HEIGHT=%f ANGLE=%f EXPONENT=%f\n", spotLight, spotHeight, spotAngle, spotExponent);
 	printf("Material SHININESS=%5.1f\n", materialShininess);
 	glutPostRedisplay();
 }
 
 // OpenGL callback: draw function
-void wedstrijd(void)
+void displayFunction(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	glMaterialf(GL_FRONT, GL_SHININESS, materialShininess);
 	glShadeModel(flat? GL_FLAT: GL_SMOOTH);
+	glMaterialf(GL_FRONT, GL_SHININESS, materialShininess);
+
+	if(lightsLocked) {
+		printf("Lights locked\n");
+		configureLights(ambientLight, diffuseLight, specularLight, spotLight, spotAngle, spotExponent, spotHeight);
+	}
 	gluLookAt(xLens, yLens, zLens, xRef, yRef, zRef, xVW, yVW, zVW);
+	if(!lightsLocked) {
+		printf("Lights unlocked\n");
+		configureLights(ambientLight, diffuseLight, specularLight, spotLight, spotAngle, spotExponent, spotHeight);
+	}
+
 	drawAxes(axes);
-	drawSuspension(wireFrame);
-	drawTires(wireFrame);
+	glEnable(GL_NORMALIZE);
+	glEnable(GL_LIGHTING);
+		drawLights();
+		drawSuspension(wireFrame);
+		drawTires(wireFrame);
+		drawArc(wireFrame);
+	glDisable(GL_LIGHTING);
+    glDisable(GL_NORMALIZE);
+	glutSwapBuffers();
 	glFlush();
 }
 
 // OpenGL callback: reshape function
-void raam(GLint newWidth, GLint newHeight)
+void windowFunction(GLint newWidth, GLint newHeight)
 {
 	GLdouble border;
 	glMatrixMode(GL_PROJECTION);
@@ -209,14 +245,14 @@ void raam(GLint newWidth, GLint newHeight)
 int main( int argc, char * argv[])
 {
 	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB | GLUT_DEPTH);
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
 	glutInitWindowPosition(100, 100);
 	glutInitWindowSize(winWidth, winHeight);
 	glutCreateWindow("Soapbox car");
     init();
-	glutKeyboardFunc(toetsen);
-	glutReshapeFunc(raam);
-	glutDisplayFunc(wedstrijd);
-	glutTimerFunc(animateSpeed, animatie, NULL);
+	glutKeyboardFunc(keyboardWatcher);
+	glutReshapeFunc(windowFunction);
+	glutDisplayFunc(displayFunction);
+	glutTimerFunc(ANIMATION_SPEED, animation, 0);
 	glutMainLoop();
 }
