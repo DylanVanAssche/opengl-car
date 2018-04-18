@@ -20,6 +20,7 @@ GLint checkpoints = 0;
 GLint wireFrame = 0;
 GLint animateWheels = 0;
 GLint animateCar = 0;
+GLint animateSpeed = 1;
 GLint clear = 0;
 GLint fog = 0;
 GLint texture = 0;
@@ -58,12 +59,37 @@ void finishMenu(int id) {
 // Init OpenGL defaults
 void init(void)
 {
+	// Background and depth
 	glClearColor(0.8, 0.8, 0.8, 0.0);
 	glClearDepth(1.0);
 	glEnable(GL_DEPTH_TEST);
 
+	// Light sources default values
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, BLACK);
+	glLightfv(GL_LIGHT0, GL_AMBIENT, BLACK);
+	glLightfv(GL_LIGHT1, GL_AMBIENT, BLACK);
+	glLightfv(GL_LIGHT2, GL_AMBIENT, BLACK);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, BLACK);
+	glLightfv(GL_LIGHT1, GL_DIFFUSE, BLACK);
+	glLightfv(GL_LIGHT2, GL_DIFFUSE, BLACK);
+	glLightfv(GL_LIGHT0, GL_SPECULAR, BLACK);
+	glLightfv(GL_LIGHT1, GL_SPECULAR, BLACK);
+	glLightfv(GL_LIGHT2, GL_SPECULAR, BLACK);
+
 	// Init menu
 	// TODO: crashes on my PC due a lack of closed source video drivers
+}
+
+// OpenGL callback: timer animation
+void beweeg(void) {
+	if(animateWheels) {
+		print("Wielen bewegen\n")
+	}
+
+	if(animateCar) {
+		print("Auto bewegen\n")
+	}
+	glutTimerFunc(animateSpeed, animatie, NULL);
 }
 
 // OpenGL callback: keyboard input
@@ -99,6 +125,8 @@ void toetsen(unsigned char key, int x, int y)
 		case 't': texture != texture; printf("Texture TOGGLE\n"); break;
 		case 'm': fog != fog; printf("Fog TOGGLE\n"); break;
 		case 'f': clear != clear; printf("Transparancy TOGGLE"); break;
+		case 'a': animateSpeed++; break;
+		case 'A': animateSpeed--; break;
 
 		// Spot
 		case 'h': spotHeight++; break;
@@ -133,7 +161,8 @@ void wedstrijd(void)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	glShadeModel(flat? GL_FLAT: GL_SMOOTH );
+	glMaterialf(GL_FRONT, GL_SHININESS, materialShininess);
+	glShadeModel(flat? GL_FLAT: GL_SMOOTH);
 	gluLookAt(xLens, yLens, zLens, xRef, yRef, zRef, xVW, yVW, zVW);
 	drawAxes(axes);
 	drawSuspension(wireFrame);
@@ -188,5 +217,6 @@ int main( int argc, char * argv[])
 	glutKeyboardFunc(toetsen);
 	glutReshapeFunc(raam);
 	glutDisplayFunc(wedstrijd);
+	glutTimerFunc(animateSpeed, animatie, NULL);
 	glutMainLoop();
 }

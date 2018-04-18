@@ -33,6 +33,7 @@ several files.
 #define CAR_LINE_WIDTH 5.0
 #define CAR_SUBDIVIONS 16 // change this if rendering performance is bad
 static const GLfloat RED[] = {0.19, 0.39, 0.74, 1.0};
+static const GLfloat BLACK[] = {0.0,0.0,0.0,1.0};
 
 // Functions
 void drawAxes(int axes);
