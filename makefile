@@ -20,7 +20,8 @@ CFLAGS = $(INCPATH) -std=c99
 SRCS = \
 	car.c \
 	view.c \
-	vehicle.c
+	vehicle.c \
+	arc.c
 
 OBJS = $(SRCS:.c=.o)
 

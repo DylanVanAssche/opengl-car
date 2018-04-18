@@ -15,6 +15,9 @@ void drawSuspension(int wireFrame) {
     // Main beam X axis
 	glPushMatrix();
         glColor3f(1.0, 0.0, 0.0);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_CHROME);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, DIFFUSE_CHROME);
+	    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, SPECULAR_CHROME);
         glScalef(2.0, 0.125, 0.25);
         glTranslatef(0.75, 0.5, 0.5);
         if(wireFrame) {
@@ -27,7 +30,9 @@ void drawSuspension(int wireFrame) {
 
     // Main beam Y axis
     glPushMatrix();
-        glColor3f(1.0, 0.0, 0.0);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_CHROME);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, DIFFUSE_CHROME);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, SPECULAR_CHROME);
         glScalef(0.4, 0.125, 1.0);
         glTranslatef(4.25, 0.5, 0.125);
         if(wireFrame) {
@@ -40,7 +45,9 @@ void drawSuspension(int wireFrame) {
 
     // Wheel holder X axis
     glPushMatrix();
-        glColor3f(1.0, 0.0, 0.0);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_CHROME);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, DIFFUSE_CHROME);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, SPECULAR_CHROME);
         glScalef(0.5, 0.125, 0.0625);
         glTranslatef(0.5, 0.5, 0.5);
         if(wireFrame) {
@@ -69,7 +76,9 @@ void drawSuspension(int wireFrame) {
         	gluQuadricDrawStyle(seatBottom, GLU_FILL);
             gluQuadricDrawStyle(seatTop, GLU_FILL);
         }
-        glColor3f(0.0, 1.0, 0.0);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_CHROME);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, DIFFUSE_CHROME);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, SPECULAR_CHROME);
     	gluCylinder(seatBottom, 1.0, 0.5, 1.0, CAR_SUBDIVIONS, CAR_SUBDIVIONS); // cone
         glTranslatef(0.0, 0.0, 1.0);
         gluDisk(seatTop, 0.0, 0.75, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
@@ -100,8 +109,13 @@ void drawTires(int wireFrame) {
             gluQuadricDrawStyle(wheelFrontTop, GLU_FILL);
             gluQuadricDrawStyle(wheelFrontBottom, GLU_FILL);
         }
-        glColor3f(0.0, 0.0, 0.0);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_BLACK);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, DIFFUSE_BLACK);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, SPECULAR_BLACK);
     	gluCylinder(wheelFrontSide, 1.0, 1.0, 1.0, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_GREY);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_GREY);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_GREY);
         gluDisk(wheelFrontBottom, 0.0, 1.0, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
         glTranslatef(0.0, 0.0, 1.0);
         gluDisk(wheelFrontTop, 0.0, 1.0, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
@@ -131,8 +145,13 @@ void drawTires(int wireFrame) {
             gluQuadricDrawStyle(wheelBack1Top, GLU_FILL);
             gluQuadricDrawStyle(wheelBack1Bottom, GLU_FILL);
         }
-        glColor3f(0.0, 0.0, 0.0);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_BLACK);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, DIFFUSE_BLACK);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, SPECULAR_BLACK);
     	gluCylinder(wheelBack1Side, 1.0, 1.0, 1.0, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_GREY);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_GREY);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_GREY);
         gluDisk(wheelBack1Bottom, 0.0, 1.0, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
         glTranslatef(0.0, 0.0, 1.0);
         gluDisk(wheelBack1Top, 0.0, 1.0, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
@@ -162,8 +181,13 @@ void drawTires(int wireFrame) {
             gluQuadricDrawStyle(wheelBack2Top, GLU_FILL);
             gluQuadricDrawStyle(wheelBack2Bottom, GLU_FILL);
         }
-        glColor3f(0.0, 0.0, 0.0);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_BLACK);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, DIFFUSE_BLACK);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, SPECULAR_BLACK);
     	gluCylinder(wheelBack2Side, 1.0, 1.0, 1.0, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_GREY);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_GREY);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_GREY);
         gluDisk(wheelBack2Bottom, 0.0, 1.0, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
         glTranslatef(0.0, 0.0, 1.0);
         gluDisk(wheelBack2Top, 0.0, 1.0, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
@@ -175,5 +199,9 @@ void drawTires(int wireFrame) {
 }
 
 void drawCoachwork() {
+    /*
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_GREY);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, DIFFUSE_GREY);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, SPECULAR_GREY);*/
     // TODO: Bezier curve
 }
