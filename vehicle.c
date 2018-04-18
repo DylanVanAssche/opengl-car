@@ -57,8 +57,8 @@ void drawSuspension(int wireFrame) {
 
 	glPushMatrix();
         glRotatef(-90.0, 1.0, 0.0, 0.0);
-    	glScalef(0.5, 1.0, 0.15);
-        glTranslatef(4.25, 0.5, 0.5);
+        glScalef(0.125, 0.125, 0.125);
+        glTranslatef(13.625, -1.0, 1.0);
     	if(wireFrame)
         {
         	gluQuadricDrawStyle(seatBottom, GLU_SILHOUETTE);
@@ -71,7 +71,8 @@ void drawSuspension(int wireFrame) {
         }
         glColor3f(0.0, 1.0, 0.0);
     	gluCylinder(seatBottom, 1.0, 0.5, 1.0, CAR_SUBDIVIONS, CAR_SUBDIVIONS); // cone
-        gluDisk(seatTop, 0.0, 1.0, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
+        glTranslatef(0.0, 0.0, 1.0);
+        gluDisk(seatTop, 0.0, 0.75, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
 
 	glPopMatrix();
 	gluDeleteQuadric(seatBottom);
