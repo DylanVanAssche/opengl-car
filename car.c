@@ -218,9 +218,6 @@ void keyboardWatcher(unsigned char key, int x, int y)
 		case '2': diffuseLight = !diffuseLight; printf("Diffuse light TOGGLE\n"); break;
 		case '3': specularLight = !specularLight; printf("Specular light TOGGLE\n"); break;
 		case '4': spotLight = !spotLight; printf("Spotlight TOGGLE\n"); break;
-		case '5': projectionMode = 'o'; printf("Projection mode ORTHOGONAL\n"); break;
-		case '6': projectionMode = 's'; printf("Projection mode SYMMETRIC\n"); break;
-		case '7': projectionMode = 'g'; printf("Projection mode GENERAL\n"); break;
 
 		// Features
 		case 's': flat = 0; printf("Shading mode SMOOTH\n"); break;
@@ -351,6 +348,18 @@ void windowFunction(GLint newWidth, GLint newHeight)
 // Main loop
 int main(int argc, char* argv[])
 {
+	// Selects projection mode
+	// - 'o' ORTHOGONAL perspective
+	// - 's' SYMMETRIC perspective
+	// - 'g' GENERAL perspective
+	if(argc > 1) {
+		projectionMode = argv[1][0];
+	}
+	else {
+		printf("Projection mode can be changed using arguments");
+		projectionMode = 'o';
+	}
+
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
 	glutInitWindowPosition(100, 100);
