@@ -7,7 +7,7 @@
 */
 #include "car.h"
 
-void drawFinish(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular) {
+void drawFinish(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular, GLint competition) {
     // Cylinders
     GLUquadricObj *cylinder1 = gluNewQuadric();
     GLUquadricObj *cylinder2 = gluNewQuadric();
@@ -15,7 +15,7 @@ void drawFinish(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* sp
 	glPushMatrix();
         glRotatef(-90.0, 1.0, 0.0, 0.0);
         glScalef(0.25, 0.25, 1.25);
-        glTranslatef(0.0, -5.0, 0.0);
+        competition? glTranslatef(0.0, -15.0, 0.0): glTranslatef(0.0, -5.0, 0.0);
     	if(wireFrame)
         {
         	gluQuadricDrawStyle(cylinder1, GLU_SILHOUETTE);
@@ -30,8 +30,8 @@ void drawFinish(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* sp
         glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
         glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
     	gluCylinder(cylinder1, 1.0, 1.0, 1.0, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
-        glTranslatef(0.0, 10.0, 0.0);
-        gluCylinder(cylinder1, 1.0, 1.0, 1.0, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
+        competition? glTranslatef(0.0, 20.0, 0.0): glTranslatef(0.0, 10.0, 0.0);
+        gluCylinder(cylinder2, 1.0, 1.0, 1.0, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
 
 	glPopMatrix();
 	gluDeleteQuadric(cylinder1);
