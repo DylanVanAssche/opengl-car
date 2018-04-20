@@ -22,6 +22,7 @@ GLint animateWheels = 0;
 GLint animateCar = 0;
 GLint clear = 0;
 GLint fog = 0;
+GLint competition = 0;
 GLint texture = 0;
 GLubyte projectionMode = 'g';
 GLfloat* coachworkAmbient = AMBIENT_GREY;
@@ -234,6 +235,7 @@ void keyboardWatcher(unsigned char key, int x, int y)
 		case 'G': animateCar = !animateCar; printf("Animation car TOGGLE\n"); break;
 		case 't': texture = !texture; printf("Texture TOGGLE\n"); break;
 		case 'm': fog = !fog; printf("Fog TOGGLE\n"); break;
+		case 'n': competition = !competition; printf("Competition TOGGLE\n"); break;
 		case 'f': clear = !clear; printf("Transparancy TOGGLE\n"); break;
 
 		// Spot
@@ -290,9 +292,21 @@ void displayFunction(void)
 	glEnable(GL_NORMALIZE);
 	glEnable(GL_LIGHTING);
 		drawLights();
+		// soapbox car 1
 		drawSuspension(wireFrame, suspensionAmbient, suspensionDiffuse, suspensionSpecular);
 		drawTires(wireFrame);
-		drawFinish(wireFrame, finishAmbient, finishDiffuse, finishSpecular);
+
+		// soapbox car 2
+		if(competition) {
+			glPushMatrix();
+				glTranslatef(0.0, 0.0, 2.0);
+				drawSuspension(wireFrame, suspensionAmbient, suspensionDiffuse, suspensionSpecular);
+				drawTires(wireFrame);
+			glPopMatrix();
+		}
+
+		// Finish
+		drawFinish(wireFrame, finishAmbient, finishDiffuse, finishSpecular, competition);
 	glDisable(GL_LIGHTING);
     glDisable(GL_NORMALIZE);
 	glutSwapBuffers();
