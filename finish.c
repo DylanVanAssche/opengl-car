@@ -7,7 +7,7 @@
 */
 #include "car.h"
 
-void drawArc(int wireFrame) {
+void drawFinish(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular) {
     // Cylinders
     GLUquadricObj *cylinder1 = gluNewQuadric();
     GLUquadricObj *cylinder2 = gluNewQuadric();
@@ -26,9 +26,9 @@ void drawArc(int wireFrame) {
         	gluQuadricDrawStyle(cylinder1, GLU_FILL);
             gluQuadricDrawStyle(cylinder2, GLU_FILL);
         }
-        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_YELLOW);
-        glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, DIFFUSE_YELLOW);
-        glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, SPECULAR_YELLOW);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
     	gluCylinder(cylinder1, 1.0, 1.0, 1.0, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
         glTranslatef(0.0, 10.0, 0.0);
         gluCylinder(cylinder1, 1.0, 1.0, 1.0, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
