@@ -35,6 +35,10 @@ GLfloat* finishAmbient = AMBIENT_YELLOW;
 GLfloat* finishDiffuse = DIFFUSE_YELLOW;
 GLfloat* finishSpecular = SPECULAR_YELLOW;
 
+// Animation
+GLfloat animationWheelsAngle = 0.0;
+GLfloat animationCarTranslation = 0.0;
+
 // Lights
 GLint lightsLocked = 0;
 GLint ambientLight = 0;
@@ -179,20 +183,31 @@ void init(void)
 }
 
 // OpenGL callback: timer animation
-void animation(int value) {
-	// Wheels turning
+void animation(GLint value) {
+	// Wheels movement
 	if(animateWheels) {
-		printf("Wielen bewegen\n");
+		printf("The wheels on the soapbox car go round and round... ANGLE=%f\n", animationWheelsAngle);
+		animationWheelsAngle += ANIMATION_WHEEL_STEP;
+
+		// Reset angle after 360 degrees
+		if(animationWheelsAngle >= 360.0) {
+			animationWheelsAngle = 0.0;
+		}
 	}
 
 	// Car movement
 	if(animateCar) {
-		printf("Auto bewegen\n");
+		printf("Gas met die zooi! TRANSLATION=%f\n", animationCarTranslation);
+		animationCarTranslation += ANIMATION_CAR_STEP;
+
+		// Reset when car is out of sight
+		if(animationCarTranslation <= -10.0) {
+			animationCarTranslation = 10.0;
+		}
 	}
 
 	// Only update when animations are activated
 	if(animateWheels || animateCar) {
-		glutSwapBuffers();
     	glutPostRedisplay();
 	}
 
@@ -289,23 +304,27 @@ void displayFunction(void)
 	glEnable(GL_NORMALIZE);
 	glEnable(GL_LIGHTING);
 		drawLights();
-		// soapbox car 1
-		drawSuspension(wireFrame, suspensionAmbient, suspensionDiffuse, suspensionSpecular);
-		drawTires(wireFrame);
 
-		// soapbox car 2
-		if(competition) {
-			glPushMatrix();
+		glPushMatrix();
+			glTranslatef(animationCarTranslation, 0.0, 0.0);
+			// soapbox car 1
+			drawSuspension(wireFrame, suspensionAmbient, suspensionDiffuse, suspensionSpecular);
+			drawTires(wireFrame, animationWheelsAngle);
+
+			// soapbox car 2
+			if(competition) {
 				glTranslatef(0.0, 0.0, 2.0);
 				drawSuspension(wireFrame, suspensionAmbient, suspensionDiffuse, suspensionSpecular);
-				drawTires(wireFrame);
-			glPopMatrix();
-		}
+				drawTires(wireFrame, animationWheelsAngle);
+			}
+		glPopMatrix();
 
 		// Finish
 		drawFinish(wireFrame, finishAmbient, finishDiffuse, finishSpecular, competition);
 	glDisable(GL_LIGHTING);
     glDisable(GL_NORMALIZE);
+
+	// Swap the buffers and flush
 	glutSwapBuffers();
 	glFlush();
 }
@@ -357,7 +376,7 @@ int main(int argc, char* argv[])
 	}
 	else {
 		printf("Projection mode can be changed using arguments");
-		projectionMode = 'o';
+		projectionMode = 'g';
 	}
 
 	glutInit(&argc, argv);
