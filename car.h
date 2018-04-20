@@ -33,7 +33,9 @@ several files.
 #define MENU_FINISH_LILAC 6
 #define CAR_LINE_WIDTH 5.0
 #define CAR_SUBDIVIONS 50 // change this if rendering performance is bad
-#define ANIMATION_SPEED 100 // Don't fry the GPU please
+#define ANIMATION_SPEED 125 // Don't fry the GPU please
+#define ANIMATION_WHEEL_STEP 5
+#define ANIMATION_CAR_STEP -0.1 // negative step since we are driving to the other side
 #define SPOT_EXPONENT_DEFAULT 20.0
 #define SPOT_ANGLE_DEFAULT 0.0
 #define SPOT_HEIGHT_DEFAULT 0.0
@@ -73,7 +75,7 @@ static GLfloat SPECULAR_LILA[] = {0.35, 0.15, 0.85, 1.0};
 // Functions
 void drawAxes(GLint axes);
 void drawSuspension(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular);
-void drawTires(GLint wireFrame);
+void drawTires(GLint wireFrame, GLfloat animationAngle);
 void configureLights(GLint ambientLight, GLint diffuseLight, GLint specularLight, GLint spotLight, GLint spotAngle, GLint spotExponent, GLint spotHeight);
 void drawLights();
 void drawFinish(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular, GLint competition);
