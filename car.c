@@ -154,6 +154,11 @@ void init(void)
 	glLightfv(GL_LIGHT1, GL_SPECULAR, BLACK);
 	glLightfv(GL_LIGHT2, GL_SPECULAR, BLACK);
 
+#ifdef LINUX
+	// Blending
+	glBlendColor(0.8, 0.6, 0.4, 0.7);
+#endif
+
 	// Init menu
 	GLint menuCoachworkID = glutCreateMenu(coachworkMenu);
 	glutAddMenuEntry("grey", MENU_COACHWORK_GREY);
@@ -275,6 +280,7 @@ void displayFunction(void)
 	glShadeModel(flat? GL_FLAT: GL_SMOOTH);
 	glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, materialShininess);
 
+	// Eye
 	if(lightsLocked) {
 		printf("Lights locked\n");
 		configureLights(ambientLight, diffuseLight, specularLight, spotLight, spotAngle, spotExponent, spotHeight);
@@ -285,13 +291,17 @@ void displayFunction(void)
 		configureLights(ambientLight, diffuseLight, specularLight, spotLight, spotAngle, spotExponent, spotHeight);
 	}
 
+	// Axes
 	drawAxes(axes);
+
+	// Items with light
 	glEnable(GL_NORMALIZE);
 	glEnable(GL_LIGHTING);
 		drawLights();
 		// soapbox car 1
 		drawSuspension(wireFrame, suspensionAmbient, suspensionDiffuse, suspensionSpecular);
 		drawTires(wireFrame);
+		drawCoachwork(wireFrame, coachworkAmbient, coachworkDiffuse, coachworkSpecular, clear);
 
 		// soapbox car 2
 		if(competition) {
@@ -299,6 +309,7 @@ void displayFunction(void)
 				glTranslatef(0.0, 0.0, 2.0);
 				drawSuspension(wireFrame, suspensionAmbient, suspensionDiffuse, suspensionSpecular);
 				drawTires(wireFrame);
+				drawCoachwork(wireFrame, coachworkAmbient, coachworkDiffuse, coachworkSpecular, clear);
 			glPopMatrix();
 		}
 
@@ -306,6 +317,8 @@ void displayFunction(void)
 		drawFinish(wireFrame, finishAmbient, finishDiffuse, finishSpecular, competition);
 	glDisable(GL_LIGHTING);
     glDisable(GL_NORMALIZE);
+
+	// Swap buffers and flush
 	glutSwapBuffers();
 	glFlush();
 }

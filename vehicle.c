@@ -198,11 +198,20 @@ void drawTires(GLint wireFrame) {
     gluDeleteQuadric(wheelFrontBottom);
 }
 
-void drawCoachwork(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular) {
-    /*
-    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_GREY);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, DIFFUSE_GREY);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, SPECULAR_GREY);
-    */
+void drawCoachwork(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular, GLint clear) {
     // TODO: Bezier curve
+
+    // Make the coachwork transparent when enabled
+    if(clear) {
+        glEnable(GL_BLEND);
+    }
+
+	glDepthMask(GL_FALSE); // Disable depth mask before blending
+		glBlendFunc(GL_SRC_ALPHA, GL_DST_ALPHA); // You can pick here different things to get other types of blending
+        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_GREY);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, DIFFUSE_GREY);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, SPECULAR_GREY);
+   		glutSolidCone(0.4, 1.2, 10, 8);
+	glDepthMask(GL_TRUE); // Enable depth mask again
+	glDisable(GL_BLEND); // Stop blending
 }
