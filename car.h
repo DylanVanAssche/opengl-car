@@ -24,8 +24,9 @@ several files.
 // Constants
 #define AXIS_LENGTH 100.0
 #define AXIS_LINE_WIDTH 2.0
-#define MENU_BODYWORK_GREY 1
-#define MENU_BODYWORK_WHITE 2
+#define MENU_QUIT 0
+#define MENU_COACHWORK_GREY 1
+#define MENU_COACHWORK_WHITE 2
 #define MENU_SUSPENSION_CHROME 3
 #define MENU_SUSPENSION_BRONZE 4
 #define MENU_FINISH_YELLOW 5
@@ -47,32 +48,32 @@ static const GLfloat WHITE[] = {1.0, 1.0, 1.0, 1.0};
 static const GLfloat BLACK[] = {0.0, 0.0, 0.0, 1.0};
 
 // Materials
-static const GLfloat AMBIENT_GREY[] = {0.22, 0.22, 0.22, 1.0};
-static const GLfloat DIFFUSE_GREY[] = {0.33, 0.33, 0.33, 1.0};
-static const GLfloat SPECULAR_GREY[] = {0.11, 0.11, 0.11, 1.0};
-static const GLfloat AMBIENT_BLACK[] = {0.11, 0.11, 0.11, 1.0};
-static const GLfloat DIFFUSE_BLACK[] = {0.055, 0.055, 0.055, 1.0};
-static const GLfloat SPECULAR_BLACK[] = {0.0275, 0.0275, 0.0275, 1.0};
-static const GLfloat AMBIENT_WHITE[] = {0.66, 0.66, 0.66, 1.0};
-static const GLfloat DIFFUSE_WHITE[] = {0.77, 0.77, 0.77, 1.0};
-static const GLfloat SPECULAR_WHITE[] = {0.55, 0.55, 0.55, 1.0};
-static const GLfloat AMBIENT_CHROME[] = {0.46, 0.58, 0.35, 1.0};
-static const GLfloat DIFFUSE_CHROME[] = {0.23, 0.29, 0.17, 1.0};
-static const GLfloat SPECULAR_CHROME[] = {0.69, 0.87, 0.52, 1.0};
-static const GLfloat AMBIENT_BRONZE[] = {0.21, 0.13, 0.10, 1.0};
-static const GLfloat DIFFUSE_BRONZE[] = {0.39, 0.27, 0.17, 1.0};
-static const GLfloat SPECULAR_BRONZE[] = {0.71, 0.43, 0.18, 1.0};
-static const GLfloat AMBIENT_YELLOW[] = {0.65, 0.55, 0.15, 1.0};
-static const GLfloat DIFFUSE_YELLOW[] = {0.75, 0.45, 0.15, 1.0};
-static const GLfloat SPECULAR_YELLOW[] = {0.85, 0.35, 0.15, 1.0};
-static const GLfloat AMBIENT_LILA[] = {0.45, 0.15, 0.75, 1.0};
-static const GLfloat DIFFUSE_LILA[] = {0.55, 0.15, 0.65, 1.0};
-static const GLfloat SPECULAR_LILA[] = {0.35, 0.15, 0.85, 1.0};
+static GLfloat AMBIENT_GREY[] = {0.22, 0.22, 0.22, 1.0};
+static GLfloat DIFFUSE_GREY[] = {0.33, 0.33, 0.33, 1.0};
+static GLfloat SPECULAR_GREY[] = {0.11, 0.11, 0.11, 1.0};
+static GLfloat AMBIENT_BLACK[] = {0.11, 0.11, 0.11, 1.0};
+static GLfloat DIFFUSE_BLACK[] = {0.055, 0.055, 0.055, 1.0};
+static GLfloat SPECULAR_BLACK[] = {0.0275, 0.0275, 0.0275, 1.0};
+static GLfloat AMBIENT_WHITE[] = {0.66, 0.66, 0.66, 1.0};
+static GLfloat DIFFUSE_WHITE[] = {0.77, 0.77, 0.77, 1.0};
+static GLfloat SPECULAR_WHITE[] = {0.55, 0.55, 0.55, 1.0};
+static GLfloat AMBIENT_CHROME[] = {0.46, 0.58, 0.35, 1.0};
+static GLfloat DIFFUSE_CHROME[] = {0.23, 0.29, 0.17, 1.0};
+static GLfloat SPECULAR_CHROME[] = {0.69, 0.87, 0.52, 1.0};
+static GLfloat AMBIENT_BRONZE[] = {0.21, 0.13, 0.10, 1.0};
+static GLfloat DIFFUSE_BRONZE[] = {0.39, 0.27, 0.17, 1.0};
+static GLfloat SPECULAR_BRONZE[] = {0.71, 0.43, 0.18, 1.0};
+static GLfloat AMBIENT_YELLOW[] = {0.65, 0.55, 0.15, 1.0};
+static GLfloat DIFFUSE_YELLOW[] = {0.75, 0.45, 0.15, 1.0};
+static GLfloat SPECULAR_YELLOW[] = {0.85, 0.35, 0.15, 1.0};
+static GLfloat AMBIENT_LILA[] = {0.45, 0.15, 0.75, 1.0};
+static GLfloat DIFFUSE_LILA[] = {0.55, 0.15, 0.65, 1.0};
+static GLfloat SPECULAR_LILA[] = {0.35, 0.15, 0.85, 1.0};
 
 // Functions
-void drawAxes(int axes);
-void drawSuspension(int wireFrame);
-void drawTires(int wireFrame);
-void configureLights(int ambientLight, int diffuseLight, int specularLight, int spotLight, int spotAngle, int spotExponent, int spotHeight);
+void drawAxes(GLint axes);
+void drawSuspension(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular);
+void drawTires(GLint wireFrame);
+void configureLights(GLint ambientLight, GLint diffuseLight, GLint specularLight, GLint spotLight, GLint spotAngle, GLint spotExponent, GLint spotHeight);
 void drawLights();
-void drawArc(int wireFrame);
+void drawFinish(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular);

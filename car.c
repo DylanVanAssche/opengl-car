@@ -24,6 +24,15 @@ GLint clear = 0;
 GLint fog = 0;
 GLint texture = 0;
 GLubyte projectionMode = 'g';
+GLfloat* coachworkAmbient = AMBIENT_GREY;
+GLfloat* coachworkDiffuse = DIFFUSE_GREY;
+GLfloat* coachworkSpecular = SPECULAR_GREY;
+GLfloat* suspensionAmbient = AMBIENT_BRONZE;
+GLfloat* suspensionDiffuse = DIFFUSE_BRONZE;
+GLfloat* suspensionSpecular = SPECULAR_BRONZE;
+GLfloat* finishAmbient = AMBIENT_YELLOW;
+GLfloat* finishDiffuse = DIFFUSE_YELLOW;
+GLfloat* finishSpecular = SPECULAR_YELLOW;
 
 // Lights
 GLint lightsLocked = 0;
@@ -46,18 +55,82 @@ GLdouble xVW = 0.0, yVW = 1.0, zVW = 0.0;
 // OpenGL callback: menu calls
 void menu(int id) {
 	printf("Selected item ID: %d in main menu\n", id);
+	switch(id) {
+		case MENU_QUIT:
+		exit(0);
+		break;
+
+		default:
+		printf("Unsupported action!\n");
+		return; // Avoid redisplay when nothing has been changed
+	}
+	glutPostRedisplay();
 }
 
-void bodyworkMenu(int id) {
-	printf("Selected item ID: %d in bodyworkMenu\n", id);
+void coachworkMenu(int id) {
+	printf("Selected item ID: %d in coackworkMenu\n", id);
+	switch(id) {
+		case MENU_COACHWORK_GREY:
+			coachworkAmbient = AMBIENT_GREY;
+			coachworkDiffuse = DIFFUSE_GREY;
+			coachworkSpecular = SPECULAR_GREY;
+		break;
+
+		case MENU_COACHWORK_WHITE:
+			coachworkAmbient = AMBIENT_WHITE;
+			coachworkDiffuse = DIFFUSE_WHITE;
+			coachworkSpecular = SPECULAR_WHITE;
+		break;
+
+		default:
+		printf("Unsupported action!\n");
+		return; // Avoid redisplay when nothing has been changed
+	}
+	glutPostRedisplay();
 }
 
 void suspensionMenu(int id) {
 	printf("Selected item ID: %d in suspensionMenu\n", id);
+	switch(id) {
+		case MENU_SUSPENSION_BRONZE:
+			suspensionAmbient = AMBIENT_BRONZE;
+			suspensionDiffuse = DIFFUSE_BRONZE;
+			suspensionSpecular = SPECULAR_BRONZE;
+		break;
+
+		case MENU_SUSPENSION_CHROME:
+			suspensionAmbient = AMBIENT_CHROME;
+			suspensionDiffuse = DIFFUSE_CHROME;
+			suspensionSpecular = SPECULAR_CHROME;
+		break;
+
+		default:
+		printf("Unsupported action!\n");
+		return; // Avoid redisplay when nothing has been changed
+	}
+	glutPostRedisplay();
 }
 
 void finishMenu(int id) {
 	printf("Selected item ID: %d in finishMenu\n", id);
+	switch(id) {
+		case MENU_FINISH_YELLOW:
+			finishAmbient = AMBIENT_YELLOW;
+			finishDiffuse = DIFFUSE_YELLOW;
+			finishSpecular = SPECULAR_YELLOW;
+		break;
+
+		case MENU_FINISH_LILAC:
+			finishAmbient = AMBIENT_LILA;
+			finishDiffuse = DIFFUSE_LILA;
+			finishSpecular = SPECULAR_LILA;
+		break;
+
+		default:
+		printf("Unsupported action!\n");
+		return; // Avoid redisplay when nothing has been changed
+	}
+	glutPostRedisplay();
 }
 
 // Init OpenGL defaults
@@ -81,7 +154,27 @@ void init(void)
 	glLightfv(GL_LIGHT2, GL_SPECULAR, BLACK);
 
 	// Init menu
-	// TODO: crashes on my PC due a lack of closed source video drivers
+	GLint menuCoachworkID = glutCreateMenu(coachworkMenu);
+	glutAddMenuEntry("grey", MENU_COACHWORK_GREY);
+	glutAddMenuEntry("white", MENU_COACHWORK_WHITE);
+
+	GLint menuSuspensionID = glutCreateMenu(suspensionMenu);
+	glutAddMenuEntry("chrome", MENU_SUSPENSION_CHROME);
+	glutAddMenuEntry("bronze", MENU_SUSPENSION_BRONZE);
+
+	GLint menuFinishID = glutCreateMenu(finishMenu);
+	glutAddMenuEntry("yellow", MENU_FINISH_YELLOW);
+	glutAddMenuEntry("lilac", MENU_FINISH_LILAC);
+
+	// Main menu
+	GLint menuID = glutCreateMenu(menu);
+	glutAddSubMenu("Coachwork", menuCoachworkID);
+	glutAddSubMenu("Suspension", menuSuspensionID);
+	glutAddSubMenu("Finish", menuFinishID);
+	glutAddMenuEntry("quit", MENU_QUIT);
+
+	// Attach menu
+	glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
 
 // OpenGL callback: timer animation
@@ -197,9 +290,9 @@ void displayFunction(void)
 	glEnable(GL_NORMALIZE);
 	glEnable(GL_LIGHTING);
 		drawLights();
-		drawSuspension(wireFrame);
+		drawSuspension(wireFrame, suspensionAmbient, suspensionDiffuse, suspensionSpecular);
 		drawTires(wireFrame);
-		drawArc(wireFrame);
+		drawFinish(wireFrame, finishAmbient, finishDiffuse, finishSpecular);
 	glDisable(GL_LIGHTING);
     glDisable(GL_NORMALIZE);
 	glutSwapBuffers();
@@ -242,7 +335,7 @@ void windowFunction(GLint newWidth, GLint newHeight)
 }
 
 // Main loop
-int main( int argc, char * argv[])
+int main(int argc, char* argv[])
 {
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);

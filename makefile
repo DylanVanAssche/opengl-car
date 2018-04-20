@@ -21,7 +21,7 @@ SRCS = \
 	car.c \
 	view.c \
 	vehicle.c \
-	arc.c
+	finish.c
 
 OBJS = $(SRCS:.c=.o)
 

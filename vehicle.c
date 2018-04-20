@@ -8,16 +8,16 @@
 #include "car.h"
 
 // Draw the vehicle suspension
-void drawSuspension(int wireFrame) {
+void drawSuspension(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular) {
     printf("Drawing suspension\n");
     glLineWidth(CAR_LINE_WIDTH);
 
     // Main beam X axis
 	glPushMatrix();
         glColor3f(1.0, 0.0, 0.0);
-        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_CHROME);
-        glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, DIFFUSE_CHROME);
-	    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, SPECULAR_CHROME);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
+	    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
         glScalef(2.0, 0.125, 0.25);
         glTranslatef(0.75, 0.5, 0.5);
         if(wireFrame) {
@@ -30,9 +30,9 @@ void drawSuspension(int wireFrame) {
 
     // Main beam Y axis
     glPushMatrix();
-        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_CHROME);
-        glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, DIFFUSE_CHROME);
-        glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, SPECULAR_CHROME);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
         glScalef(0.4, 0.125, 1.0);
         glTranslatef(4.25, 0.5, 0.125);
         if(wireFrame) {
@@ -45,9 +45,9 @@ void drawSuspension(int wireFrame) {
 
     // Wheel holder X axis
     glPushMatrix();
-        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_CHROME);
-        glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, DIFFUSE_CHROME);
-        glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, SPECULAR_CHROME);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
         glScalef(0.5, 0.125, 0.0625);
         glTranslatef(0.5, 0.5, 0.5);
         if(wireFrame) {
@@ -76,9 +76,9 @@ void drawSuspension(int wireFrame) {
         	gluQuadricDrawStyle(seatBottom, GLU_FILL);
             gluQuadricDrawStyle(seatTop, GLU_FILL);
         }
-        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_CHROME);
-        glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, DIFFUSE_CHROME);
-        glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, SPECULAR_CHROME);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
     	gluCylinder(seatBottom, 1.0, 0.5, 1.0, CAR_SUBDIVIONS, CAR_SUBDIVIONS); // cone
         glTranslatef(0.0, 0.0, 1.0);
         gluDisk(seatTop, 0.0, 0.75, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
@@ -88,7 +88,7 @@ void drawSuspension(int wireFrame) {
     gluDeleteQuadric(seatTop);
 }
 
-void drawTires(int wireFrame) {
+void drawTires(GLint wireFrame) {
     GLUquadricObj *wheelFrontSide = gluNewQuadric();
     GLUquadricObj *wheelFrontTop = gluNewQuadric();
 	GLUquadricObj *wheelFrontBottom = gluNewQuadric();
@@ -198,7 +198,7 @@ void drawTires(int wireFrame) {
     gluDeleteQuadric(wheelFrontBottom);
 }
 
-void drawCoachwork() {
+void drawCoachwork(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular) {
     /*
     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_GREY);
     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, DIFFUSE_GREY);

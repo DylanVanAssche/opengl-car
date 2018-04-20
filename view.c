@@ -7,7 +7,7 @@
 */
 #include "car.h"
 
-void drawAxes(int axes) {
+void drawAxes(GLint axes) {
     if(axes) {
         printf("Drawing axes\n");
         glLineWidth(AXIS_LINE_WIDTH);
@@ -41,7 +41,7 @@ void drawAxes(int axes) {
     }
 }
 
-void configureLights(int ambientLight, int diffuseLight, int specularLight, int spotLight, int spotAngle, int spotExponent, int spotHeight) {
+void configureLights(GLint ambientLight, GLint diffuseLight, GLint specularLight, GLint spotLight, GLint spotAngle, GLint spotExponent, GLint spotHeight) {
     GLfloat posLight0[] = {2.0, 5.0, 4.0, 1.0};
     GLfloat posLight1[] = {2.0, 5.0, 4.0, 1.0};
     GLfloat posLight2[] = {3.0, 3.0, 3.0, 1.0};
