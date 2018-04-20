@@ -35,10 +35,6 @@ GLfloat* finishAmbient = AMBIENT_YELLOW;
 GLfloat* finishDiffuse = DIFFUSE_YELLOW;
 GLfloat* finishSpecular = SPECULAR_YELLOW;
 
-// Animation
-GLfloat animationWheelsAngle = 0.0;
-GLfloat animationCarTranslation = 0.0;
-
 // Lights
 GLint lightsLocked = 0;
 GLint ambientLight = 0;
@@ -50,7 +46,7 @@ GLdouble spotAngle = 0.0;
 GLdouble spotExponent = 20.0;
 
 // Material
-GLdouble materialShininess = 10.0;
+GLfloat materialShininess = 10.0;
 
 // Eye
 GLdouble xLens = 1.0, yLens = 1.0, zLens = 3.0;
@@ -183,31 +179,20 @@ void init(void)
 }
 
 // OpenGL callback: timer animation
-void animation(GLint value) {
-	// Wheels movement
+void animation(int value) {
+	// Wheels turning
 	if(animateWheels) {
-		printf("The wheels on the soapbox car go round and round... ANGLE=%f\n", animationWheelsAngle);
-		animationWheelsAngle += ANIMATION_WHEEL_STEP;
-
-		// Reset angle after 360 degrees
-		if(animationWheelsAngle >= 360.0) {
-			animationWheelsAngle = 0.0;
-		}
+		printf("Wielen bewegen\n");
 	}
 
 	// Car movement
 	if(animateCar) {
-		printf("Gas met die zooi! TRANSLATION=%f\n", animationCarTranslation);
-		animationCarTranslation += ANIMATION_CAR_STEP;
-
-		// Reset when car is out of sight
-		if(animationCarTranslation <= -10.0) {
-			animationCarTranslation = 10.0;
-		}
+		printf("Auto bewegen\n");
 	}
 
 	// Only update when animations are activated
 	if(animateWheels || animateCar) {
+		glutSwapBuffers();
     	glutPostRedisplay();
 	}
 
@@ -255,13 +240,13 @@ void keyboardWatcher(unsigned char key, int x, int y)
 		case 'H': spotHeight--; break;
 		case 'v': spotAngle++; break;
 		case 'V': spotAngle--; break;
-		case 'w': spotExponent = spotExponent + 5; break;
-		case 'W': spotExponent = spotExponent - 5; break;
+		case 'w': spotExponent = spotExponent + SPOT_EXPONENT_STEP; break;
+		case 'W': spotExponent = spotExponent - SPOT_EXPONENT_STEP; break;
 		case 'b': lightsLocked = !lightsLocked; printf("Lights locked TOGGLE\n"); break;
 
 		// Material
-		case 'e': materialShininess = materialShininess + 5; break;
-		case 'E': materialShininess > 0? materialShininess = materialShininess - 5: printf("Material SHININESS must be > 0\n"); break;
+		case 'e': materialShininess + MATERIAL_SHININESS_STEP <= 128.0? materialShininess += MATERIAL_SHININESS_STEP: (materialShininess = 128.0); break;
+		case 'E': materialShininess - MATERIAL_SHININESS_STEP >= 0.0? materialShininess -= MATERIAL_SHININESS_STEP: (materialShininess = 0.0); break;
 
 		// Quit
 		case 'q':
@@ -288,7 +273,7 @@ void displayFunction(void)
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	glShadeModel(flat? GL_FLAT: GL_SMOOTH);
-	glMaterialf(GL_FRONT, GL_SHININESS, materialShininess);
+	glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, materialShininess);
 
 	if(lightsLocked) {
 		printf("Lights locked\n");
@@ -304,27 +289,23 @@ void displayFunction(void)
 	glEnable(GL_NORMALIZE);
 	glEnable(GL_LIGHTING);
 		drawLights();
+		// soapbox car 1
+		drawSuspension(wireFrame, suspensionAmbient, suspensionDiffuse, suspensionSpecular);
+		drawTires(wireFrame);
 
-		glPushMatrix();
-			glTranslatef(animationCarTranslation, 0.0, 0.0);
-			// soapbox car 1
-			drawSuspension(wireFrame, suspensionAmbient, suspensionDiffuse, suspensionSpecular);
-			drawTires(wireFrame, animationWheelsAngle);
-
-			// soapbox car 2
-			if(competition) {
+		// soapbox car 2
+		if(competition) {
+			glPushMatrix();
 				glTranslatef(0.0, 0.0, 2.0);
 				drawSuspension(wireFrame, suspensionAmbient, suspensionDiffuse, suspensionSpecular);
-				drawTires(wireFrame, animationWheelsAngle);
-			}
-		glPopMatrix();
+				drawTires(wireFrame);
+			glPopMatrix();
+		}
 
 		// Finish
 		drawFinish(wireFrame, finishAmbient, finishDiffuse, finishSpecular, competition);
 	glDisable(GL_LIGHTING);
     glDisable(GL_NORMALIZE);
-
-	// Swap the buffers and flush
 	glutSwapBuffers();
 	glFlush();
 }

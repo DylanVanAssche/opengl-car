@@ -88,19 +88,15 @@ void drawSuspension(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat
     gluDeleteQuadric(seatTop);
 }
 
-void drawTires(GLint wireFrame, GLfloat animationAngle) {
+void drawTires(GLint wireFrame) {
     GLUquadricObj *wheelFrontSide = gluNewQuadric();
     GLUquadricObj *wheelFrontTop = gluNewQuadric();
 	GLUquadricObj *wheelFrontBottom = gluNewQuadric();
 
     // Front wheel
 	glPushMatrix();
-        glScalef(0.2, 0.2, 0.150);
+    	glScalef(0.2, 0.2, 0.150);
         glTranslatef(0.5, 0.5, 0.45);
-
-        // Animation angle
-        glRotatef(animationAngle, 0.0, 0.0, 1.0);
-
     	if(wireFrame)
         {
         	gluQuadricDrawStyle(wheelFrontSide, GLU_SILHOUETTE);
@@ -137,10 +133,6 @@ void drawTires(GLint wireFrame, GLfloat animationAngle) {
     glPushMatrix();
     	glScalef(0.2, 0.2, 0.33);
         glTranslatef(11.25, 0.5, 0.75);
-
-        // Animation angle
-        glRotatef(animationAngle, 0.0, 0.0, 1.0);
-
     	if(wireFrame)
         {
         	gluQuadricDrawStyle(wheelBack1Side, GLU_SILHOUETTE);
@@ -177,10 +169,6 @@ void drawTires(GLint wireFrame, GLfloat animationAngle) {
     glPushMatrix();
     	glScalef(0.2, 0.2, 0.33);
         glTranslatef(11.25, 0.5, -1.0);
-
-        // Animation angle
-        glRotatef(animationAngle, 0.0, 0.0, 1.0);
-
     	if(wireFrame)
         {
         	gluQuadricDrawStyle(wheelBack2Side, GLU_SILHOUETTE);
@@ -214,6 +202,7 @@ void drawCoachwork(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat*
     /*
     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_GREY);
     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, DIFFUSE_GREY);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, SPECULAR_GREY);*/
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, SPECULAR_GREY);
+    */
     // TODO: Bezier curve
 }
