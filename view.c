@@ -67,7 +67,3 @@ void configureLights(GLint ambientLight, GLint diffuseLight, GLint specularLight
     specularLight? glEnable(GL_LIGHT2): glDisable(GL_LIGHT2);
     spotLight? glEnable(GL_LIGHT3): glDisable(GL_LIGHT3);
 }
-
-void drawLights() {
-
-}

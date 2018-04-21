@@ -14,12 +14,16 @@ void drawSuspension(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat
 
     // Main beam X axis
 	glPushMatrix();
-        glColor3f(1.0, 0.0, 0.0);
+        // Materials
         glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
         glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
 	    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
+
+        // Scaling and translating
         glScalef(2.0, 0.125, 0.25);
         glTranslatef(0.75, 0.5, 0.5);
+
+        // Wireframe or solid?
         if(wireFrame) {
             glutWireCube(1.0);
         }
@@ -30,11 +34,16 @@ void drawSuspension(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat
 
     // Main beam Y axis
     glPushMatrix();
+        // Materials
         glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
         glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
         glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
+
+        // Scaling and translating
         glScalef(0.4, 0.125, 1.0);
         glTranslatef(4.25, 0.5, 0.125);
+
+        // Wireframe or solid?
         if(wireFrame) {
             glutWireCube(1.0);
         }
@@ -45,11 +54,16 @@ void drawSuspension(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat
 
     // Wheel holder X axis
     glPushMatrix();
+        // Materials
         glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
         glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
         glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
+
+        // Scaling and translating
         glScalef(0.5, 0.125, 0.0625);
         glTranslatef(0.5, 0.5, 0.5);
+
+        // Wireframe or solid?
         if(wireFrame) {
             glutWireCube(1.0);
         }
@@ -63,9 +77,12 @@ void drawSuspension(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat
     GLUquadricObj *seatTop = gluNewQuadric();
 
 	glPushMatrix();
+        // Rotating, scaling and translating
         glRotatef(-90.0, 1.0, 0.0, 0.0);
         glScalef(0.125, 0.125, 0.125);
         glTranslatef(13.625, -1.0, 1.0);
+
+        // Wireframe or solid?
     	if(wireFrame)
         {
         	gluQuadricDrawStyle(seatBottom, GLU_SILHOUETTE);
@@ -76,6 +93,8 @@ void drawSuspension(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat
         	gluQuadricDrawStyle(seatBottom, GLU_FILL);
             gluQuadricDrawStyle(seatTop, GLU_FILL);
         }
+
+        // Set materials before drawing
         glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
         glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
         glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
@@ -95,12 +114,14 @@ void drawTires(GLint wireFrame, GLfloat animationAngle) {
 
     // Front wheel
 	glPushMatrix();
+        // Scaling and translating
     	glScalef(0.2, 0.2, 0.150);
         glTranslatef(0.5, 0.5, 0.45);
 
         // Animation angle
         glRotatef(animationAngle, 0.0, 0.0, 1.0);
 
+        // Wireframe or solid?
     	if(wireFrame)
         {
         	gluQuadricDrawStyle(wheelFrontSide, GLU_SILHOUETTE);
@@ -113,6 +134,8 @@ void drawTires(GLint wireFrame, GLfloat animationAngle) {
             gluQuadricDrawStyle(wheelFrontTop, GLU_FILL);
             gluQuadricDrawStyle(wheelFrontBottom, GLU_FILL);
         }
+
+        // Set materials before drawing
         glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_BLACK);
         glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, DIFFUSE_BLACK);
         glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, SPECULAR_BLACK);
@@ -135,12 +158,14 @@ void drawTires(GLint wireFrame, GLfloat animationAngle) {
 	GLUquadricObj *wheelBack1Bottom = gluNewQuadric();
 
     glPushMatrix();
+        // Scaling and translating
     	glScalef(0.2, 0.2, 0.33);
         glTranslatef(11.25, 0.5, 0.75);
 
         // Animation angle
         glRotatef(animationAngle, 0.0, 0.0, 1.0);
 
+        // Wireframe or solid?
     	if(wireFrame)
         {
         	gluQuadricDrawStyle(wheelBack1Side, GLU_SILHOUETTE);
@@ -153,6 +178,8 @@ void drawTires(GLint wireFrame, GLfloat animationAngle) {
             gluQuadricDrawStyle(wheelBack1Top, GLU_FILL);
             gluQuadricDrawStyle(wheelBack1Bottom, GLU_FILL);
         }
+
+        // Set materials before drawing
         glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_BLACK);
         glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, DIFFUSE_BLACK);
         glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, SPECULAR_BLACK);
@@ -175,12 +202,14 @@ void drawTires(GLint wireFrame, GLfloat animationAngle) {
 	GLUquadricObj *wheelBack2Bottom = gluNewQuadric();
 
     glPushMatrix();
+        // Scaling and translating
     	glScalef(0.2, 0.2, 0.33);
         glTranslatef(11.25, 0.5, -1.0);
 
         // Animation angle
         glRotatef(animationAngle, 0.0, 0.0, 1.0);
 
+        // Wireframe or solid?
     	if(wireFrame)
         {
         	gluQuadricDrawStyle(wheelBack2Side, GLU_SILHOUETTE);
@@ -193,6 +222,8 @@ void drawTires(GLint wireFrame, GLfloat animationAngle) {
             gluQuadricDrawStyle(wheelBack2Top, GLU_FILL);
             gluQuadricDrawStyle(wheelBack2Bottom, GLU_FILL);
         }
+
+        // Set materials before drawing
         glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_BLACK);
         glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, DIFFUSE_BLACK);
         glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, SPECULAR_BLACK);

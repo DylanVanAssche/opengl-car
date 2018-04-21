@@ -211,6 +211,7 @@ void animation(GLint value) {
     	glutPostRedisplay();
 	}
 
+	// Restart Timer callback
 	glutTimerFunc(ANIMATION_SPEED, animation, 0);
 }
 
@@ -290,6 +291,7 @@ void displayFunction(void)
 	glShadeModel(flat? GL_FLAT: GL_SMOOTH);
 	glMaterialf(GL_FRONT, GL_SHININESS, materialShininess);
 
+	// Lights stay at the same place when set before gluLookAt
 	if(lightsLocked) {
 		printf("Lights locked\n");
 		configureLights(ambientLight, diffuseLight, specularLight, spotLight, spotAngle, spotExponent, spotHeight);
@@ -301,10 +303,12 @@ void displayFunction(void)
 	}
 
 	drawAxes(axes);
+
+	// Elements where the lights will affect their appearence
 	glEnable(GL_NORMALIZE);
 	glEnable(GL_LIGHTING);
-		drawLights();
 
+		// Push matrix to isolate translation animation
 		glPushMatrix();
 			glTranslatef(animationCarTranslation, 0.0, 0.0);
 			// soapbox car 1
@@ -319,7 +323,6 @@ void displayFunction(void)
 			}
 		glPopMatrix();
 
-		// Finish
 		drawFinish(wireFrame, finishAmbient, finishDiffuse, finishSpecular, competition);
 	glDisable(GL_LIGHTING);
     glDisable(GL_NORMALIZE);
