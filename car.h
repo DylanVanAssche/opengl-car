@@ -34,6 +34,8 @@ several files.
 #define CAR_LINE_WIDTH 5.0
 #define CAR_SUBDIVIONS 50 // change this if rendering performance is bad on HP Thin CLients
 #define ANIMATION_SPEED 100 // Don't fry the GPU please
+#define ANIMATION_WHEEL_STEP 5
+#define ANIMATION_CAR_STEP -0.05 // driving in the opposite direction
 #define MATERIAL_SHININESS_STEP 5.0
 #define SPOT_EXPONENT_DEFAULT 20.0
 #define SPOT_EXPONENT_STEP 5.0
@@ -75,7 +77,7 @@ static GLfloat SPECULAR_LILA[] = {0.35, 0.15, 0.85, 1.0};
 // Functions
 void drawAxes(GLint axes);
 void drawSuspension(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular);
-void drawTires(GLint wireFrame);
+void drawTires(GLint wireFrame, GLfloat animationAngle);
 void drawCoachwork(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular, GLint clear);
 void configureLights(GLint ambientLight, GLint diffuseLight, GLint specularLight, GLint spotLight, GLint spotAngle, GLint spotExponent, GLint spotHeight);
 void drawLights();
