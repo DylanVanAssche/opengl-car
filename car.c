@@ -180,6 +180,23 @@ void init(void)
 
 	// Attach menu
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
+
+	// Tire texture
+    tImageJPG *tireJPG;
+    tireJPG = LoadJPG(tireTexture);
+    printf("Loaded %s: %dx%d\n", tireTexture, tireJPG->sizeX, tireJPG->sizeY);
+
+	// Rim texture
+    tImageJPG *rimJPG;
+    rimJPG = LoadJPG(rimTexture);
+    printf("Loaded %s: %dx%d\n", rimTexture, rimJPG->sizeX, rimJPG->sizeY);
+
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	glGenTextures(NUMBER_OF_TEXTURES, textureAddressing);
+	glBindTexture(GL_TEXTURE_2D, textureAddressing[0]);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, tireJPG->sizeX, tireJPG->sizeY, 0, GL_RGB, GL_UNSIGNED_BYTE, tireJPG->data);
+	glBindTexture(GL_TEXTURE_2D, textureAddressing[1]);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, rimJPG->sizeX, rimJPG->sizeY, 0, GL_RGB, GL_UNSIGNED_BYTE, rimJPG->data);
 }
 
 // OpenGL callback: timer animation
@@ -313,13 +330,15 @@ void displayFunction(void)
 			glTranslatef(animationCarTranslation, 0.0, 0.0);
 			// soapbox car 1
 			drawSuspension(wireFrame, suspensionAmbient, suspensionDiffuse, suspensionSpecular);
-			drawTires(wireFrame, animationWheelsAngle);
+			drawTires(wireFrame, animationWheelsAngle, textureAddressing);
+			drawCoachwork(wireFrame, coachworkAmbient, coachworkDiffuse, coachworkSpecular, clear);
 
 			// soapbox car 2
 			if(competition) {
 				glTranslatef(0.0, 0.0, 2.0);
 				drawSuspension(wireFrame, suspensionAmbient, suspensionDiffuse, suspensionSpecular);
-				drawTires(wireFrame, animationWheelsAngle);
+				drawTires(wireFrame, animationWheelsAngle, textureAddressing);
+				drawCoachwork(wireFrame, coachworkAmbient, coachworkDiffuse, coachworkSpecular, clear);
 			}
 		glPopMatrix();
 
@@ -378,7 +397,7 @@ int main(int argc, char* argv[])
 		projectionMode = argv[1][0];
 	}
 	else {
-		printf("Projection mode can be changed using arguments");
+		printf("Projection mode can be changed using arguments\n");
 		projectionMode = 'g';
 	}
 
