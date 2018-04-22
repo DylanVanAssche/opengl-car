@@ -107,7 +107,7 @@ void drawSuspension(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat
     gluDeleteQuadric(seatTop);
 }
 
-void drawTires(GLint wireFrame, GLfloat animationAngle, GLuint textureAddressing[]) {
+void drawTires(GLint wireFrame, GLfloat animationAngle, GLuint textureAddressing[], GLint texture) {
     GLUquadricObj *wheelFrontSide = gluNewQuadric();
     GLUquadricObj *wheelFrontTop = gluNewQuadric();
 	GLUquadricObj *wheelFrontBottom = gluNewQuadric();
@@ -136,8 +136,8 @@ void drawTires(GLint wireFrame, GLfloat animationAngle, GLuint textureAddressing
         }
 
         // Add textures
-        glEnable(GL_TEXTURE_2D);
-            glBindTexture(GL_TEXTURE_2D, textureAddressing[0]);
+        texture? glEnable(GL_TEXTURE_2D): glDisable(GL_TEXTURE_2D);
+            glBindTexture(GL_TEXTURE_2D, textureAddressing[TEXTURE_TIRE]);
         	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
         	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
         	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
@@ -151,7 +151,7 @@ void drawTires(GLint wireFrame, GLfloat animationAngle, GLuint textureAddressing
             glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, SPECULAR_BLACK);
         	gluCylinder(wheelFrontSide, 1.0, 1.0, 1.0, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
 
-            glBindTexture(GL_TEXTURE_2D, textureAddressing[1]);
+            glBindTexture(GL_TEXTURE_2D, textureAddressing[TEXTURE_RIM]);
         	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
         	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
         	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
@@ -200,8 +200,8 @@ void drawTires(GLint wireFrame, GLfloat animationAngle, GLuint textureAddressing
         }
 
         // Set materials before drawing
-        glEnable(GL_TEXTURE_2D);
-            glBindTexture(GL_TEXTURE_2D, textureAddressing[0]);
+        texture? glEnable(GL_TEXTURE_2D): glDisable(GL_TEXTURE_2D);
+            glBindTexture(GL_TEXTURE_2D, textureAddressing[TEXTURE_TIRE]);
         	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
         	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
         	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
@@ -215,7 +215,7 @@ void drawTires(GLint wireFrame, GLfloat animationAngle, GLuint textureAddressing
             glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, SPECULAR_BLACK);
         	gluCylinder(wheelBack1Side, 1.0, 1.0, 1.0, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
 
-            glBindTexture(GL_TEXTURE_2D, textureAddressing[1]);
+            glBindTexture(GL_TEXTURE_2D, textureAddressing[TEXTURE_RIM]);
             glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
@@ -264,8 +264,8 @@ void drawTires(GLint wireFrame, GLfloat animationAngle, GLuint textureAddressing
         }
 
         // Set materials before drawing
-        glEnable(GL_TEXTURE_2D);
-            glBindTexture(GL_TEXTURE_2D, textureAddressing[0]);
+        texture? glEnable(GL_TEXTURE_2D): glDisable(GL_TEXTURE_2D);
+            glBindTexture(GL_TEXTURE_2D, textureAddressing[TEXTURE_TIRE]);
         	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
         	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
         	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
@@ -279,7 +279,7 @@ void drawTires(GLint wireFrame, GLfloat animationAngle, GLuint textureAddressing
             glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, SPECULAR_BLACK);
         	gluCylinder(wheelBack2Side, 1.0, 1.0, 1.0, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
 
-            glBindTexture(GL_TEXTURE_2D, textureAddressing[1]);
+            glBindTexture(GL_TEXTURE_2D, textureAddressing[TEXTURE_RIM]);
             glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
