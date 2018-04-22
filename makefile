@@ -21,7 +21,8 @@ SRCS = \
 	car.c \
 	view.c \
 	vehicle.c \
-	finish.c
+	finish.c \
+	InitJPG.c
 
 OBJS = $(SRCS:.c=.o)
 
@@ -30,7 +31,6 @@ OBJS = $(SRCS:.c=.o)
 # Makefile build commands
 .c.o:
 	cc -c $< $(CFLAGS)
-
 
 car:	clean $(OBJS)
 	LDOPTS= \

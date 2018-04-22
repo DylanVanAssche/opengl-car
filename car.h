@@ -15,6 +15,7 @@ several files.
 #include <string.h>
 #include <math.h>
 #include <GL/glut.h>
+#include "InitJPG.h"
 
 // My version of the GCC compiler doesn't support the constant M_PI by default
 #ifndef M_PI
@@ -41,6 +42,26 @@ several files.
 #define SPOT_EXPONENT_STEP 5.0
 #define SPOT_ANGLE_DEFAULT 0.0
 #define SPOT_HEIGHT_DEFAULT 0.0
+#define NUMBER_OF_TEXTURES 3
+#define TEXTURE_TIRE 0
+#define TEXTURE_RIM 1
+#define TEXTURE_FINISH 2
+
+// Textures and complex surfaces
+static const char tireTexture[30] = "./images/tire.jpg";
+static const char rimTexture[30] = "./images/rim.jpg";
+static const char finishTexture[30] = "./images/finish.jpg";
+static GLuint textureAddressing[6];
+static GLfloat coachworkCheckpoints[4][4][3] = {
+   {{-1.5, -1.5, 4.0}, {-0.5, -1.5, 2.0},
+    {0.5, -1.5, -1.0}, {1.5, -1.5, 2.0}},
+   {{-1.5, -0.5, 1.0}, {-0.5, -0.5, 3.0},
+    {0.5, -0.5, 0.0}, {1.5, -0.5, -1.0}},
+   {{-1.5, 0.5, 4.0}, {-0.5, 0.5, 0.0},
+    {0.5, 0.5, 3.0}, {1.5, 0.5, 4.0}},
+   {{-1.5, 1.5, -2.0}, {-0.5, 1.5, -2.0},
+    {0.5, 1.5, 0.0}, {1.5, 1.5, -1.0}}
+};
 
 // Colors
 static const GLfloat RED[] = {1.0, 0.0, 0.0, 1.0};
@@ -77,7 +98,7 @@ static GLfloat SPECULAR_LILA[] = {0.35, 0.15, 0.85, 1.0};
 // Functions
 void drawAxes(GLint axes);
 void drawSuspension(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular);
-void drawTires(GLint wireFrame, GLfloat animationAngle);
+void drawTires(GLint wireFrame, GLfloat animationAngle, GLuint textureAddressing[], GLint texture);
 void drawCoachwork(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular, GLint clear);
 void configureLights(GLint ambientLight, GLint diffuseLight, GLint specularLight, GLint spotLight, GLint spotAngle, GLint spotExponent, GLint spotHeight);
-void drawFinish(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular, GLint competition);
+void drawFinish(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular, GLint competition, GLuint textureAddressing[], GLint texture);
