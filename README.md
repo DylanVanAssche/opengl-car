@@ -23,9 +23,9 @@ WIP
 ## Shortcuts
 
 ### Mouse
-Right click to show the menu where you can select several materials for each component of the car.
+- Right click to show the menu where you can select several materials for each component of the car.
 
-You can also quit the application from the mouse menu if you like.
+- You can also quit the application from the menu if you like.
 
 ### Keyboard
 
