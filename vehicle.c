@@ -302,35 +302,34 @@ void drawTires(GLint wireFrame, GLfloat animationAngle, GLuint textureAddressing
 }
 
 void drawCoachwork(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular, GLint clear) {
-    glMap2f(GL_MAP2_VERTEX_3, 0, 1, 3, 4, 0, 1, 12, 4, &coachworkCheckpoints[0][0][0]);
-   	glEnable(GL_MAP2_VERTEX_3);
-   	glMapGrid2f(20, 0.0, 1.0, 20, 0.0, 1.0);
-
     glPushMatrix ();
-	glColor3f(1.0, 0.0, 0.0);
-	   for (int j = 0; j <= 8; j++) {
-	      glBegin(GL_LINE_STRIP);
-	      for (int i = 0; i <= 30; i++)
-	         glEvalCoord2f((GLfloat)i/30.0, (GLfloat)j/8.0);
-	      glEnd();
-	      glBegin(GL_LINE_STRIP);
-	      for (int i = 0; i <= 30; i++)
-	         glEvalCoord2f((GLfloat)j/8.0, (GLfloat)i/30.0);
-	      glEnd();
-	   }
-   glPopMatrix ();
+        glMap2f(GL_MAP2_VERTEX_3, 0, 1, 3, 4, 0, 1, 12, 4, &coachworkCheckpoints[0][0][0]);
+       	glEnable(GL_MAP2_VERTEX_3);
+       	glMapGrid2f(20, 0.0, 1.0, 20, 0.0, 1.0);
 
-    // Make the coachwork transparent when enabled
-    if(clear) {
-        glEnable(GL_BLEND);
-    }
+        // Make the coachwork transparent when enabled
+        if(clear) {
+            glEnable(GL_BLEND);
+        }
 
-	glDepthMask(GL_FALSE); // Disable depth mask before blending
-		glBlendFunc(GL_SRC_ALPHA, GL_DST_ALPHA); // You can pick here different things to get other types of blending
-        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_GREY);
-        glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, DIFFUSE_GREY);
-        glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, SPECULAR_GREY);
-   		//glutSolidCone(0.4, 1.2, 10, 8);
-	glDepthMask(GL_TRUE); // Enable depth mask again
-	glDisable(GL_BLEND); // Stop blending
+    	glDepthMask(GL_FALSE); // Disable depth mask before blending
+    		glBlendFunc(GL_SRC_ALPHA, GL_DST_ALPHA); // You can pick here different things to get other types of blending
+            glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
+            glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
+            glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
+            for (int j = 0; j <= 8; j++) {
+     	      glBegin(GL_LINE_STRIP);
+         	      for (int i = 0; i <= 30; i++) {
+         	         glEvalCoord2f((GLfloat)i/30.0, (GLfloat)j/8.0);
+                 }
+     	      glEnd();
+     	      glBegin(GL_LINE_STRIP);
+         	      for (int i = 0; i <= 30; i++) {
+         	         glEvalCoord2f((GLfloat)j/8.0, (GLfloat)i/30.0);
+                 }
+     	      glEnd();
+     	   }
+    	glDepthMask(GL_TRUE); // Enable depth mask again
+    	glDisable(GL_BLEND); // Stop blending
+    glPopMatrix ();
 }
