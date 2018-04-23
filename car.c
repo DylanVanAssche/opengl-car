@@ -8,7 +8,7 @@
 #include "car.h"
 
 // Window size 1920 x 1080
-GLint winWidth = 1280, winHeight = 720;
+GLint winWidth = 1024, winHeight = 720;
 
 // Viewport coordinates
 GLdouble xmin = -2.0, xmax = 4.0, ymin = -2.0, ymax = 3.0, near = 1.0, far = 10.0, angle = 60.0;
@@ -24,6 +24,7 @@ GLint clear = 0;
 GLint fog = 0;
 GLint competition = 0;
 GLint texture = 0;
+GLint mesh = 0;
 GLubyte projectionMode = 'g';
 GLfloat* coachworkAmbient = AMBIENT_GREY;
 GLfloat* coachworkDiffuse = DIFFUSE_GREY;
@@ -274,6 +275,7 @@ void keyboardWatcher(unsigned char key, int x, int y)
 		case 'm': fog = !fog; printf("Fog TOGGLE\n"); break;
 		case 'n': competition = !competition; printf("Competition TOGGLE\n"); break;
 		case 'f': clear = !clear; printf("Transparancy TOGGLE\n"); break;
+		case 'a': mesh = !mesh; printf("Mesh points TOGGLE\n"); break;
 
 		// Spot
 		case 'h': spotHeight++; break;
@@ -338,14 +340,14 @@ void displayFunction(void)
 			// soapbox car 1
 			drawSuspension(wireFrame, suspensionAmbient, suspensionDiffuse, suspensionSpecular);
 			drawTires(wireFrame, animationWheelsAngle, textureAddressing, texture);
-			drawCoachwork(wireFrame, coachworkAmbient, coachworkDiffuse, coachworkSpecular, clear);
+			drawCoachwork(wireFrame, coachworkAmbient, coachworkDiffuse, coachworkSpecular, clear, mesh);
 
 			// soapbox car 2
 			if(competition) {
 				glTranslatef(0.0, 0.0, 2.0);
 				drawSuspension(wireFrame, suspensionAmbient, suspensionDiffuse, suspensionSpecular);
 				drawTires(wireFrame, animationWheelsAngle, textureAddressing, texture);
-				drawCoachwork(wireFrame, coachworkAmbient, coachworkDiffuse, coachworkSpecular, clear);
+				drawCoachwork(wireFrame, coachworkAmbient, coachworkDiffuse, coachworkSpecular, clear, mesh);
 			}
 		glPopMatrix();
 
@@ -384,13 +386,7 @@ void windowFunction(GLint newWidth, GLint newHeight)
 				break;
 	}
 
-	// Keep ratio
-	if(newWidth < newHeight) {
-		glViewport(0, 0, newWidth, newWidth);
-	}
-	else {
-		glViewport(0, 0, newHeight, newHeight);
-	}
+	glViewport(0, 0, newWidth, newHeight);
 }
 
 // Main loop

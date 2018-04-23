@@ -46,21 +46,54 @@ several files.
 #define TEXTURE_TIRE 0
 #define TEXTURE_RIM 1
 #define TEXTURE_FINISH 2
+#define TEXTURE_NAME_LENGTH 30
+#define COACHWORK_BEZIER_DIMENSIONS 3 // 3D checkpoints
+#define COACHWORK_BEZIER_LENGTH 6 // 6 checkpoints for the length of the coachwork
+#define COACHWORK_BEZIER_WIDTH 4 // 4 checkpoints for the width of the coachwork
+#define COACHWORK_BEZIER_SUBDIVIONS 20.0
+#define COACHWORK_BEZIER_MESH_RADIUS 0.05
+#define COACHWORK_GRID 20
 
 // Textures and complex surfaces
-static const char tireTexture[30] = "./images/tire.jpg";
-static const char rimTexture[30] = "./images/rim.jpg";
-static const char finishTexture[30] = "./images/finish.jpg";
-static GLuint textureAddressing[6];
-static GLfloat coachworkCheckpoints[4][4][3] = {
-   {{-1.5, -1.5, 4.0}, {-0.5, -1.5, 2.0},
-    {0.5, -1.5, -1.0}, {1.5, -1.5, 2.0}},
-   {{-1.5, -0.5, 1.0}, {-0.5, -0.5, 3.0},
-    {0.5, -0.5, 0.0}, {1.5, -0.5, -1.0}},
-   {{-1.5, 0.5, 4.0}, {-0.5, 0.5, 0.0},
-    {0.5, 0.5, 3.0}, {1.5, 0.5, 4.0}},
-   {{-1.5, 1.5, -2.0}, {-0.5, 1.5, -2.0},
-    {0.5, 1.5, 0.0}, {1.5, 1.5, -1.0}}
+static const char tireTexture[TEXTURE_NAME_LENGTH] = "./images/tire.jpg";
+static const char rimTexture[TEXTURE_NAME_LENGTH] = "./images/rim.jpg";
+static const char finishTexture[TEXTURE_NAME_LENGTH] = "./images/finish.jpg";
+static GLuint textureAddressing[NUMBER_OF_TEXTURES];
+static GLfloat coachworkCheckpoints[COACHWORK_BEZIER_WIDTH][COACHWORK_BEZIER_LENGTH][COACHWORK_BEZIER_DIMENSIONS] = // 6x4 3D points (6 length, 4 width)
+{
+    // 2 points extra for the length of the coachwork to provide a cutout for the seat
+   {
+       {0.5, 0.0, 0.33},
+       {1.0, 0.0, 0.66},
+       {1.5, 0.0, 0.66},
+       {1.7, 0.0, 0.66},
+       {1.9, 0.0, 0.66},
+       {2.0, 0.0, 0.66}
+   },
+   {
+       {0.0, 0.25, 0.33},
+       {0.5, 0.25, 0.66},
+       {1.5, 0.25, 0.66},
+       {1.7, 0.25, 0.66},
+       {1.9, 0.25, 0.66},
+       {2.0, 0.25, 0.66}
+   },
+   {
+       {0.0, 0.375, 0.33},
+       {0.5, 0.375, 0.66},
+       {1.5, 0.375, 0.66},
+       {1.7, 0.375, 0.66},
+       {1.9, 0.375, 0.66},
+       {2.0, 0.375, 0.66}
+   },
+   {
+       {0.0, 0.4, 0.125},
+       {0.5, 0.4, 0.125},
+       {1.5, 0.4, 0.125},
+       {1.8, 0.4, 0.125},
+       {1.9, 0.4, 0.45},
+       {2.5, 0.4, 0.5}
+   }
 };
 
 // Colors
@@ -99,6 +132,6 @@ static GLfloat SPECULAR_LILA[] = {0.35, 0.15, 0.85, 1.0};
 void drawAxes(GLint axes);
 void drawSuspension(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular);
 void drawTires(GLint wireFrame, GLfloat animationAngle, GLuint textureAddressing[], GLint texture);
-void drawCoachwork(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular, GLint clear);
+void drawCoachwork(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular, GLint clear, GLint mesh);
 void configureLights(GLint ambientLight, GLint diffuseLight, GLint specularLight, GLint spotLight, GLint spotAngle, GLint spotExponent, GLint spotHeight);
 void drawFinish(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular, GLint competition, GLuint textureAddressing[], GLint texture);
