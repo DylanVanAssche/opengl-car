@@ -7,7 +7,7 @@
 */
 #include "car.h"
 
-void drawFinish(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular, GLint competition, GLuint textureAddressing[], GLint texture) {
+void drawFinish(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular, GLint competition, GLuint textureAddressing[], GLint texture, GLint checkpoints) {
     // Cylinders
     GLUquadricObj *cylinder1 = gluNewQuadric();
     GLUquadricObj *cylinder2 = gluNewQuadric();

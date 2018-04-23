@@ -51,7 +51,7 @@ several files.
 #define COACHWORK_BEZIER_LENGTH 6 // 6 checkpoints for the length of the coachwork
 #define COACHWORK_BEZIER_WIDTH 4 // 4 checkpoints for the width of the coachwork
 #define COACHWORK_BEZIER_SUBDIVIONS 20.0
-#define COACHWORK_BEZIER_MESH_RADIUS 0.05
+#define COACHWORK_BEZIER_CHECKPOINT_RADIUS 0.05
 #define COACHWORK_GRID 20
 #define ARC_BSPLINE_ORDER 4
 #define ARC_BSPLINE_DEGREE 3
@@ -142,6 +142,6 @@ static GLfloat SPECULAR_LILA[] = {0.35, 0.15, 0.85, 1.0};
 void drawAxes(GLint axes);
 void drawSuspension(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular);
 void drawTires(GLint wireFrame, GLfloat animationAngle, GLuint textureAddressing[], GLint texture);
-void drawCoachwork(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular, GLint clear, GLint mesh);
+void drawCoachwork(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular, GLint clear, GLint checkpoints);
 void configureLights(GLint ambientLight, GLint diffuseLight, GLint specularLight, GLint spotLight, GLint spotAngle, GLint spotExponent, GLint spotHeight);
-void drawFinish(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular, GLint competition, GLuint textureAddressing[], GLint texture);
+void drawFinish(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular, GLint competition, GLuint textureAddressing[], GLint texture, GLint checkpoints);

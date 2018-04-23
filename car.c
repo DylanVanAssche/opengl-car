@@ -24,7 +24,6 @@ GLint clear = 0;
 GLint fog = 0;
 GLint competition = 0;
 GLint texture = 0;
-GLint mesh = 0;
 GLubyte projectionMode = 'g';
 GLfloat* coachworkAmbient = AMBIENT_GREY;
 GLfloat* coachworkDiffuse = DIFFUSE_GREY;
@@ -274,8 +273,7 @@ void keyboardWatcher(unsigned char key, int x, int y)
 		case 't': texture = !texture; printf("Texture TOGGLE\n"); break;
 		case 'm': fog = !fog; printf("Fog TOGGLE\n"); break;
 		case 'n': competition = !competition; printf("Competition TOGGLE\n"); break;
-		case 'f': clear = !clear; printf("Transparancy TOGGLE\n"); break;
-		case 'a': mesh = !mesh; printf("Mesh points TOGGLE\n"); break;
+		case 'f': clear = !clear; printf("Transparency TOGGLE\n"); break;
 
 		// Spot
 		case 'h': spotHeight++; break;
@@ -340,14 +338,14 @@ void displayFunction(void)
 			// soapbox car 1
 			drawSuspension(wireFrame, suspensionAmbient, suspensionDiffuse, suspensionSpecular);
 			drawTires(wireFrame, animationWheelsAngle, textureAddressing, texture);
-			drawCoachwork(wireFrame, coachworkAmbient, coachworkDiffuse, coachworkSpecular, clear, mesh);
+			drawCoachwork(wireFrame, coachworkAmbient, coachworkDiffuse, coachworkSpecular, clear, checkpoints);
 
 			// soapbox car 2
 			if(competition) {
 				glTranslatef(0.0, 0.0, 2.0);
 				drawSuspension(wireFrame, suspensionAmbient, suspensionDiffuse, suspensionSpecular);
 				drawTires(wireFrame, animationWheelsAngle, textureAddressing, texture);
-				drawCoachwork(wireFrame, coachworkAmbient, coachworkDiffuse, coachworkSpecular, clear, mesh);
+				drawCoachwork(wireFrame, coachworkAmbient, coachworkDiffuse, coachworkSpecular, clear, checkpoints);
 			}
 		glPopMatrix();
 
