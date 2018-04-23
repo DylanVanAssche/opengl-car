@@ -149,4 +149,6 @@ WIP
 </table>
 
 ## License
-Everything in this repository is available under the GPLv3 license.
+- Everything (except for the images) in this repository is available under the GPLv3 license.
+
+- The images are available under separate licenses, see the folder `images` for more information.
