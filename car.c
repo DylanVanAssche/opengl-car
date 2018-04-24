@@ -349,7 +349,7 @@ void displayFunction(void)
 			}
 		glPopMatrix();
 
-		drawFinish(wireFrame, finishAmbient, finishDiffuse, finishSpecular, competition, textureAddressing, texture);
+		drawFinish(wireFrame, finishAmbient, finishDiffuse, finishSpecular, competition, textureAddressing, texture, checkpoints);
 	glDisable(GL_LIGHTING);
     glDisable(GL_NORMALIZE);
 

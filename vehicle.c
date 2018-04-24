@@ -385,10 +385,10 @@ void drawCoachwork(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat*
             glScalef(1.0, 1.0, -1.0); // mirror
             glTranslatef(0.0, 0.0, -0.25); // car is not centered on the axis
             if(wireFrame) {
-                glEvalMesh2(GL_LINE, 0, 20, 0, 20);
+                glEvalMesh2(GL_LINE, 0, COACHWORK_GRID, 0, COACHWORK_GRID);
             }
             else {
-                glEvalMesh2(GL_FILL, 0, 20, 0, 20);
+                glEvalMesh2(GL_FILL, 0, COACHWORK_GRID, 0, COACHWORK_GRID);
             }
             glDisable(GL_MAP2_VERTEX_3);
         glDepthMask(GL_TRUE); // Enable depth mask again
