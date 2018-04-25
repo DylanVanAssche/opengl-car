@@ -35,8 +35,8 @@ several files.
 #define CAR_LINE_WIDTH 5.0
 #define CAR_SUBDIVIONS 50 // change this if rendering performance is bad on HP Thin CLients
 #define ANIMATION_SPEED 100 // Don't fry the GPU please
-#define ANIMATION_WHEEL_STEP 5
-#define ANIMATION_CAR_STEP -0.05 // driving in the opposite direction
+#define ANIMATION_WHEEL_STEP 25
+#define ANIMATION_CAR_STEP -0.20 // driving in the opposite direction
 #define MATERIAL_SHININESS_STEP 5.0
 #define SPOT_EXPONENT_DEFAULT 20.0
 #define SPOT_EXPONENT_STEP 5.0
@@ -47,11 +47,11 @@ several files.
 #define TEXTURE_RIM 1
 #define TEXTURE_FINISH 2
 #define TEXTURE_NAME_LENGTH 30
+#define CHECKPOINT_RADIUS 0.05
 #define COACHWORK_BEZIER_DIMENSIONS 3 // 3D checkpoints
 #define COACHWORK_BEZIER_LENGTH 6 // 6 checkpoints for the length of the coachwork
 #define COACHWORK_BEZIER_WIDTH 4 // 4 checkpoints for the width of the coachwork
 #define COACHWORK_BEZIER_SUBDIVIONS 20.0
-#define COACHWORK_BEZIER_CHECKPOINT_RADIUS 0.05
 #define COACHWORK_GRID 20
 #define FINISH_START_PILLARS -7.5
 #define FINISH_DISTANCE_PILLARS 10.0
@@ -106,7 +106,7 @@ static const GLfloat coachworkCheckpoints[COACHWORK_BEZIER_WIDTH][COACHWORK_BEZI
 
 // B Spline order = 4 (degree = 3), C X C checkpoints where C >= 4
 // Checkpoints
-static GLfloat arcCheckpoints[FINISH_BSPLINE_ORDER][FINISH_BSPLINE_ORDER][FINISH_BSPLINE_DIMENSION] = {
+static GLfloat finishCheckpoints[FINISH_BSPLINE_ORDER][FINISH_BSPLINE_ORDER][FINISH_BSPLINE_DIMENSION] = {
     {
         {0.0, 2.0, 0.0},
         {1.5, 2.0, 0.0},
