@@ -25,6 +25,7 @@ several files.
 // Constants
 #define WINDOW_WIDTH 1024
 #define WINDOW_HEIGHT 720
+#define VIEW_RESET_POS 5.0
 #define AXIS_LENGTH 100.0
 #define AXIS_LINE_WIDTH 2.0
 #define MENU_QUIT 0
@@ -40,6 +41,8 @@ several files.
 #define ANIMATION_WHEEL_STEP 25
 #define ANIMATION_CAR_STEP -0.20 // driving in the opposite direction
 #define MATERIAL_SHININESS_STEP 5.0
+#define MATERIAL_SHININESS_MIN 0.0
+#define MATERIAL_SHININESS_MAX 128.0
 #define SPOT_EXPONENT_DEFAULT 20.0
 #define SPOT_EXPONENT_STEP 5.0
 #define SPOT_ANGLE_DEFAULT 40.0
@@ -73,6 +76,7 @@ static GLfloat posLight3[] = {5.0, SPOT_HEIGHT_DEFAULT, 1.0, 1.0};
 static GLfloat spotDirection[] = {-1.0, -1.0, 0.0};
 
 // Textures and complex surfaces
+static const char nameTexture[NUMBER_OF_TEXTURES][TEXTURE_NAME_LENGTH] = {"./images/tire.jpg", "./images/rim.jpg", "./images/finish.jpg"};
 static const char tireTexture[TEXTURE_NAME_LENGTH] = "./images/tire.jpg";
 static const char rimTexture[TEXTURE_NAME_LENGTH] = "./images/rim.jpg";
 static const char finishTexture[TEXTURE_NAME_LENGTH] = "./images/finish.jpg";
