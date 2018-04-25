@@ -338,7 +338,7 @@ void drawCoachwork(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat*
                             glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, RED);
                             glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, RED);
                             glTranslatef(coachworkCheckpoints[i][j][0], coachworkCheckpoints[i][j][1], coachworkCheckpoints[i][j][2]);
-                            glutSolidSphere(COACHWORK_BEZIER_CHECKPOINT_RADIUS, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
+                            glutSolidSphere(CHECKPOINT_RADIUS, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
                         glPopMatrix();
 
                         // Mirror
@@ -347,7 +347,7 @@ void drawCoachwork(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat*
                             glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, GREEN);
                             glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, GREEN);
                             glTranslatef(coachworkCheckpoints[i][j][0], coachworkCheckpoints[i][j][1], -coachworkCheckpoints[i][j][2]);
-                            glutSolidSphere(COACHWORK_BEZIER_CHECKPOINT_RADIUS, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
+                            glutSolidSphere(CHECKPOINT_RADIUS, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
                         glPopMatrix();
                     }
                 }

@@ -8,28 +8,63 @@
 #include "car.h"
 
 void drawFinish(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular, GLint competition, GLuint textureAddressing[], GLint texture, GLint checkpoints) {
-    /*int u, v;
-   for (u = 0; u < 4; u++) {
-      for (v = 0; v < 4; v++) {
-         arcCheckpoints[u][v][0] = 2.0*((GLfloat)u - 1.5);
-         arcCheckpoints[u][v][1] = 2.0*((GLfloat)v - 1.5);
-
-         if ( (u == 1 || u == 2) && (v == 1 || v == 2))
-            arcCheckpoints[u][v][2] = 3.0;
-         else
-            arcCheckpoints[u][v][2] = -3.0;
-      }
-  }*/
-
     // Cylinders
     GLUquadricObj *cylinder1 = gluNewQuadric();
     GLUquadricObj *cylinder2 = gluNewQuadric();
 
-	glPushMatrix();
+    glPushMatrix();
         // Rotating, scaling and translating
         glRotatef(-90.0, 1.0, 0.0, 0.0);
+
         glScalef(0.25, 0.25, 1.25);
         competition? glTranslatef(0.0, 2*FINISH_START_PILLARS, 0.0): glTranslatef(0.0, FINISH_START_PILLARS, 0.0);
+
+        // Draw checkpoints if required
+        if(checkpoints) {
+            glPushMatrix();
+                for(GLint i = 0; i < FINISH_BSPLINE_ORDER; i++) {
+                    for(GLint j = 0; j < FINISH_BSPLINE_ORDER; j++) {
+                        // Part 1
+                        glPushMatrix();
+                            glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, RED);
+                            glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, RED);
+                            glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, RED);
+                            glTranslatef(finishCheckpoints[i][j][0], finishCheckpoints[i][j][1], finishCheckpoints[i][j][2] + 1.0); // Move above pillars
+                            glutSolidSphere(CHECKPOINT_RADIUS, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
+                        glPopMatrix();
+
+                        // Part 2
+                        glPushMatrix();
+                            glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, GREEN);
+                            glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, GREEN);
+                            glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, GREEN);
+                            glTranslatef(finishCheckpoints[i][j][0], -finishCheckpoints[i][j][1], finishCheckpoints[i][j][2] + 1.0); // Move above pillars
+                            glutSolidSphere(CHECKPOINT_RADIUS, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
+                        glPopMatrix();
+
+                        // Part 3
+                        glPushMatrix();
+                            competition? glTranslatef(0.0, 2*FINISH_DISTANCE_PILLARS, 0.0): glTranslatef(0.0, FINISH_DISTANCE_PILLARS, 0.0);
+                            glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, BLUE);
+                            glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, BLUE);
+                            glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, BLUE);
+                            glTranslatef(finishCheckpoints[i][j][0], -finishCheckpoints[i][j][1], finishCheckpoints[i][j][2] + 1.0); // Move above pillars
+                            glutSolidSphere(CHECKPOINT_RADIUS, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
+                        glPopMatrix();
+
+                        // Part 4
+                        glPushMatrix();
+                            competition? glTranslatef(0.0, 2*FINISH_DISTANCE_PILLARS, 0.0): glTranslatef(0.0, FINISH_DISTANCE_PILLARS, 0.0);
+                            glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, BLACK);
+                            glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, BLACK);
+                            glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, BLACK);
+                            glTranslatef(finishCheckpoints[i][j][0], finishCheckpoints[i][j][1], finishCheckpoints[i][j][2] + 1.0); // Move above pillars
+                            glutSolidSphere(CHECKPOINT_RADIUS, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
+                        glPopMatrix();
+                    }
+                }
+            glPopMatrix();
+        }
 
         // Wireframe or not?
     	if(wireFrame)
@@ -104,7 +139,7 @@ void drawFinish(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* sp
                         knots, // Array of knots in the v direction
                         FINISH_BSPLINE_ORDER*FINISH_BSPLINE_DIMENSION, // The offset between 2 checkpoints in the u direction
                         FINISH_BSPLINE_DIMENSION, // The offset between 2 checkpoints in the v direction
-                        &arcCheckpoints[0][0][0], // Checkpoints for the B Spline arc
+                        &finishCheckpoints[0][0][0], // Checkpoints for the B Spline arc
                         FINISH_BSPLINE_ORDER, // Order of the B spline in the u direction
                         FINISH_BSPLINE_ORDER, // Order of the B Spline in the v direction
                         GL_MAP2_TEXTURE_COORD_2
@@ -118,7 +153,7 @@ void drawFinish(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* sp
                         knots, // Array of knots in the v direction
                         FINISH_BSPLINE_ORDER*FINISH_BSPLINE_DIMENSION, // The offset between 2 checkpoints in the u direction
                         FINISH_BSPLINE_DIMENSION, // The offset between 2 checkpoints in the v direction
-                        &arcCheckpoints[0][0][0], // Checkpoints for the B Spline arc
+                        &finishCheckpoints[0][0][0], // Checkpoints for the B Spline arc
                         FINISH_BSPLINE_ORDER, // Order of the B spline in the u direction
                         FINISH_BSPLINE_ORDER, // Order of the B Spline in the v direction
                         GL_MAP2_VERTEX_3
@@ -138,7 +173,7 @@ void drawFinish(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* sp
                         knots, // Array of knots in the v direction
                         FINISH_BSPLINE_ORDER*FINISH_BSPLINE_DIMENSION, // The offset between 2 checkpoints in the u direction
                         FINISH_BSPLINE_DIMENSION, // The offset between 2 checkpoints in the v direction
-                        &arcCheckpoints[0][0][0], // Checkpoints for the B Spline arc
+                        &finishCheckpoints[0][0][0], // Checkpoints for the B Spline arc
                         FINISH_BSPLINE_ORDER, // Order of the B spline in the u direction
                         FINISH_BSPLINE_ORDER, // Order of the B Spline in the v direction
                         GL_MAP2_TEXTURE_COORD_2
@@ -152,7 +187,7 @@ void drawFinish(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* sp
                         knots, // Array of knots in the v direction
                         FINISH_BSPLINE_ORDER*FINISH_BSPLINE_DIMENSION, // The offset between 2 checkpoints in the u direction
                         FINISH_BSPLINE_DIMENSION, // The offset between 2 checkpoints in the v direction
-                        &arcCheckpoints[0][0][0], // Checkpoints for the B Spline arc
+                        &finishCheckpoints[0][0][0], // Checkpoints for the B Spline arc
                         FINISH_BSPLINE_ORDER, // Order of the B spline in the u direction
                         FINISH_BSPLINE_ORDER, // Order of the B Spline in the v direction
                         GL_MAP2_VERTEX_3
@@ -173,7 +208,7 @@ void drawFinish(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* sp
                         knots, // Array of knots in the v direction
                         FINISH_BSPLINE_ORDER*FINISH_BSPLINE_DIMENSION, // The offset between 2 checkpoints in the u direction
                         FINISH_BSPLINE_DIMENSION, // The offset between 2 checkpoints in the v direction
-                        &arcCheckpoints[0][0][0], // Checkpoints for the B Spline arc
+                        &finishCheckpoints[0][0][0], // Checkpoints for the B Spline arc
                         FINISH_BSPLINE_ORDER, // Order of the B spline in the u direction
                         FINISH_BSPLINE_ORDER, // Order of the B Spline in the v direction
                         GL_MAP2_TEXTURE_COORD_2
@@ -187,7 +222,7 @@ void drawFinish(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* sp
                         knots, // Array of knots in the v direction
                         FINISH_BSPLINE_ORDER*FINISH_BSPLINE_DIMENSION, // The offset between 2 checkpoints in the u direction
                         FINISH_BSPLINE_DIMENSION, // The offset between 2 checkpoints in the v direction
-                        &arcCheckpoints[0][0][0], // Checkpoints for the B Spline arc
+                        &finishCheckpoints[0][0][0], // Checkpoints for the B Spline arc
                         FINISH_BSPLINE_ORDER, // Order of the B spline in the u direction
                         FINISH_BSPLINE_ORDER, // Order of the B Spline in the v direction
                         GL_MAP2_VERTEX_3
@@ -207,7 +242,7 @@ void drawFinish(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* sp
                         knots, // Array of knots in the v direction
                         FINISH_BSPLINE_ORDER*FINISH_BSPLINE_DIMENSION, // The offset between 2 checkpoints in the u direction
                         FINISH_BSPLINE_DIMENSION, // The offset between 2 checkpoints in the v direction
-                        &arcCheckpoints[0][0][0], // Checkpoints for the B Spline arc
+                        &finishCheckpoints[0][0][0], // Checkpoints for the B Spline arc
                         FINISH_BSPLINE_ORDER, // Order of the B spline in the u direction
                         FINISH_BSPLINE_ORDER, // Order of the B Spline in the v direction
                         GL_MAP2_TEXTURE_COORD_2
@@ -221,7 +256,7 @@ void drawFinish(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* sp
                         knots, // Array of knots in the v direction
                         FINISH_BSPLINE_ORDER*FINISH_BSPLINE_DIMENSION, // The offset between 2 checkpoints in the u direction
                         FINISH_BSPLINE_DIMENSION, // The offset between 2 checkpoints in the v direction
-                        &arcCheckpoints[0][0][0], // Checkpoints for the B Spline arc
+                        &finishCheckpoints[0][0][0], // Checkpoints for the B Spline arc
                         FINISH_BSPLINE_ORDER, // Order of the B spline in the u direction
                         FINISH_BSPLINE_ORDER, // Order of the B Spline in the v direction
                         GL_MAP2_VERTEX_3
