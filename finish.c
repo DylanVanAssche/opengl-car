@@ -47,8 +47,8 @@ void drawFinish(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* sp
         texture? glEnable(GL_TEXTURE_2D): glDisable(GL_TEXTURE_2D);
             glBindTexture(GL_TEXTURE_2D, textureAddressing[TEXTURE_FINISH]);
         	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-        	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-        	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+        	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
         	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
             gluQuadricTexture(cylinder1, GL_TRUE);
@@ -66,21 +66,8 @@ void drawFinish(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* sp
 
             // Arc (B-Spline) p72
             glPushMatrix();
-                glScalef(0.25, 1.5, 1.0);
+                competition? glScalef(0.25, 3.0, 1.0): glScalef(0.25, 1.5, 1.0);
                 glTranslatef(0.0, -0.875, 1.0);
-
-                // Bind texture
-                glBindTexture(GL_TEXTURE_2D, textureAddressing[TEXTURE_FINISH]);
-            	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-            	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-            	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-            	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-            	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
-                // Set materials before drawing
-                glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
-                glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
-                glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
 
                 GLUnurbsObj *arcBSpline1 = gluNewNurbsRenderer();
                 GLUnurbsObj *arcBSpline2 = gluNewNurbsRenderer();
@@ -89,76 +76,51 @@ void drawFinish(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* sp
                 // https://www.talisman.org/opengl-1.1/Reference/gluNurbsProperty.html
                 gluNurbsProperty(arcBSpline1, GLU_SAMPLING_TOLERANCE, FINISH_BSPLINE_SAMPLING);
                 gluNurbsProperty(arcBSpline2, GLU_SAMPLING_TOLERANCE, FINISH_BSPLINE_SAMPLING);
+                gluNurbsProperty(arcBSpline3, GLU_SAMPLING_TOLERANCE, FINISH_BSPLINE_SAMPLING);
+                gluNurbsProperty(arcBSpline4, GLU_SAMPLING_TOLERANCE, FINISH_BSPLINE_SAMPLING);
+
                 if(wireFrame) {
-                    gluNurbsProperty(
-                        arcBSpline1, // GLUnurbsObj
-                        GLU_DISPLAY_MODE, // Property
-                        GLU_OUTLINE_POLYGON // Value of the property
-                    );
-
-                    gluNurbsProperty(
-                        arcBSpline2, // GLUnurbsObj
-                        GLU_DISPLAY_MODE, // Property
-                        GLU_OUTLINE_POLYGON // Value of the property
-                    );
-
-                    gluNurbsProperty(
-                        arcBSpline3, // GLUnurbsObj
-                        GLU_DISPLAY_MODE, // Property
-                        GLU_OUTLINE_POLYGON // Value of the property
-                    );
-
-                    gluNurbsProperty(
-                        arcBSpline4, // GLUnurbsObj
-                        GLU_DISPLAY_MODE, // Property
-                        GLU_OUTLINE_POLYGON // Value of the property
-                    );
+                    gluNurbsProperty(arcBSpline1, GLU_DISPLAY_MODE, GLU_OUTLINE_POLYGON);
+                    gluNurbsProperty(arcBSpline2, GLU_DISPLAY_MODE, GLU_OUTLINE_POLYGON);
+                    gluNurbsProperty(arcBSpline3, GLU_DISPLAY_MODE, GLU_OUTLINE_POLYGON);
+                    gluNurbsProperty(arcBSpline4, GLU_DISPLAY_MODE, GLU_OUTLINE_POLYGON);
                 }
                 else {
-                    gluNurbsProperty(
-                        arcBSpline1, // GLUnurbsObj
-                        GLU_DISPLAY_MODE, // Property
-                        GLU_FILL // Value of the property
-                    );
-
-                    gluNurbsProperty(
-                        arcBSpline2, // GLUnurbsObj
-                        GLU_DISPLAY_MODE, // Property
-                        GLU_FILL // Value of the property
-                    );
-
-                    gluNurbsProperty(
-                        arcBSpline3, // GLUnurbsObj
-                        GLU_DISPLAY_MODE, // Property
-                        GLU_FILL // Value of the property
-                    );
-
-                    gluNurbsProperty(
-                        arcBSpline4, // GLUnurbsObj
-                        GLU_DISPLAY_MODE, // Property
-                        GLU_FILL // Value of the property
-                    );
+                    gluNurbsProperty(arcBSpline1, GLU_DISPLAY_MODE, GLU_FILL);
+                    gluNurbsProperty(arcBSpline2, GLU_DISPLAY_MODE, GLU_FILL);
+                    gluNurbsProperty(arcBSpline3, GLU_DISPLAY_MODE, GLU_FILL);
+                    gluNurbsProperty(arcBSpline4, GLU_DISPLAY_MODE, GLU_FILL);
                 }
 
                 // Part 1
                 gluBeginSurface(arcBSpline1);
                     // https://www.talisman.org/opengl-1.1/Reference/gluNurbsSurface.html
-                    /*
-                        Note that a gluNurbsSurface with sKnotCount knots in the u direction
-                        and tKnotCount knots in the v direction with orders sOrder and tOrder
-                        must have (sKnotCount - sOrder) x (tKnotCount - tOrder) control points.
-                    */
+                    // Texture mapping
                     gluNurbsSurface(
                         arcBSpline1, // GLUnurbsObj
-                        8, // Number of knots in the u direction
+                        2*FINISH_BSPLINE_ORDER, // Number of knots in the u direction
                         knots, // Array of knots in the u direction
-                        8, // Number of knots in the v direction
+                        2*FINISH_BSPLINE_ORDER, // Number of knots in the v direction
                         knots, // Array of knots in the v direction
-                        4*3, // The offset between 2 checkpoints in the u direction
-                        3, // The offset between 2 checkpoints in the v direction
+                        FINISH_BSPLINE_ORDER*FINISH_BSPLINE_DIMENSION, // The offset between 2 checkpoints in the u direction
+                        FINISH_BSPLINE_DIMENSION, // The offset between 2 checkpoints in the v direction
                         &arcCheckpoints[0][0][0], // Checkpoints for the B Spline arc
-                        4, //FINISH_BSPLINE_ORDER, // Order of the B spline in the u direction
-                        4, //FINISH_BSPLINE_ORDER, // Order of the B Spline in the v direction
+                        FINISH_BSPLINE_ORDER, // Order of the B spline in the u direction
+                        FINISH_BSPLINE_ORDER, // Order of the B Spline in the v direction
+                        GL_MAP2_TEXTURE_COORD_2
+                    );
+                    // BSpline surface
+                    gluNurbsSurface(
+                        arcBSpline1, // GLUnurbsObj
+                        2*FINISH_BSPLINE_ORDER, // Number of knots in the u direction
+                        knots, // Array of knots in the u direction
+                        2*FINISH_BSPLINE_ORDER, // Number of knots in the v direction
+                        knots, // Array of knots in the v direction
+                        FINISH_BSPLINE_ORDER*FINISH_BSPLINE_DIMENSION, // The offset between 2 checkpoints in the u direction
+                        FINISH_BSPLINE_DIMENSION, // The offset between 2 checkpoints in the v direction
+                        &arcCheckpoints[0][0][0], // Checkpoints for the B Spline arc
+                        FINISH_BSPLINE_ORDER, // Order of the B spline in the u direction
+                        FINISH_BSPLINE_ORDER, // Order of the B Spline in the v direction
                         GL_MAP2_VERTEX_3
                     );
                 gluEndSurface(arcBSpline1);
@@ -167,22 +129,32 @@ void drawFinish(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* sp
                 glScalef(-1.0, 1.0, 1.0);
                 gluBeginSurface(arcBSpline2);
                     // https://www.talisman.org/opengl-1.1/Reference/gluNurbsSurface.html
-                    /*
-                        Note that a gluNurbsSurface with sKnotCount knots in the u direction
-                        and tKnotCount knots in the v direction with orders sOrder and tOrder
-                        must have (sKnotCount - sOrder) x (tKnotCount - tOrder) control points.
-                    */
+                    // Texture mapping
                     gluNurbsSurface(
                         arcBSpline2, // GLUnurbsObj
-                        8, // Number of knots in the u direction
+                        2*FINISH_BSPLINE_ORDER, // Number of knots in the u direction
                         knots, // Array of knots in the u direction
-                        8, // Number of knots in the v direction
+                        2*FINISH_BSPLINE_ORDER, // Number of knots in the v direction
                         knots, // Array of knots in the v direction
-                        4*3, // The offset between 2 checkpoints in the u direction
-                        3, // The offset between 2 checkpoints in the v direction
+                        FINISH_BSPLINE_ORDER*FINISH_BSPLINE_DIMENSION, // The offset between 2 checkpoints in the u direction
+                        FINISH_BSPLINE_DIMENSION, // The offset between 2 checkpoints in the v direction
                         &arcCheckpoints[0][0][0], // Checkpoints for the B Spline arc
-                        4, //FINISH_BSPLINE_ORDER, // Order of the B spline in the u direction
-                        4, //FINISH_BSPLINE_ORDER, // Order of the B Spline in the v direction
+                        FINISH_BSPLINE_ORDER, // Order of the B spline in the u direction
+                        FINISH_BSPLINE_ORDER, // Order of the B Spline in the v direction
+                        GL_MAP2_TEXTURE_COORD_2
+                    );
+                    // BSpline surface
+                    gluNurbsSurface(
+                        arcBSpline2, // GLUnurbsObj
+                        2*FINISH_BSPLINE_ORDER, // Number of knots in the u direction
+                        knots, // Array of knots in the u direction
+                        2*FINISH_BSPLINE_ORDER, // Number of knots in the v direction
+                        knots, // Array of knots in the v direction
+                        FINISH_BSPLINE_ORDER*FINISH_BSPLINE_DIMENSION, // The offset between 2 checkpoints in the u direction
+                        FINISH_BSPLINE_DIMENSION, // The offset between 2 checkpoints in the v direction
+                        &arcCheckpoints[0][0][0], // Checkpoints for the B Spline arc
+                        FINISH_BSPLINE_ORDER, // Order of the B spline in the u direction
+                        FINISH_BSPLINE_ORDER, // Order of the B Spline in the v direction
                         GL_MAP2_VERTEX_3
                     );
                 gluEndSurface(arcBSpline2);
@@ -192,22 +164,32 @@ void drawFinish(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* sp
                 glScalef(-1.0, -1.0, 1.0);
                 gluBeginSurface(arcBSpline3);
                     // https://www.talisman.org/opengl-1.1/Reference/gluNurbsSurface.html
-                    /*
-                        Note that a gluNurbsSurface with sKnotCount knots in the u direction
-                        and tKnotCount knots in the v direction with orders sOrder and tOrder
-                        must have (sKnotCount - sOrder) x (tKnotCount - tOrder) control points.
-                    */
+                    // Texture mapping
                     gluNurbsSurface(
                         arcBSpline3, // GLUnurbsObj
-                        8, // Number of knots in the u direction
+                        2*FINISH_BSPLINE_ORDER, // Number of knots in the u direction
                         knots, // Array of knots in the u direction
-                        8, // Number of knots in the v direction
+                        2*FINISH_BSPLINE_ORDER, // Number of knots in the v direction
                         knots, // Array of knots in the v direction
-                        4*3, // The offset between 2 checkpoints in the u direction
-                        3, // The offset between 2 checkpoints in the v direction
+                        FINISH_BSPLINE_ORDER*FINISH_BSPLINE_DIMENSION, // The offset between 2 checkpoints in the u direction
+                        FINISH_BSPLINE_DIMENSION, // The offset between 2 checkpoints in the v direction
                         &arcCheckpoints[0][0][0], // Checkpoints for the B Spline arc
-                        4, //FINISH_BSPLINE_ORDER, // Order of the B spline in the u direction
-                        4, //FINISH_BSPLINE_ORDER, // Order of the B Spline in the v direction
+                        FINISH_BSPLINE_ORDER, // Order of the B spline in the u direction
+                        FINISH_BSPLINE_ORDER, // Order of the B Spline in the v direction
+                        GL_MAP2_TEXTURE_COORD_2
+                    );
+                    // BSpline surface
+                    gluNurbsSurface(
+                        arcBSpline3, // GLUnurbsObj
+                        2*FINISH_BSPLINE_ORDER, // Number of knots in the u direction
+                        knots, // Array of knots in the u direction
+                        2*FINISH_BSPLINE_ORDER, // Number of knots in the v direction
+                        knots, // Array of knots in the v direction
+                        FINISH_BSPLINE_ORDER*FINISH_BSPLINE_DIMENSION, // The offset between 2 checkpoints in the u direction
+                        FINISH_BSPLINE_DIMENSION, // The offset between 2 checkpoints in the v direction
+                        &arcCheckpoints[0][0][0], // Checkpoints for the B Spline arc
+                        FINISH_BSPLINE_ORDER, // Order of the B spline in the u direction
+                        FINISH_BSPLINE_ORDER, // Order of the B Spline in the v direction
                         GL_MAP2_VERTEX_3
                     );
                 gluEndSurface(arcBSpline3);
@@ -216,23 +198,33 @@ void drawFinish(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* sp
                 glScalef(-1.0, 1.0, 1.0);
                 gluBeginSurface(arcBSpline4);
                     // https://www.talisman.org/opengl-1.1/Reference/gluNurbsSurface.html
-                    /*
-                        Note that a gluNurbsSurface with sKnotCount knots in the u direction
-                        and tKnotCount knots in the v direction with orders sOrder and tOrder
-                        must have (sKnotCount - sOrder) x (tKnotCount - tOrder) control points.
-                    */
+                    // Texture mapping
                     gluNurbsSurface(
                         arcBSpline4, // GLUnurbsObj
-                        8, // Number of knots in the u direction
+                        2*FINISH_BSPLINE_ORDER, // Number of knots in the u direction
                         knots, // Array of knots in the u direction
-                        8, // Number of knots in the v direction
+                        2*FINISH_BSPLINE_ORDER, // Number of knots in the v direction
                         knots, // Array of knots in the v direction
-                        4*3, // The offset between 2 checkpoints in the u direction
-                        3, // The offset between 2 checkpoints in the v direction
+                        FINISH_BSPLINE_ORDER*FINISH_BSPLINE_DIMENSION, // The offset between 2 checkpoints in the u direction
+                        FINISH_BSPLINE_DIMENSION, // The offset between 2 checkpoints in the v direction
                         &arcCheckpoints[0][0][0], // Checkpoints for the B Spline arc
-                        4, //FINISH_BSPLINE_ORDER, // Order of the B spline in the u direction
-                        4, //FINISH_BSPLINE_ORDER, // Order of the B Spline in the v direction
+                        FINISH_BSPLINE_ORDER, // Order of the B spline in the u direction
+                        FINISH_BSPLINE_ORDER, // Order of the B Spline in the v direction
                         GL_MAP2_TEXTURE_COORD_2
+                    );
+                    // BSpline surface
+                    gluNurbsSurface(
+                        arcBSpline4, // GLUnurbsObj
+                        2*FINISH_BSPLINE_ORDER, // Number of knots in the u direction
+                        knots, // Array of knots in the u direction
+                        2*FINISH_BSPLINE_ORDER, // Number of knots in the v direction
+                        knots, // Array of knots in the v direction
+                        FINISH_BSPLINE_ORDER*FINISH_BSPLINE_DIMENSION, // The offset between 2 checkpoints in the u direction
+                        FINISH_BSPLINE_DIMENSION, // The offset between 2 checkpoints in the v direction
+                        &arcCheckpoints[0][0][0], // Checkpoints for the B Spline arc
+                        FINISH_BSPLINE_ORDER, // Order of the B spline in the u direction
+                        FINISH_BSPLINE_ORDER, // Order of the B Spline in the v direction
+                        GL_MAP2_VERTEX_3
                     );
                 gluEndSurface(arcBSpline4);
             glPopMatrix();

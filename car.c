@@ -334,7 +334,7 @@ void displayFunction(void)
 
 		// Push matrix to isolate translation animation
 		glPushMatrix();
-			glTranslatef(animationCarTranslation, 0.0, 0.0);
+			competition? glTranslatef(animationCarTranslation, 0.0, 0.25): glTranslatef(animationCarTranslation, 0.0, 0.5);
 			// soapbox car 1
 			drawSuspension(wireFrame, suspensionAmbient, suspensionDiffuse, suspensionSpecular);
 			drawTires(wireFrame, animationWheelsAngle, textureAddressing, texture);

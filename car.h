@@ -59,6 +59,7 @@ several files.
 #define FINISH_BSPLINE_DEGREE 3
 #define FINISH_BSPLINE_CHECKPOINTS 4
 #define FINISH_BSPLINE_SAMPLING 25.0
+#define FINISH_BSPLINE_DIMENSION 3
 
 // Textures and complex surfaces
 static const char tireTexture[TEXTURE_NAME_LENGTH] = "./images/tire.jpg";
@@ -104,8 +105,8 @@ static const GLfloat coachworkCheckpoints[COACHWORK_BEZIER_WIDTH][COACHWORK_BEZI
 };
 
 // B Spline order = 4 (degree = 3), C X C checkpoints where C >= 4
-// TODO make the spline more "uitgerokken"
-static GLfloat arcCheckpoints[4][4][3] = {
+// Checkpoints
+static GLfloat arcCheckpoints[FINISH_BSPLINE_ORDER][FINISH_BSPLINE_ORDER][FINISH_BSPLINE_DIMENSION] = {
     {
         {0.0, 2.0, 0.0},
         {1.5, 2.0, 0.0},
@@ -128,11 +129,11 @@ static GLfloat arcCheckpoints[4][4][3] = {
         {0.0, -2.5, 1.0},
         {1.5, -2.5, 1.0},
         {2.5, -2.5, 1.0},
-        {3.0, -2.5, 0.5}
+        {3.0, -2.5, 0.33}
     }
 };
 
-static GLfloat knots[8] = {0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0};
+static GLfloat knots[2*FINISH_BSPLINE_ORDER] = {0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0};
 
 // Colors
 static const GLfloat RED[] = {1.0, 0.0, 0.0, 1.0};
