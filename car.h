@@ -26,7 +26,7 @@ several files.
 #define AXIS_LENGTH 100.0
 #define AXIS_LINE_WIDTH 2.0
 #define MENU_QUIT 0
-#define MENU_COACHWORK_GREY 1
+#define MENU_COACHWORK_GRAY 1
 #define MENU_COACHWORK_WHITE 2
 #define MENU_SUSPENSION_CHROME 3
 #define MENU_SUSPENSION_BRONZE 4
@@ -60,6 +60,9 @@ several files.
 #define FINISH_BSPLINE_CHECKPOINTS 4
 #define FINISH_BSPLINE_SAMPLING 25.0
 #define FINISH_BSPLINE_DIMENSION 3
+#define FOG_DENSITY 0.25 // Exponent mode only
+#define FOG_START 0.0 // Linear mode only
+#define FOG_END 10.0 // Linear mode only
 
 // Textures and complex surfaces
 static const char tireTexture[TEXTURE_NAME_LENGTH] = "./images/tire.jpg";
@@ -143,11 +146,12 @@ static const GLfloat GREEN_BLUE[] = {0.0, 0.75, 0.75, 1.0};
 static const GLfloat YELLOW[] = {1.0, 1.0, 0.0, 1.0};
 static const GLfloat WHITE[] = {1.0, 1.0, 1.0, 1.0};
 static const GLfloat BLACK[] = {0.0, 0.0, 0.0, 1.0};
+static const GLfloat BLUE_GRAY[] = {0.44, 0.5, 0.56, 1.0};
 
 // Materials
-static GLfloat AMBIENT_GREY[] = {0.22, 0.22, 0.22, 1.0};
-static GLfloat DIFFUSE_GREY[] = {0.33, 0.33, 0.33, 1.0};
-static GLfloat SPECULAR_GREY[] = {0.11, 0.11, 0.11, 1.0};
+static GLfloat AMBIENT_GRAY[] = {0.22, 0.22, 0.22, 1.0};
+static GLfloat DIFFUSE_GRAY[] = {0.33, 0.33, 0.33, 1.0};
+static GLfloat SPECULAR_GRAY[] = {0.11, 0.11, 0.11, 1.0};
 static GLfloat AMBIENT_BLACK[] = {0.11, 0.11, 0.11, 1.0};
 static GLfloat DIFFUSE_BLACK[] = {0.055, 0.055, 0.055, 1.0};
 static GLfloat SPECULAR_BLACK[] = {0.0275, 0.0275, 0.0275, 1.0};
@@ -173,4 +177,5 @@ void drawSuspension(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat
 void drawTires(GLint wireFrame, GLfloat animationAngle, GLuint textureAddressing[], GLint texture);
 void drawCoachwork(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular, GLint clear, GLint checkpoints);
 void configureLights(GLint ambientLight, GLint diffuseLight, GLint specularLight, GLint spotLight, GLint spotAngle, GLint spotExponent, GLint spotHeight);
+void configureFog(GLint fog, GLint fogMode);
 void drawFinish(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular, GLint competition, GLuint textureAddressing[], GLint texture, GLint checkpoints);

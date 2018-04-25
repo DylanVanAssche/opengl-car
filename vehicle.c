@@ -159,9 +159,9 @@ void drawTires(GLint wireFrame, GLfloat animationAngle, GLuint textureAddressing
         	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
             gluQuadricTexture(wheelFrontBottom, GL_TRUE);
             gluQuadricTexture(wheelFrontTop, GL_TRUE);
-            glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_GREY);
-            glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_GREY);
-            glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_GREY);
+            glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_GRAY);
+            glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_GRAY);
+            glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_GRAY);
             gluDisk(wheelFrontBottom, 0.0, 1.0, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
             glTranslatef(0.0, 0.0, 1.0);
             gluDisk(wheelFrontTop, 0.0, 1.0, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
@@ -223,9 +223,9 @@ void drawTires(GLint wireFrame, GLfloat animationAngle, GLuint textureAddressing
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
             gluQuadricTexture(wheelBack1Bottom, GL_TRUE);
             gluQuadricTexture(wheelBack1Top, GL_TRUE);
-            glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_GREY);
-            glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_GREY);
-            glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_GREY);
+            glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_GRAY);
+            glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_GRAY);
+            glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_GRAY);
             gluDisk(wheelBack1Bottom, 0.0, 1.0, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
             glTranslatef(0.0, 0.0, 1.0);
             gluDisk(wheelBack1Top, 0.0, 1.0, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
@@ -287,9 +287,9 @@ void drawTires(GLint wireFrame, GLfloat animationAngle, GLuint textureAddressing
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
             gluQuadricTexture(wheelBack2Bottom, GL_TRUE);
             gluQuadricTexture(wheelBack2Top, GL_TRUE);
-            glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_GREY);
-            glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, DIFFUSE_GREY);
-            glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, SPECULAR_GREY);
+            glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_GRAY);
+            glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, DIFFUSE_GRAY);
+            glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, SPECULAR_GRAY);
             gluDisk(wheelBack2Bottom, 0.0, 1.0, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
             glTranslatef(0.0, 0.0, 1.0);
             gluDisk(wheelBack2Top, 0.0, 1.0, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
