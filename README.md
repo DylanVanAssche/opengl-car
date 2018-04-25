@@ -15,10 +15,15 @@ A futuristic soapbox car in OpenGL for the course Computergraphics by Herman Cra
 - [x] Animates the wheels of the car
 - [x] Texture support of the finish and the car
 - [x] Toggle the alpha value of the car
-- [ ] Fog support
+- [x] Fog support
 
 ## Screenshots
-WIP
+
+### Competition mode
+![Screenshot 1](./images/screenshot1.png)
+
+### Fog, blending and different types of illumination
+![Screenshot 2](./images/screenshot2.png)
 
 ## Shortcuts
 
@@ -52,51 +57,51 @@ WIP
     </tr>
     <tr>
         <td>1</td>
-        <td>Toggle ambient light (`GL_LIGHT0`)</td>
+        <td>Toggle ambient light (GL_LIGHT0)</td>
     </tr>
     <tr>
         <td>2</td>
-        <td>Toggle diffuse light (`GL_LIGHT1`)</td>
+        <td>Toggle diffuse light (GL_LIGHT1)</td>
     </tr>
     <tr>
         <td>3</td>
-        <td>Toggle specular light (`GL_LIGHT2`)</td>
+        <td>Toggle specular light (GL_LIGHT2)</td>
     </tr>
     <tr>
         <td>4</td>
-        <td>Toggle spot light (`GL_LIGHT3`)</td>
+        <td>Toggle spot light (GL_LIGHT3)</td>
     </tr>
     <tr>
         <td>s</td>
-        <td>Switch to shading mode _SMOOTH_</td>
+        <td>Switch to shading mode <i>SMOOTH</i></td>
     </tr>
     <tr>
         <td>S</td>
-        <td>Switch to shading mode _FLAT_</td>
+        <td>Switch to shading mode <i>FLAT</i></td>
     </tr>
     <tr>
         <td>l</td>
-        <td>Turn wireframe mode _ON_</td>
+        <td>Turn wireframe mode <i>ON</i></td>
     </tr>
     <tr>
         <td>L</td>
-        <td>Turn wireframe mode _OFF_</td>
+        <td>Turn wireframe mode <i>OFF</i></td>
     </tr>
     <tr>
         <td>j</td>
-        <td>Turn axes _ON_</td>
+        <td>Turn axes <i>ON</i></td>
     </tr>
     <tr>
         <td>J</td>
-        <td>Turn axes _OFF_</td>
+        <td>Turn axes <i>OFF</i></td>
     </tr>
     <tr>
         <td>k</td>
-        <td>Turn checkpoints _ON_</td>
+        <td>Turn checkpoints <i>ON</i></td>
     </tr>
     <tr>
         <td>K</td>
-        <td>Turn checkpoints _OFF_</td>
+        <td>Turn checkpoints <i>OFF</i></td>
     </tr>
     <tr>
         <td>g</td>
@@ -113,6 +118,10 @@ WIP
     <tr>
         <td>m</td>
         <td>Toggle fog</td>
+    </tr>
+    <tr>
+        <td>M</td>
+        <td>Toggle fog mode (<i>LINEAR / EXP</i>)</td>
     </tr>
     <tr>
         <td>n</td>
