@@ -67,3 +67,18 @@ void configureLights(GLint ambientLight, GLint diffuseLight, GLint specularLight
     specularLight? glEnable(GL_LIGHT2): glDisable(GL_LIGHT2);
     spotLight? glEnable(GL_LIGHT3): glDisable(GL_LIGHT3);
 }
+
+void configureFog(GLint fog, GLint fogMode) {
+    fog? glEnable(GL_FOG): glDisable(GL_FOG);
+    glFogfv(GL_FOG_COLOR, BLUE_GRAY);
+
+    if(fogMode) {
+        glFogf(GL_FOG_MODE, GL_EXP); // GL_EXP2 is also an option
+        glFogf(GL_FOG_DENSITY, FOG_DENSITY);
+    }
+    else {
+        glFogf(GL_FOG_MODE, GL_LINEAR);
+        glFogf(GL_FOG_START, FOG_START);
+        glFogf(GL_FOG_END, FOG_END);
+    }
+}

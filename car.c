@@ -22,12 +22,13 @@ GLint animateWheels = 0;
 GLint animateCar = 0;
 GLint clear = 0;
 GLint fog = 0;
+GLint fogMode = 0;
 GLint competition = 0;
 GLint texture = 0;
 GLubyte projectionMode = 'g';
-GLfloat* coachworkAmbient = AMBIENT_GREY;
-GLfloat* coachworkDiffuse = DIFFUSE_GREY;
-GLfloat* coachworkSpecular = SPECULAR_GREY;
+GLfloat* coachworkAmbient = AMBIENT_GRAY;
+GLfloat* coachworkDiffuse = DIFFUSE_GRAY;
+GLfloat* coachworkSpecular = SPECULAR_GRAY;
 GLfloat* suspensionAmbient = AMBIENT_BRONZE;
 GLfloat* suspensionDiffuse = DIFFUSE_BRONZE;
 GLfloat* suspensionSpecular = SPECULAR_BRONZE;
@@ -75,10 +76,10 @@ void menu(int id) {
 void coachworkMenu(int id) {
 	printf("Selected item ID: %d in coackworkMenu\n", id);
 	switch(id) {
-		case MENU_COACHWORK_GREY:
-			coachworkAmbient = AMBIENT_GREY;
-			coachworkDiffuse = DIFFUSE_GREY;
-			coachworkSpecular = SPECULAR_GREY;
+		case MENU_COACHWORK_GRAY:
+			coachworkAmbient = AMBIENT_GRAY;
+			coachworkDiffuse = DIFFUSE_GRAY;
+			coachworkSpecular = SPECULAR_GRAY;
 		break;
 
 		case MENU_COACHWORK_WHITE:
@@ -160,7 +161,7 @@ void init(void)
 
 	// Init menu
 	GLint menuCoachworkID = glutCreateMenu(coachworkMenu);
-	glutAddMenuEntry("grey", MENU_COACHWORK_GREY);
+	glutAddMenuEntry("grey", MENU_COACHWORK_GRAY);
 	glutAddMenuEntry("white", MENU_COACHWORK_WHITE);
 
 	GLint menuSuspensionID = glutCreateMenu(suspensionMenu);
@@ -272,6 +273,7 @@ void keyboardWatcher(unsigned char key, int x, int y)
 		case 'G': animateCar = !animateCar; printf("Animation car TOGGLE\n"); break;
 		case 't': texture = !texture; printf("Texture TOGGLE\n"); break;
 		case 'm': fog = !fog; printf("Fog TOGGLE\n"); break;
+		case 'M': fogMode = !fogMode; printf("Fog exponent/lineair mode TOGGLE\n"); break;
 		case 'n': competition = !competition; printf("Competition TOGGLE\n"); break;
 		case 'f': clear = !clear; printf("Transparency TOGGLE\n"); break;
 
@@ -314,6 +316,9 @@ void displayFunction(void)
 	glLoadIdentity();
 	glShadeModel(flat? GL_FLAT: GL_SMOOTH);
 	glMaterialf(GL_FRONT, GL_SHININESS, materialShininess);
+
+	// Configure fog
+	configureFog(fog, fogMode);
 
 	// Lights stay at the same place when set before gluLookAt
 	if(lightsLocked) {
