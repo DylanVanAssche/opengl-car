@@ -7,11 +7,11 @@
 */
 #include "car.h"
 
-// Window size 1920 x 1080
+// Window
 GLint winWidth = 1024, winHeight = 720;
 
 // Viewport coordinates
-GLdouble xmin = -2.0, xmax = 4.0, ymin = -2.0, ymax = 3.0, near = 1.0, far = 10.0, angle = 60.0;
+GLdouble xmin = -50.0, xmax = 50.0, ymin = -50.0, ymax = 50.0, near = 0.1, far = 25.0, angle = 60.0;
 
 // Enabled features
 GLint axes = 1;
@@ -46,9 +46,9 @@ GLint ambientLight = 0;
 GLint diffuseLight = 0;
 GLint specularLight = 0;
 GLint spotLight = 0;
-GLdouble spotHeight = 0.0;
-GLdouble spotAngle = 0.0;
-GLdouble spotExponent = 20.0;
+GLdouble spotHeight = SPOT_HEIGHT_DEFAULT;
+GLdouble spotAngle = SPOT_ANGLE_DEFAULT;
+GLdouble spotExponent = SPOT_EXPONENT_DEFAULT;
 
 // Material
 GLdouble materialShininess = 10.0;
@@ -152,12 +152,15 @@ void init(void)
 	glLightfv(GL_LIGHT0, GL_AMBIENT, BLACK);
 	glLightfv(GL_LIGHT1, GL_AMBIENT, BLACK);
 	glLightfv(GL_LIGHT2, GL_AMBIENT, BLACK);
+	glLightfv(GL_LIGHT3, GL_AMBIENT, BLACK);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, BLACK);
 	glLightfv(GL_LIGHT1, GL_DIFFUSE, BLACK);
 	glLightfv(GL_LIGHT2, GL_DIFFUSE, BLACK);
+	glLightfv(GL_LIGHT3, GL_DIFFUSE, BLACK);
 	glLightfv(GL_LIGHT0, GL_SPECULAR, BLACK);
 	glLightfv(GL_LIGHT1, GL_SPECULAR, BLACK);
 	glLightfv(GL_LIGHT2, GL_SPECULAR, BLACK);
+	glLightfv(GL_LIGHT3, GL_SPECULAR, BLACK);
 
 	// Init menu
 	GLint menuCoachworkID = glutCreateMenu(coachworkMenu);
@@ -226,8 +229,8 @@ void animation(GLint value) {
 		animationCarTranslation += ANIMATION_CAR_STEP;
 
 		// Reset when car is out of sight
-		if(animationCarTranslation <= -10.0) {
-			animationCarTranslation = 10.0;
+		if(animationCarTranslation <= -far) {
+			animationCarTranslation = far;
 		}
 	}
 
@@ -318,7 +321,7 @@ void displayFunction(void)
 	glMaterialf(GL_FRONT, GL_SHININESS, materialShininess);
 
 	// Configure fog
-	configureFog(fog, fogMode);
+	configureFog(fog, fogMode, far);
 
 	// Lights stay at the same place when set before gluLookAt
 	if(lightsLocked) {

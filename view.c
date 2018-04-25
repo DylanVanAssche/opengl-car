@@ -42,10 +42,8 @@ void drawAxes(GLint axes) {
 }
 
 void configureLights(GLint ambientLight, GLint diffuseLight, GLint specularLight, GLint spotLight, GLint spotAngle, GLint spotExponent, GLint spotHeight) {
-    GLfloat posLight0[] = {2.0, 5.0, 4.0, 1.0};
-    GLfloat posLight1[] = {2.0, 5.0, 4.0, 1.0};
-    GLfloat posLight2[] = {3.0, 3.0, 3.0, 1.0};
-    GLfloat posLight3[] = {2.0, 5.0, 4.0, 1.0};
+    // Update spot height
+    posLight3[1] = spotHeight;
 
     // Light positions
     glLightfv(GL_LIGHT0, GL_POSITION, posLight0);
@@ -57,9 +55,14 @@ void configureLights(GLint ambientLight, GLint diffuseLight, GLint specularLight
     glLightfv(GL_LIGHT0, GL_AMBIENT, WHITE);
 	glLightfv(GL_LIGHT1, GL_DIFFUSE, GREEN_BLUE);
 	glLightfv(GL_LIGHT2, GL_SPECULAR, RED);
-	glLightfv(GL_LIGHT3, GL_SPECULAR, YELLOW);
+	glLightfv(GL_LIGHT3, GL_AMBIENT, YELLOW);
+    glLightfv(GL_LIGHT3, GL_DIFFUSE, YELLOW);
     glLightfv(GL_LIGHT3, GL_SPECULAR, YELLOW);
-    glLightfv(GL_LIGHT3, GL_SPECULAR, YELLOW);
+
+    // Spot
+    glLightf(GL_LIGHT3, GL_SPOT_CUTOFF, spotAngle);
+    glLightf(GL_LIGHT3, GL_SPOT_EXPONENT, spotExponent);
+    glLightfv(GL_LIGHT3, GL_SPOT_DIRECTION, spotDirection);
 
     // Enable several lights
     ambientLight? glEnable(GL_LIGHT0): glDisable(GL_LIGHT0);
@@ -68,7 +71,7 @@ void configureLights(GLint ambientLight, GLint diffuseLight, GLint specularLight
     spotLight? glEnable(GL_LIGHT3): glDisable(GL_LIGHT3);
 }
 
-void configureFog(GLint fog, GLint fogMode) {
+void configureFog(GLint fog, GLint fogMode, GLfloat far) {
     fog? glEnable(GL_FOG): glDisable(GL_FOG);
     glFogfv(GL_FOG_COLOR, BLUE_GRAY);
 
@@ -79,6 +82,6 @@ void configureFog(GLint fog, GLint fogMode) {
     else {
         glFogf(GL_FOG_MODE, GL_LINEAR);
         glFogf(GL_FOG_START, FOG_START);
-        glFogf(GL_FOG_END, FOG_END);
+        glFogf(GL_FOG_END, far);
     }
 }

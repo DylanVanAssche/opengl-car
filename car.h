@@ -23,6 +23,8 @@ several files.
 #endif
 
 // Constants
+#define WINDOW_WIDTH 1024
+#define WINDOW_HEIGHT 720
 #define AXIS_LENGTH 100.0
 #define AXIS_LINE_WIDTH 2.0
 #define MENU_QUIT 0
@@ -40,8 +42,8 @@ several files.
 #define MATERIAL_SHININESS_STEP 5.0
 #define SPOT_EXPONENT_DEFAULT 20.0
 #define SPOT_EXPONENT_STEP 5.0
-#define SPOT_ANGLE_DEFAULT 0.0
-#define SPOT_HEIGHT_DEFAULT 0.0
+#define SPOT_ANGLE_DEFAULT 40.0
+#define SPOT_HEIGHT_DEFAULT 3.0
 #define NUMBER_OF_TEXTURES 3
 #define TEXTURE_TIRE 0
 #define TEXTURE_RIM 1
@@ -62,7 +64,13 @@ several files.
 #define FINISH_BSPLINE_DIMENSION 3
 #define FOG_DENSITY 0.25 // Exponent mode only
 #define FOG_START 0.0 // Linear mode only
-#define FOG_END 10.0 // Linear mode only
+
+// Lights
+static GLfloat posLight0[] = {3.0, 3.0, 3.0, 1.0};
+static GLfloat posLight1[] = {3.0, 3.0, -3.0, 1.0};
+static GLfloat posLight2[] = {3.0, 3.0, 3.0, 1.0};
+static GLfloat posLight3[] = {5.0, SPOT_HEIGHT_DEFAULT, 1.0, 1.0};
+static GLfloat spotDirection[] = {-1.0, -1.0, 0.0};
 
 // Textures and complex surfaces
 static const char tireTexture[TEXTURE_NAME_LENGTH] = "./images/tire.jpg";
@@ -135,7 +143,7 @@ static GLfloat finishCheckpoints[FINISH_BSPLINE_ORDER][FINISH_BSPLINE_ORDER][FIN
         {3.0, -2.5, 0.33}
     }
 };
-
+// Knots
 static GLfloat knots[2*FINISH_BSPLINE_ORDER] = {0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0};
 
 // Colors
@@ -177,5 +185,5 @@ void drawSuspension(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat
 void drawTires(GLint wireFrame, GLfloat animationAngle, GLuint textureAddressing[], GLint texture);
 void drawCoachwork(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular, GLint clear, GLint checkpoints);
 void configureLights(GLint ambientLight, GLint diffuseLight, GLint specularLight, GLint spotLight, GLint spotAngle, GLint spotExponent, GLint spotHeight);
-void configureFog(GLint fog, GLint fogMode);
+void configureFog(GLint fog, GLint fogMode, GLfloat far);
 void drawFinish(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular, GLint competition, GLuint textureAddressing[], GLint texture, GLint checkpoints);
