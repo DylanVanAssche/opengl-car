@@ -301,7 +301,7 @@ void drawTires(GLint wireFrame, GLfloat animationAngle, GLuint textureAddressing
     gluDeleteQuadric(wheelFrontBottom);
 }
 
-void drawCoachwork(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular, GLint clear, GLint mesh) {
+void drawCoachwork(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular, GLint clear, GLint checkpoints) {
     glPushMatrix();
         // Bezier spline: u € [0,1] and v € [0,1] (definition of the Bezier forumula)
         // https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glMap2.xml
@@ -327,9 +327,8 @@ void drawCoachwork(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat*
             1.0 // vMax
         );
 
-        // Draw point mesh if required
-        if(mesh) {
-            printf("Drawing mesh\n");
+        // Draw checkpoints if required
+        if(checkpoints) {
             glPushMatrix();
                 for(GLint i = 0; i < COACHWORK_BEZIER_WIDTH; i++) {
                     for(GLint j = 0; j < COACHWORK_BEZIER_LENGTH; j++) {
@@ -339,7 +338,7 @@ void drawCoachwork(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat*
                             glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, RED);
                             glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, RED);
                             glTranslatef(coachworkCheckpoints[i][j][0], coachworkCheckpoints[i][j][1], coachworkCheckpoints[i][j][2]);
-                            glutSolidSphere(COACHWORK_BEZIER_MESH_RADIUS, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
+                            glutSolidSphere(COACHWORK_BEZIER_CHECKPOINT_RADIUS, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
                         glPopMatrix();
 
                         // Mirror
@@ -348,7 +347,7 @@ void drawCoachwork(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat*
                             glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, GREEN);
                             glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, GREEN);
                             glTranslatef(coachworkCheckpoints[i][j][0], coachworkCheckpoints[i][j][1], -coachworkCheckpoints[i][j][2]);
-                            glutSolidSphere(COACHWORK_BEZIER_MESH_RADIUS, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
+                            glutSolidSphere(COACHWORK_BEZIER_CHECKPOINT_RADIUS, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
                         glPopMatrix();
                     }
                 }
@@ -386,10 +385,10 @@ void drawCoachwork(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat*
             glScalef(1.0, 1.0, -1.0); // mirror
             glTranslatef(0.0, 0.0, -0.25); // car is not centered on the axis
             if(wireFrame) {
-                glEvalMesh2(GL_LINE, 0, 20, 0, 20);
+                glEvalMesh2(GL_LINE, 0, COACHWORK_GRID, 0, COACHWORK_GRID);
             }
             else {
-                glEvalMesh2(GL_FILL, 0, 20, 0, 20);
+                glEvalMesh2(GL_FILL, 0, COACHWORK_GRID, 0, COACHWORK_GRID);
             }
             glDisable(GL_MAP2_VERTEX_3);
         glDepthMask(GL_TRUE); // Enable depth mask again

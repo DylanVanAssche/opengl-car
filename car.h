@@ -51,16 +51,24 @@ several files.
 #define COACHWORK_BEZIER_LENGTH 6 // 6 checkpoints for the length of the coachwork
 #define COACHWORK_BEZIER_WIDTH 4 // 4 checkpoints for the width of the coachwork
 #define COACHWORK_BEZIER_SUBDIVIONS 20.0
-#define COACHWORK_BEZIER_MESH_RADIUS 0.05
+#define COACHWORK_BEZIER_CHECKPOINT_RADIUS 0.05
 #define COACHWORK_GRID 20
+#define FINISH_START_PILLARS -7.5
+#define FINISH_DISTANCE_PILLARS 10.0
+#define FINISH_BSPLINE_ORDER 4
+#define FINISH_BSPLINE_DEGREE 3
+#define FINISH_BSPLINE_CHECKPOINTS 4
+#define FINISH_BSPLINE_SAMPLING 25.0
+#define FINISH_BSPLINE_DIMENSION 3
 
 // Textures and complex surfaces
 static const char tireTexture[TEXTURE_NAME_LENGTH] = "./images/tire.jpg";
 static const char rimTexture[TEXTURE_NAME_LENGTH] = "./images/rim.jpg";
 static const char finishTexture[TEXTURE_NAME_LENGTH] = "./images/finish.jpg";
 static GLuint textureAddressing[NUMBER_OF_TEXTURES];
-static GLfloat coachworkCheckpoints[COACHWORK_BEZIER_WIDTH][COACHWORK_BEZIER_LENGTH][COACHWORK_BEZIER_DIMENSIONS] = // 6x4 3D points (6 length, 4 width)
-{
+
+// Bezier surface 6x4 3D points (6 length, 4 width)
+static const GLfloat coachworkCheckpoints[COACHWORK_BEZIER_WIDTH][COACHWORK_BEZIER_LENGTH][COACHWORK_BEZIER_DIMENSIONS] = {
     // 2 points extra for the length of the coachwork to provide a cutout for the seat
    {
        {0.5, 0.0, 0.33},
@@ -95,6 +103,37 @@ static GLfloat coachworkCheckpoints[COACHWORK_BEZIER_WIDTH][COACHWORK_BEZIER_LEN
        {2.5, 0.4, 0.5}
    }
 };
+
+// B Spline order = 4 (degree = 3), C X C checkpoints where C >= 4
+// Checkpoints
+static GLfloat arcCheckpoints[FINISH_BSPLINE_ORDER][FINISH_BSPLINE_ORDER][FINISH_BSPLINE_DIMENSION] = {
+    {
+        {0.0, 2.0, 0.0},
+        {1.5, 2.0, 0.0},
+        {2.5, 2.0, 0.0},
+        {3.0, 0.0, 0.0}
+    },
+    {
+        {0.0, 1.95, 0.9},
+        {1.5, 1.95, 0.9},
+        {2.5, 1.95, 0.9},
+        {3.0, 0.0, 0.5}
+    },
+    {
+        {0.0, 1.9, 0.95},
+        {1.5, 1.9, 0.95},
+        {2.5, 1.9, 0.95},
+        {3.0, 0.0, 0.5}
+    },
+    {
+        {0.0, -2.5, 1.0},
+        {1.5, -2.5, 1.0},
+        {2.5, -2.5, 1.0},
+        {3.0, -2.5, 0.33}
+    }
+};
+
+static GLfloat knots[2*FINISH_BSPLINE_ORDER] = {0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0};
 
 // Colors
 static const GLfloat RED[] = {1.0, 0.0, 0.0, 1.0};
@@ -132,6 +171,6 @@ static GLfloat SPECULAR_LILA[] = {0.35, 0.15, 0.85, 1.0};
 void drawAxes(GLint axes);
 void drawSuspension(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular);
 void drawTires(GLint wireFrame, GLfloat animationAngle, GLuint textureAddressing[], GLint texture);
-void drawCoachwork(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular, GLint clear, GLint mesh);
+void drawCoachwork(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular, GLint clear, GLint checkpoints);
 void configureLights(GLint ambientLight, GLint diffuseLight, GLint specularLight, GLint spotLight, GLint spotAngle, GLint spotExponent, GLint spotHeight);
-void drawFinish(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular, GLint competition, GLuint textureAddressing[], GLint texture);
+void drawFinish(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular, GLint competition, GLuint textureAddressing[], GLint texture, GLint checkpoints);
