@@ -59,7 +59,7 @@ GLdouble xRef = 1.0, yRef = 1.0, zRef = 0.0;
 GLdouble xVW = 0.0, yVW = 1.0, zVW = 0.0;
 
 // OpenGL callback: menu calls
-void menu(int id) {
+void menu(GLint id) {
 	printf("Selected item ID: %d in main menu\n", id);
 	switch(id) {
 		case MENU_QUIT:
@@ -73,7 +73,7 @@ void menu(int id) {
 	glutPostRedisplay();
 }
 
-void coachworkMenu(int id) {
+void coachworkMenu(GLint id) {
 	printf("Selected item ID: %d in coackworkMenu\n", id);
 	switch(id) {
 		case MENU_COACHWORK_GRAY:
@@ -95,7 +95,7 @@ void coachworkMenu(int id) {
 	glutPostRedisplay();
 }
 
-void suspensionMenu(int id) {
+void suspensionMenu(GLint id) {
 	printf("Selected item ID: %d in suspensionMenu\n", id);
 	switch(id) {
 		case MENU_SUSPENSION_BRONZE:
@@ -117,7 +117,7 @@ void suspensionMenu(int id) {
 	glutPostRedisplay();
 }
 
-void finishMenu(int id) {
+void finishMenu(GLint id) {
 	printf("Selected item ID: %d in finishMenu\n", id);
 	switch(id) {
 		case MENU_FINISH_YELLOW:
@@ -185,29 +185,16 @@ void init(void)
 	// Attach menu
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
 
-	// Tire texture
-    tImageJPG *tireJPG;
-    tireJPG = LoadJPG(tireTexture);
-    printf("Loaded %s: %dx%d\n", tireTexture, tireJPG->sizeX, tireJPG->sizeY);
-
-	// Rim texture
-    tImageJPG *rimJPG;
-    rimJPG = LoadJPG(rimTexture);
-    printf("Loaded %s: %dx%d\n", rimTexture, rimJPG->sizeX, rimJPG->sizeY);
-
-	// Finish texture
-    tImageJPG *finishJPG;
-    finishJPG = LoadJPG(finishTexture);
-    printf("Loaded %s: %dx%d\n", finishTexture, rimJPG->sizeX, rimJPG->sizeY);
-
+	// Load textures from JPG files
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	glGenTextures(NUMBER_OF_TEXTURES, textureAddressing);
-	glBindTexture(GL_TEXTURE_2D, textureAddressing[TEXTURE_TIRE]);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, tireJPG->sizeX, tireJPG->sizeY, 0, GL_RGB, GL_UNSIGNED_BYTE, tireJPG->data);
-	glBindTexture(GL_TEXTURE_2D, textureAddressing[TEXTURE_RIM]);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, rimJPG->sizeX, rimJPG->sizeY, 0, GL_RGB, GL_UNSIGNED_BYTE, rimJPG->data);
-	glBindTexture(GL_TEXTURE_2D, textureAddressing[TEXTURE_FINISH]);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, finishJPG->sizeX, finishJPG->sizeY, 0, GL_RGB, GL_UNSIGNED_BYTE, finishJPG->data);
+	for(GLint i=0; i < NUMBER_OF_TEXTURES; i++) {
+		tImageJPG *textureJPG;
+	    textureJPG = LoadJPG(nameTexture[i]);
+		glBindTexture(GL_TEXTURE_2D, textureAddressing[i]);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, textureJPG->sizeX, textureJPG->sizeY, 0, GL_RGB, GL_UNSIGNED_BYTE, textureJPG->data);
+		printf("Loaded %s: %dx%d\n", nameTexture[i], textureJPG->sizeX, textureJPG->sizeY);
+	}
 }
 
 // OpenGL callback: timer animation
@@ -228,7 +215,7 @@ void animation(GLint value) {
 		printf("Gas met die zooi! TRANSLATION=%f\n", animationCarTranslation);
 		animationCarTranslation += ANIMATION_CAR_STEP;
 
-		// Reset when car is out of sight
+		// Reset when car is out of sight (far)
 		if(animationCarTranslation <= -far) {
 			animationCarTranslation = far;
 		}
@@ -255,7 +242,7 @@ void keyboardWatcher(unsigned char key, int x, int y)
 		case 'Y': yLens--; break;
 		case 'z': zLens++; break;
 		case 'Z': zLens--; break;
-		case 'i': xLens = yLens = zLens = 3.0; break;
+		case 'i': xLens = yLens = zLens = VIEW_RESET_POS; printf("View lens resetted\n"); break;
 
 		// Projection modes
 		case '1': ambientLight = !ambientLight; printf("Ambient light TOGGLE\n"); break;
@@ -290,8 +277,14 @@ void keyboardWatcher(unsigned char key, int x, int y)
 		case 'b': lightsLocked = !lightsLocked; printf("Lights locked TOGGLE\n"); break;
 
 		// Material
-		case 'e': materialShininess = materialShininess + 5; break;
-		case 'E': materialShininess > 0? materialShininess = materialShininess - 5: printf("Material SHININESS must be > 0\n"); break;
+		case 'e': materialShininess < MATERIAL_SHININESS_MAX?
+		(materialShininess = materialShininess + MATERIAL_SHININESS_STEP):
+		(materialShininess = MATERIAL_SHININESS_MAX);
+		break;
+		case 'E': materialShininess > MATERIAL_SHININESS_MIN?
+		(materialShininess = materialShininess - MATERIAL_SHININESS_STEP):
+		(materialShininess = MATERIAL_SHININESS_MIN);
+		break;
 
 		// Quit
 		case 'q':
@@ -340,6 +333,9 @@ void displayFunction(void)
 	glEnable(GL_NORMALIZE);
 	glEnable(GL_LIGHTING);
 
+		// Draw solid finish before blending functions are activated
+		drawFinish(wireFrame, finishAmbient, finishDiffuse, finishSpecular, competition, textureAddressing, texture, checkpoints);
+
 		// Push matrix to isolate translation animation
 		glPushMatrix();
 			// Make sure the cars are in the center of the finish
@@ -359,7 +355,6 @@ void displayFunction(void)
 			}
 		glPopMatrix();
 
-		drawFinish(wireFrame, finishAmbient, finishDiffuse, finishSpecular, competition, textureAddressing, texture, checkpoints);
 	glDisable(GL_LIGHTING);
     glDisable(GL_NORMALIZE);
 

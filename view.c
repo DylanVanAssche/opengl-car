@@ -41,6 +41,20 @@ void drawAxes(GLint axes) {
     }
 }
 
+void drawCheckpoints(GLfloat*** checkpoints, GLfloat color[], GLint u, GLint v) {
+    for(GLint i=0; i < u; i++) {
+        for(GLint j=0; j < v; j++) {
+            glPushMatrix();
+                glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, color);
+                glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, color);
+                glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, color);
+                glTranslatef(checkpoints[i][j][0], checkpoints[i][j][1], checkpoints[i][j][2]); // Move above pillars
+                glutSolidSphere(CHECKPOINT_RADIUS, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
+            glPopMatrix();
+        }
+    }
+}
+
 void configureLights(GLint ambientLight, GLint diffuseLight, GLint specularLight, GLint spotLight, GLint spotAngle, GLint spotExponent, GLint spotHeight) {
     // Update spot height
     posLight3[1] = spotHeight;

@@ -10,15 +10,14 @@
 // Draw the vehicle suspension
 void drawSuspension(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular) {
     printf("Drawing suspension\n");
-    glLineWidth(CAR_LINE_WIDTH);
+
+    // Materials
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
 
     // Main beam X axis
 	glPushMatrix();
-        // Materials
-        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
-        glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
-	    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
-
         // Scaling and translating
         glScalef(2.0, 0.125, 0.25);
         glTranslatef(0.75, 0.5, 0.5);
@@ -34,11 +33,6 @@ void drawSuspension(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat
 
     // Main beam Y axis
     glPushMatrix();
-        // Materials
-        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
-        glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
-        glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
-
         // Scaling and translating
         glScalef(0.4, 0.125, 1.0);
         glTranslatef(4.25, 0.5, 0.125);
@@ -54,11 +48,6 @@ void drawSuspension(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat
 
     // Wheel holder X axis
     glPushMatrix();
-        // Materials
-        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
-        glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
-        glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
-
         // Scaling and translating
         glScalef(0.5, 0.125, 0.0625);
         glTranslatef(0.5, 0.5, 0.5);
@@ -93,11 +82,6 @@ void drawSuspension(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat
         	gluQuadricDrawStyle(seatBottom, GLU_FILL);
             gluQuadricDrawStyle(seatTop, GLU_FILL);
         }
-
-        // Set materials before drawing
-        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
-        glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
-        glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
     	gluCylinder(seatBottom, 1.0, 0.5, 1.0, CAR_SUBDIVIONS, CAR_SUBDIVIONS); // cone
         glTranslatef(0.0, 0.0, 1.0);
         gluDisk(seatTop, 0.0, 0.75, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
@@ -108,201 +92,134 @@ void drawSuspension(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat
 }
 
 void drawTires(GLint wireFrame, GLfloat animationAngle, GLuint textureAddressing[], GLint texture) {
-    GLUquadricObj *wheelFrontSide = gluNewQuadric();
-    GLUquadricObj *wheelFrontTop = gluNewQuadric();
-	GLUquadricObj *wheelFrontBottom = gluNewQuadric();
+    GLfloat tirePos[3][3] = { // 3 tires, 3D
+        {0.5, 0.5, 0.45},
+        {11.25, 0.5, 0.75},
+        {11.25, 0.5, -1.0}
+    };
 
-    // Front wheel
-	glPushMatrix();
-        // Scaling and translating
-    	glScalef(0.2, 0.2, 0.150);
-        glTranslatef(0.5, 0.5, 0.45);
+    GLfloat tireScale[3][3] = { // 3 tires, 3D
+        {0.2, 0.2, 0.150},
+        {0.2, 0.2, 0.33},
+        {0.2, 0.2, 0.33}
+    };
 
-        // Animation angle
-        glRotatef(animationAngle, 0.0, 0.0, 1.0);
+    // Loop through the 3 tires
+    for(GLint i=0; i < 3; i++) {
+        GLUquadricObj *wheelSide = gluNewQuadric();
+        GLUquadricObj *wheelTop = gluNewQuadric();
+    	GLUquadricObj *wheelBottom = gluNewQuadric();
+        glPushMatrix();
+            // Scaling and translating
+        	glScalef(tireScale[i][0], tireScale[i][1], tireScale[i][2]);
+            glTranslatef(tirePos[i][0], tirePos[i][1], tirePos[i][2]);
 
-        // Wireframe or solid?
-    	if(wireFrame)
-        {
-        	gluQuadricDrawStyle(wheelFrontSide, GLU_SILHOUETTE);
-            gluQuadricDrawStyle(wheelFrontTop, GLU_SILHOUETTE);
-            gluQuadricDrawStyle(wheelFrontBottom, GLU_SILHOUETTE);
-        }
-    	else
-        {
-        	gluQuadricDrawStyle(wheelFrontSide, GLU_FILL);
-            gluQuadricDrawStyle(wheelFrontTop, GLU_FILL);
-            gluQuadricDrawStyle(wheelFrontBottom, GLU_FILL);
-        }
+            // Animation angle
+            glRotatef(animationAngle, 0.0, 0.0, 1.0);
 
-        // Add textures
-        texture? glEnable(GL_TEXTURE_2D): glDisable(GL_TEXTURE_2D);
+            // Wireframe or solid?
+            if(wireFrame)
+            {
+                gluQuadricDrawStyle(wheelSide, GLU_SILHOUETTE);
+                gluQuadricDrawStyle(wheelTop, GLU_SILHOUETTE);
+                gluQuadricDrawStyle(wheelBottom, GLU_SILHOUETTE);
+            }
+            else
+            {
+                gluQuadricDrawStyle(wheelSide, GLU_FILL);
+                gluQuadricDrawStyle(wheelTop, GLU_FILL);
+                gluQuadricDrawStyle(wheelBottom, GLU_FILL);
+            }
+
+            // Textures enabled?
+            texture? glEnable(GL_TEXTURE_2D): glDisable(GL_TEXTURE_2D);
+
+            // Bind texture
             glBindTexture(GL_TEXTURE_2D, textureAddressing[TEXTURE_TIRE]);
         	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
         	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
         	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
         	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-            gluQuadricTexture(wheelFrontSide, GL_TRUE);
+            gluQuadricTexture(wheelSide, GL_TRUE);
 
-            // Set materials before drawing
+            // Set materials and draw
             glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_BLACK);
             glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, DIFFUSE_BLACK);
             glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, SPECULAR_BLACK);
-        	gluCylinder(wheelFrontSide, 1.0, 1.0, 1.0, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
+        	gluCylinder(wheelSide, 1.0, 1.0, 1.0, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
 
+            // Bind texture
             glBindTexture(GL_TEXTURE_2D, textureAddressing[TEXTURE_RIM]);
         	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
         	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
         	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
         	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-            gluQuadricTexture(wheelFrontBottom, GL_TRUE);
-            gluQuadricTexture(wheelFrontTop, GL_TRUE);
+            gluQuadricTexture(wheelBottom, GL_TRUE);
+            gluQuadricTexture(wheelTop, GL_TRUE);
+
+            // Set materials and draw
             glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_GRAY);
             glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_GRAY);
             glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_GRAY);
-            gluDisk(wheelFrontBottom, 0.0, 1.0, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
+            gluDisk(wheelBottom, 0.0, 1.0, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
             glTranslatef(0.0, 0.0, 1.0);
-            gluDisk(wheelFrontTop, 0.0, 1.0, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
-        glDisable(GL_TEXTURE_2D); // Only the tire, not the rim
-
-	glPopMatrix();
-	gluDeleteQuadric(wheelFrontSide);
-    gluDeleteQuadric(wheelFrontTop);
-    gluDeleteQuadric(wheelFrontBottom);
-
-    // Back wheel 1
-    GLUquadricObj *wheelBack1Side = gluNewQuadric();
-    GLUquadricObj *wheelBack1Top = gluNewQuadric();
-	GLUquadricObj *wheelBack1Bottom = gluNewQuadric();
-
-    glPushMatrix();
-        // Scaling and translating
-    	glScalef(0.2, 0.2, 0.33);
-        glTranslatef(11.25, 0.5, 0.75);
-
-        // Animation angle
-        glRotatef(animationAngle, 0.0, 0.0, 1.0);
-
-        // Wireframe or solid?
-    	if(wireFrame)
-        {
-        	gluQuadricDrawStyle(wheelBack1Side, GLU_SILHOUETTE);
-            gluQuadricDrawStyle(wheelBack1Top, GLU_SILHOUETTE);
-            gluQuadricDrawStyle(wheelBack1Bottom, GLU_SILHOUETTE);
-        }
-    	else
-        {
-        	gluQuadricDrawStyle(wheelBack1Side, GLU_FILL);
-            gluQuadricDrawStyle(wheelBack1Top, GLU_FILL);
-            gluQuadricDrawStyle(wheelBack1Bottom, GLU_FILL);
-        }
-
-        // Set materials before drawing
-        texture? glEnable(GL_TEXTURE_2D): glDisable(GL_TEXTURE_2D);
-            glBindTexture(GL_TEXTURE_2D, textureAddressing[TEXTURE_TIRE]);
-        	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-        	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-        	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-        	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-            gluQuadricTexture(wheelBack1Side, GL_TRUE);
-
-            // Set materials before drawing
-            glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_BLACK);
-            glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, DIFFUSE_BLACK);
-            glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, SPECULAR_BLACK);
-        	gluCylinder(wheelBack1Side, 1.0, 1.0, 1.0, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
-
-            glBindTexture(GL_TEXTURE_2D, textureAddressing[TEXTURE_RIM]);
-            glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-            gluQuadricTexture(wheelBack1Bottom, GL_TRUE);
-            gluQuadricTexture(wheelBack1Top, GL_TRUE);
-            glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_GRAY);
-            glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_GRAY);
-            glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_GRAY);
-            gluDisk(wheelBack1Bottom, 0.0, 1.0, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
-            glTranslatef(0.0, 0.0, 1.0);
-            gluDisk(wheelBack1Top, 0.0, 1.0, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
-        glDisable(GL_TEXTURE_2D);
-
-	glPopMatrix();
-	gluDeleteQuadric(wheelFrontSide);
-    gluDeleteQuadric(wheelFrontTop);
-    gluDeleteQuadric(wheelFrontBottom);
-
-    // Back wheel 2
-    GLUquadricObj *wheelBack2Side = gluNewQuadric();
-    GLUquadricObj *wheelBack2Top = gluNewQuadric();
-	GLUquadricObj *wheelBack2Bottom = gluNewQuadric();
-
-    glPushMatrix();
-        // Scaling and translating
-    	glScalef(0.2, 0.2, 0.33);
-        glTranslatef(11.25, 0.5, -1.0);
-
-        // Animation angle
-        glRotatef(animationAngle, 0.0, 0.0, 1.0);
-
-        // Wireframe or solid?
-    	if(wireFrame)
-        {
-        	gluQuadricDrawStyle(wheelBack2Side, GLU_SILHOUETTE);
-            gluQuadricDrawStyle(wheelBack2Top, GLU_SILHOUETTE);
-            gluQuadricDrawStyle(wheelBack2Bottom, GLU_SILHOUETTE);
-        }
-    	else
-        {
-        	gluQuadricDrawStyle(wheelBack2Side, GLU_FILL);
-            gluQuadricDrawStyle(wheelBack2Top, GLU_FILL);
-            gluQuadricDrawStyle(wheelBack2Bottom, GLU_FILL);
-        }
-
-        // Set materials before drawing
-        texture? glEnable(GL_TEXTURE_2D): glDisable(GL_TEXTURE_2D);
-            glBindTexture(GL_TEXTURE_2D, textureAddressing[TEXTURE_TIRE]);
-        	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-        	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-        	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-        	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-            gluQuadricTexture(wheelBack2Side, GL_TRUE);
-
-            // Set materials before drawing
-            glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_BLACK);
-            glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, DIFFUSE_BLACK);
-            glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, SPECULAR_BLACK);
-        	gluCylinder(wheelBack2Side, 1.0, 1.0, 1.0, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
-
-            glBindTexture(GL_TEXTURE_2D, textureAddressing[TEXTURE_RIM]);
-            glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-            gluQuadricTexture(wheelBack2Bottom, GL_TRUE);
-            gluQuadricTexture(wheelBack2Top, GL_TRUE);
-            glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_GRAY);
-            glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, DIFFUSE_GRAY);
-            glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, SPECULAR_GRAY);
-            gluDisk(wheelBack2Bottom, 0.0, 1.0, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
-            glTranslatef(0.0, 0.0, 1.0);
-            gluDisk(wheelBack2Top, 0.0, 1.0, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
-        glDisable(GL_TEXTURE_2D); // Only the tire, not the rim
-
-	glPopMatrix();
-	gluDeleteQuadric(wheelFrontSide);
-    gluDeleteQuadric(wheelFrontTop);
-    gluDeleteQuadric(wheelFrontBottom);
+            gluDisk(wheelTop, 0.0, 1.0, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
+        glPopMatrix();
+    	gluDeleteQuadric(wheelSide);
+        gluDeleteQuadric(wheelTop);
+        gluDeleteQuadric(wheelBottom);
+    }
 }
 
 void drawCoachwork(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular, GLint clear, GLint checkpoints) {
+    GLfloat partScale[2][3] = { // 2 parts, 3D
+        {1.0, 1.0, 1.0},
+        {1.0, 1.0, -1.0} // Mirror
+    };
+
+    GLfloat partTranslate[2][3] = { // 2 parts, 3D
+        {0.0, 0.0, 0.0},
+        {0.0, 0.0, -0.25} // Compensate non center of the vehicle
+    };
+
     glPushMatrix();
+        // Draw checkpoints if required
+        if(checkpoints) {
+            glPushMatrix();
+            glTranslatef(0.0, 0.0, 0.125); // center on vehicle
+            for(GLint k = 0; k < 2; k++) {
+                for(GLint i = 0; i < COACHWORK_BEZIER_WIDTH; i++) {
+                    for(GLint j = 0; j < COACHWORK_BEZIER_LENGTH; j++) {
+                        // Normal
+                        glPushMatrix();
+                            glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, RED);
+                            glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, RED);
+                            glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, RED);
+                            glTranslatef(coachworkCheckpoints[i][j][0], coachworkCheckpoints[i][j][1], coachworkCheckpoints[i][j][2]);
+                            glutSolidSphere(CHECKPOINT_RADIUS, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
+                        glPopMatrix();
+
+                        // Mirror
+                        glPushMatrix();
+                            glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, GREEN);
+                            glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, GREEN);
+                            glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, GREEN);
+                            glTranslatef(coachworkCheckpoints[i][j][0], coachworkCheckpoints[i][j][1], -coachworkCheckpoints[i][j][2]);
+                            glutSolidSphere(CHECKPOINT_RADIUS, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
+                        glPopMatrix();
+                    }
+                }
+            }
+            glPopMatrix();
+        }
+
+        // Materials
+        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
+
         // Bezier spline: u € [0,1] and v € [0,1] (definition of the Bezier forumula)
         // https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glMap2.xml
         glMap2f(
@@ -327,36 +244,8 @@ void drawCoachwork(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat*
             1.0 // vMax
         );
 
-        // Draw checkpoints if required
-        if(checkpoints) {
-            glPushMatrix();
-                for(GLint i = 0; i < COACHWORK_BEZIER_WIDTH; i++) {
-                    for(GLint j = 0; j < COACHWORK_BEZIER_LENGTH; j++) {
-                        // Normal
-                        glPushMatrix();
-                            glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, RED);
-                            glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, RED);
-                            glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, RED);
-                            glTranslatef(coachworkCheckpoints[i][j][0], coachworkCheckpoints[i][j][1], coachworkCheckpoints[i][j][2]);
-                            glutSolidSphere(CHECKPOINT_RADIUS, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
-                        glPopMatrix();
-
-                        // Mirror
-                        glPushMatrix();
-                            glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, GREEN);
-                            glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, GREEN);
-                            glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, GREEN);
-                            glTranslatef(coachworkCheckpoints[i][j][0], coachworkCheckpoints[i][j][1], -coachworkCheckpoints[i][j][2]);
-                            glutSolidSphere(CHECKPOINT_RADIUS, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
-                        glPopMatrix();
-                    }
-                }
-            glPopMatrix();
-        }
-
         // Make the coachwork transparent when enabled
         clear? glEnable(GL_BLEND): glDisable(GL_BLEND);
-
         /*
             Order of drawing is important when handling transparent objects
             OpenGL should know which object comes first from the camera
@@ -371,26 +260,17 @@ void drawCoachwork(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat*
         */
         glDepthMask(GL_FALSE); // Disable depth mask before blending (p57)
     		glBlendFunc(GL_SRC_ALPHA, GL_DST_ALPHA); // You can pick here different things to get other types of blending
-            glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient);
-            glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
-            glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
-            // Part 1
-            if(wireFrame) {
-                glEvalMesh2(GL_LINE, 0, COACHWORK_GRID, 0, COACHWORK_GRID);
+            for(GLint i=0; i < 2; i++) {
+                glScalef(partScale[i][0], partScale[i][1], partScale[i][2]); // mirror
+                glTranslatef(partTranslate[i][0], partTranslate[i][1], partTranslate[i][2]); // car is not centered on the axis
+                if(wireFrame) {
+                    glEvalMesh2(GL_LINE, 0, COACHWORK_GRID, 0, COACHWORK_GRID);
+                }
+                else {
+                    glEvalMesh2(GL_FILL, 0, COACHWORK_GRID, 0, COACHWORK_GRID);
+                }
             }
-            else {
-                glEvalMesh2(GL_FILL, 0, COACHWORK_GRID, 0, COACHWORK_GRID);
-            }
-            // Part 2 (mirror)
-            glScalef(1.0, 1.0, -1.0); // mirror
-            glTranslatef(0.0, 0.0, -0.25); // car is not centered on the axis
-            if(wireFrame) {
-                glEvalMesh2(GL_LINE, 0, COACHWORK_GRID, 0, COACHWORK_GRID);
-            }
-            else {
-                glEvalMesh2(GL_FILL, 0, COACHWORK_GRID, 0, COACHWORK_GRID);
-            }
-            glDisable(GL_MAP2_VERTEX_3);
+        glDisable(GL_MAP2_VERTEX_3);
         glDepthMask(GL_TRUE); // Enable depth mask again
         glDisable(GL_BLEND); // Stop blending
     glPopMatrix();
