@@ -339,7 +339,7 @@ void displayFunction(void)
 		// Push matrix to isolate translation animation
 		glPushMatrix();
 			// Make sure the cars are in the center of the finish
-			competition? glTranslatef(animationCarTranslation, 0.0, 0.25): glTranslatef(animationCarTranslation, 0.0, 0.5);
+			competition? glTranslatef(animationCarTranslation, 0.0, -1.125): glTranslatef(animationCarTranslation, 0.0, -0.125);
 
 			// soapbox car 1
 			drawSuspension(wireFrame, suspensionAmbient, suspensionDiffuse, suspensionSpecular);
@@ -348,7 +348,7 @@ void displayFunction(void)
 
 			// soapbox car 2
 			if(competition) {
-				glTranslatef(0.0, 0.0, 2.0);
+				glTranslatef(0.0, 0.0, 2.25); // 1.0 space between the cars
 				drawSuspension(wireFrame, suspensionAmbient, suspensionDiffuse, suspensionSpecular);
 				drawTires(wireFrame, animationWheelsAngle, textureAddressing, texture);
 				drawCoachwork(wireFrame, coachworkAmbient, coachworkDiffuse, coachworkSpecular, clear, checkpoints);

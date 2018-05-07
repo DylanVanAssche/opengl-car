@@ -221,6 +221,10 @@ void drawCoachwork(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat*
         glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
 
         // Bezier spline: u € [0,1] and v € [0,1] (definition of the Bezier forumula)
+        // Bezier start and end are completely defined by P_first and P_last.
+        // All the points between the first and last points are to define the spline itself (see p66).
+        // No locale control possible with a Bezier spline, as soon as 1 point of the
+        // checkpoints is changed, the whole spline is different.
         // https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glMap2.xml
         glMap2f(
             GL_MAP2_VERTEX_3, // Type of vertex
