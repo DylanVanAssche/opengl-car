@@ -14,7 +14,6 @@ several files.
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include <time.h>
 #include <GL/glut.h>
 #include "InitJPG.h"
 

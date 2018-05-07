@@ -195,9 +195,6 @@ void init(void)
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, textureJPG->sizeX, textureJPG->sizeY, 0, GL_RGB, GL_UNSIGNED_BYTE, textureJPG->data);
 		printf("Loaded %s: %dx%d\n", nameTexture[i], textureJPG->sizeX, textureJPG->sizeY);
 	}
-
-	// Init random function
-	srand(time(NULL));
 }
 
 // OpenGL callback: timer animation
@@ -205,7 +202,7 @@ void animation(GLint value) {
 	// Wheels movement
 	if(animateWheels) {
 		printf("The wheels on the soapbox car go round and round... ANGLE=%f\n", animationWheelsAngle);
-		animationCarTranslation += ANIMATION_CAR_STEP;
+		animationWheelsAngle += ANIMATION_WHEEL_STEP;
 
 		// Reset angle after 360 degrees
 		if(animationWheelsAngle >= 360.0) {
