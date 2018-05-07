@@ -14,6 +14,7 @@ several files.
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <time.h>
 #include <GL/glut.h>
 #include "InitJPG.h"
 
@@ -37,9 +38,9 @@ several files.
 #define MENU_FINISH_LILAC 6
 #define CAR_LINE_WIDTH 5.0
 #define CAR_SUBDIVIONS 50 // change this if rendering performance is bad on HP Thin CLients
-#define ANIMATION_SPEED 100 // Don't fry the GPU please
+#define ANIMATION_SPEED 50 // Don't fry the GPU please
 #define ANIMATION_WHEEL_STEP 25
-#define ANIMATION_CAR_STEP -0.20 // driving in the opposite direction
+#define ANIMATION_CAR_STEP -0.5 // driving in the opposite direction
 #define MATERIAL_SHININESS_STEP 5.0
 #define MATERIAL_SHININESS_MIN 0.0
 #define MATERIAL_SHININESS_MAX 128.0
@@ -58,8 +59,7 @@ several files.
 #define COACHWORK_BEZIER_WIDTH 4 // 4 checkpoints for the width of the coachwork
 #define COACHWORK_BEZIER_SUBDIVIONS 20.0
 #define COACHWORK_GRID 20
-#define FINISH_START_PILLARS -7.5
-#define FINISH_DISTANCE_PILLARS 10.0
+#define FINISH_PILLAR_HEIGHT 2.0
 #define FINISH_BSPLINE_ORDER 4
 #define FINISH_BSPLINE_DEGREE 3
 #define FINISH_BSPLINE_CHECKPOINTS 4
@@ -82,7 +82,7 @@ static const char rimTexture[TEXTURE_NAME_LENGTH] = "./images/rim.jpg";
 static const char finishTexture[TEXTURE_NAME_LENGTH] = "./images/finish.jpg";
 static GLuint textureAddressing[NUMBER_OF_TEXTURES];
 
-// Bezier surface 6x4 3D points (6 length, 4 width)
+// Bezier surface 6x4 3D points (6 length (order n = 5), 4 width (order n = 3))
 static const GLfloat coachworkCheckpoints[COACHWORK_BEZIER_WIDTH][COACHWORK_BEZIER_LENGTH][COACHWORK_BEZIER_DIMENSIONS] = {
     // 2 points extra for the length of the coachwork to provide a cutout for the seat
    {
@@ -120,34 +120,39 @@ static const GLfloat coachworkCheckpoints[COACHWORK_BEZIER_WIDTH][COACHWORK_BEZI
 };
 
 // B Spline order = 4 (degree = 3), C X C checkpoints where C >= 4
-// Checkpoints
+// Circle math: X^2 + Y^2 = R^2 is required to figure out the checkpoints!
+// I splitted the 2 circle cords to keep it understandable...
 static GLfloat finishCheckpoints[FINISH_BSPLINE_ORDER][FINISH_BSPLINE_ORDER][FINISH_BSPLINE_DIMENSION] = {
     {
-        {0.0, 2.0, 0.0},
-        {1.5, 2.0, 0.0},
-        {2.5, 2.0, 0.0},
-        {3.0, 0.0, 0.0}
+        // Half circle in XZ
+        {0.0, 0.0, -1.0+3.0},
+        {1.41, 0.0, -0.707+3.0},
+        {1.41, 0.0, 0.707+3.0},
+        {0.0, 0.0, 1.0+3.0}
     },
     {
-        {0.0, 1.95, 0.9},
-        {1.5, 1.95, 0.9},
-        {2.5, 1.95, 0.9},
-        {3.0, 0.0, 0.5}
+        // Half circle 30 degrees
+        {0.0, 1.5-0.5, -0.5+2.59},
+        {1.41, 1.5-0.10, -0.61+2.59},
+        {1.41, 1.5+0.10, 0.61+2.59},
+        {0.0, 1.5+0.5, 0.5+2.59}
     },
     {
-        {0.0, 1.9, 0.95},
-        {1.5, 1.9, 0.95},
-        {2.5, 1.9, 0.95},
-        {3.0, 0.0, 0.5}
+        // Half circle 60 degrees
+        {0.0, 2.59-0.5, -0.5+1.5},
+        {1.41, 2.59-0.61, -0.10+1.5},
+        {1.41, 2.59+0.61, 0.10+1.5},
+        {0.0, 2.59+0.5, 0.5+1.5}
     },
     {
-        {0.0, -2.5, 1.0},
-        {1.5, -2.5, 1.0},
-        {2.5, -2.5, 1.0},
-        {3.0, -2.5, 0.33}
+        // Half circle in XY
+        {0.0, 3.0-1.0, 0.0},
+        {1.41, 3.0-0.707, 0.0},
+        {1.41, 3.0+0.707, 0.0},
+        {0.0, 3.0+1.0, 0.0}
     }
 };
-// Knots
+// Knots: how heavy each point weights on the B Spline
 static GLfloat knots[2*FINISH_BSPLINE_ORDER] = {0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0};
 
 // Colors

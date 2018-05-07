@@ -15,13 +15,6 @@ void drawFinish(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* sp
         {-1.0, 1.0, 1.0}
     };
 
-    GLfloat partTranslate[4][3] = { // 4 parts, 3D
-        {0.0, -0.875, 1.0}, // center + above pillars
-        {0.0, 0.0, 0.0},
-        {0.0, -5.0, 0.0}, // other pillar
-        {0.0, 0.0, 0.0}
-    };
-
     // Cylinders
     GLUquadricObj *cylinder1 = gluNewQuadric();
     GLUquadricObj *cylinder2 = gluNewQuadric();
@@ -29,8 +22,6 @@ void drawFinish(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* sp
     glPushMatrix();
         // Rotating, scaling and translating
         glRotatef(-90.0, 1.0, 0.0, 0.0);
-        glScalef(0.25, 0.25, 1.25);
-        competition? glTranslatef(0.0, 2*FINISH_START_PILLARS, 0.0): glTranslatef(0.0, FINISH_START_PILLARS, 0.0);
 
         // Draw checkpoints if required
         if(checkpoints) {
@@ -42,7 +33,7 @@ void drawFinish(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* sp
                         glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, RED);
                         glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, RED);
                         glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, RED);
-                        glTranslatef(finishCheckpoints[i][j][0], finishCheckpoints[i][j][1], finishCheckpoints[i][j][2] + 1.0); // Move above pillars
+                        glTranslatef(finishCheckpoints[i][j][0], finishCheckpoints[i][j][1], finishCheckpoints[i][j][2] + FINISH_PILLAR_HEIGHT); // Move above pillars
                         glutSolidSphere(CHECKPOINT_RADIUS, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
                     glPopMatrix();
 
@@ -51,27 +42,25 @@ void drawFinish(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* sp
                         glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, GREEN);
                         glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, GREEN);
                         glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, GREEN);
-                        glTranslatef(finishCheckpoints[i][j][0], -finishCheckpoints[i][j][1], finishCheckpoints[i][j][2] + 1.0); // Move above pillars
+                        glTranslatef(finishCheckpoints[i][j][0], -finishCheckpoints[i][j][1], finishCheckpoints[i][j][2] + FINISH_PILLAR_HEIGHT); // Move above pillars
                         glutSolidSphere(CHECKPOINT_RADIUS, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
                     glPopMatrix();
 
                     // Part 3
                     glPushMatrix();
-                        competition? glTranslatef(0.0, 2*FINISH_DISTANCE_PILLARS, 0.0): glTranslatef(0.0, FINISH_DISTANCE_PILLARS, 0.0);
                         glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, BLUE);
                         glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, BLUE);
                         glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, BLUE);
-                        glTranslatef(finishCheckpoints[i][j][0], -finishCheckpoints[i][j][1], finishCheckpoints[i][j][2] + 1.0); // Move above pillars
+                        glTranslatef(-finishCheckpoints[i][j][0], -finishCheckpoints[i][j][1], finishCheckpoints[i][j][2] + FINISH_PILLAR_HEIGHT); // Move above pillars
                         glutSolidSphere(CHECKPOINT_RADIUS, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
                     glPopMatrix();
 
                     // Part 4
                     glPushMatrix();
-                        competition? glTranslatef(0.0, 2*FINISH_DISTANCE_PILLARS, 0.0): glTranslatef(0.0, FINISH_DISTANCE_PILLARS, 0.0);
                         glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, BLACK);
                         glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, BLACK);
                         glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, BLACK);
-                        glTranslatef(finishCheckpoints[i][j][0], finishCheckpoints[i][j][1], finishCheckpoints[i][j][2] + 1.0); // Move above pillars
+                        glTranslatef(-finishCheckpoints[i][j][0], finishCheckpoints[i][j][1], finishCheckpoints[i][j][2] + FINISH_PILLAR_HEIGHT); // Move above pillars
                         glutSolidSphere(CHECKPOINT_RADIUS, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
                     glPopMatrix();
                 }
@@ -108,13 +97,25 @@ void drawFinish(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* sp
             glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
 
             // Pillars (Cylinders)
-        	gluCylinder(cylinder1, 1.0, 1.0, 1.0, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
-            competition? glTranslatef(0.0, 2*FINISH_DISTANCE_PILLARS, 0.0): glTranslatef(0.0, FINISH_DISTANCE_PILLARS, 0.0);
-            gluCylinder(cylinder2, 1.0, 1.0, 1.0, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
-
-            // Arc (B-Spline) p72
             glPushMatrix();
-                competition? glScalef(0.25, 3.0, 1.0): glScalef(0.25, 1.5, 1.0);
+                glTranslatef(0.0, -3.0, 0.0); // 3.0 since the BSpline is a circle with R = 3.0
+            	gluCylinder(cylinder1, 1.0, 1.0, FINISH_PILLAR_HEIGHT, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
+                glTranslatef(0.0, 2*3.0, 0.0); // x2 to revert previous glTranslatef
+                gluCylinder(cylinder2, 1.0, 1.0, FINISH_PILLAR_HEIGHT, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
+            glPopMatrix();
+
+            // Arc (B-Spline) p67-72
+            // order of the spline = n
+            // degree of the spline = k - 1
+            // n + 1 checkpoints needed
+            // n + k + 1 knots needed
+            // P_first and P_last define the startpoint and endpoint of the spline
+            // Assignment:
+            // order = 4 -> degree k = 3
+            // uniform periodic B spline
+            // example: n = k = 3: n + k + 1 = {0,1,2,3,4,5,6}
+            glPushMatrix();
+                glTranslatef(0.0, 0.0, FINISH_PILLAR_HEIGHT); // Move BSpline above pillars
                 glEnable(GL_MAP2_VERTEX_3);
                 glEnable(GL_MAP2_TEXTURE_COORD_2);
                     for(GLint i=0; i < 4; i++) {
@@ -129,7 +130,6 @@ void drawFinish(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* sp
                         }
 
                         // Translate and scale
-                        glTranslatef(partTranslate[i][0], partTranslate[i][1], partTranslate[i][2]);
                         glScalef(partScale[i][0], partScale[i][1], partScale[i][2]);
 
                         // Draw Nurbs surface with texture (if enabled)

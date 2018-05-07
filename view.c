@@ -20,24 +20,18 @@ void drawAxes(GLint axes) {
     	glEnd();
 
         // X axis
-        glPushMatrix();
-            glRotatef(90.0, 0.0, 1.0, 0.0);
-            glColor4fv(GREEN);
-            glBegin(GL_LINES);
-        		glVertex3d(0.0, 0.0, 0.0);
-        		glVertex3d(0.0, 0.0, AXIS_LENGTH);
-        	glEnd();
-        glPopMatrix();
+        glColor4fv(GREEN);
+        glBegin(GL_LINES);
+    		glVertex3d(0.0, 0.0, 0.0);
+    		glVertex3d(AXIS_LENGTH, 0.0, 0.0);
+    	glEnd();
 
         // Y axis
-        glPushMatrix();
-        	glRotatef(-90.0, 1.0, 0.0, 0.0);
-            glColor4fv(BLUE);
-            glBegin(GL_LINES);
-        		glVertex3d(0.0, 0.0, 0.0);
-        		glVertex3d(0.0, 0.0, AXIS_LENGTH);
-        	glEnd();
-        glPopMatrix();
+        glColor4fv(BLUE);
+        glBegin(GL_LINES);
+    		glVertex3d(0.0, 0.0, 0.0);
+    		glVertex3d(0.0, AXIS_LENGTH, 0.0);
+    	glEnd();
     }
 }
 
