@@ -213,7 +213,7 @@ void animation(GLint value) {
 	// Car movement
 	if(animateCar) {
 		printf("Gas met die zooi! TRANSLATION=%f\n", animationCarTranslation);
-		animationCarTranslation += ANIMATION_CAR_STEP; // Make speed more random
+		animationCarTranslation += ANIMATION_CAR_STEP;
 
 		// Reset when car is out of sight (far)
 		if(animationCarTranslation <= -far) {
