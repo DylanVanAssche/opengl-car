@@ -7,7 +7,7 @@
 */
 #include "car.h"
 
-// Draw the vehicle suspension
+// Draws the vehicle suspension
 void drawSuspension(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular) {
     printf("Drawing suspension\n");
 
@@ -82,8 +82,8 @@ void drawSuspension(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat
         	gluQuadricDrawStyle(seatBottom, GLU_FILL);
             gluQuadricDrawStyle(seatTop, GLU_FILL);
         }
-    	gluCylinder(seatBottom, 1.0, 0.5, 1.0, CAR_SUBDIVIONS, CAR_SUBDIVIONS); // cone
-        glTranslatef(0.0, 0.0, 1.0);
+    	gluCylinder(seatBottom, 1.0, 0.5, 1.0, CAR_SUBDIVIONS, CAR_SUBDIVIONS); // Cone
+        glTranslatef(0.0, 0.0, 1.0); // The seat is on top of the cone
         gluDisk(seatTop, 0.0, 0.75, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
 
 	glPopMatrix();
@@ -91,6 +91,7 @@ void drawSuspension(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat
     gluDeleteQuadric(seatTop);
 }
 
+// Draws the tires of the soapbox car
 void drawTires(GLint wireFrame, GLfloat animationAngle, GLuint textureAddressing[], GLint texture) {
     GLfloat tirePos[3][3] = { // 3 tires, 3D
         {0.5, 0.5, 0.45},
@@ -134,7 +135,7 @@ void drawTires(GLint wireFrame, GLfloat animationAngle, GLuint textureAddressing
             // Textures enabled?
             texture? glEnable(GL_TEXTURE_2D): glDisable(GL_TEXTURE_2D);
 
-            // Bind texture
+            // Bind texture for the tire quadric
             glBindTexture(GL_TEXTURE_2D, textureAddressing[TEXTURE_TIRE]);
         	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
         	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
@@ -143,13 +144,13 @@ void drawTires(GLint wireFrame, GLfloat animationAngle, GLuint textureAddressing
         	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
             gluQuadricTexture(wheelSide, GL_TRUE);
 
-            // Set materials and draw
+            // Set materials and draw tire quadric
             glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_BLACK);
             glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, DIFFUSE_BLACK);
             glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, SPECULAR_BLACK);
         	gluCylinder(wheelSide, 1.0, 1.0, 1.0, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
 
-            // Bind texture
+            // Bind texture for the rim
             glBindTexture(GL_TEXTURE_2D, textureAddressing[TEXTURE_RIM]);
         	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
         	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
@@ -159,7 +160,7 @@ void drawTires(GLint wireFrame, GLfloat animationAngle, GLuint textureAddressing
             gluQuadricTexture(wheelBottom, GL_TRUE);
             gluQuadricTexture(wheelTop, GL_TRUE);
 
-            // Set materials and draw
+            // Set materials and draw rim
             glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_GRAY);
             glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_GRAY);
             glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, AMBIENT_GRAY);
@@ -173,6 +174,8 @@ void drawTires(GLint wireFrame, GLfloat animationAngle, GLuint textureAddressing
     }
 }
 
+// Draws the soapbox car coachwork
+// No separate function for the coachwork since the only drawing 'component' is glEvalMesh2, the rest are init functions
 void drawCoachwork(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular, GLint clear, GLint checkpoints) {
     GLfloat partScale[2][3] = { // 2 parts, 3D
         {1.0, 1.0, 1.0},
@@ -188,30 +191,23 @@ void drawCoachwork(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat*
         // Draw checkpoints if required
         if(checkpoints) {
             glPushMatrix();
-            glTranslatef(0.0, 0.0, 0.125); // center on vehicle
-            for(GLint k = 0; k < 2; k++) {
-                for(GLint i = 0; i < COACHWORK_BEZIER_WIDTH; i++) {
-                    for(GLint j = 0; j < COACHWORK_BEZIER_LENGTH; j++) {
-                        // Normal
-                        glPushMatrix();
-                            glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, RED);
-                            glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, RED);
-                            glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, RED);
-                            glTranslatef(coachworkCheckpoints[i][j][0], coachworkCheckpoints[i][j][1], coachworkCheckpoints[i][j][2]);
-                            glutSolidSphere(CHECKPOINT_RADIUS, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
-                        glPopMatrix();
+                glTranslatef(0.0, 0.0, 0.125); // center on vehicle
 
-                        // Mirror
-                        glPushMatrix();
-                            glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, GREEN);
-                            glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, GREEN);
-                            glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, GREEN);
-                            glTranslatef(coachworkCheckpoints[i][j][0], coachworkCheckpoints[i][j][1], -coachworkCheckpoints[i][j][2]);
-                            glutSolidSphere(CHECKPOINT_RADIUS, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
-                        glPopMatrix();
+                for(GLint k = 0; k < 2; k++) { // 2 pieces
+                    for(GLint i = 0; i < COACHWORK_BEZIER_WIDTH; i++) {
+                        for(GLint j = 0; j < COACHWORK_BEZIER_LENGTH; j++) {
+                            glPushMatrix();
+                                // Part 1
+                                glTranslatef(coachworkCheckpoints[i][j][0], coachworkCheckpoints[i][j][1], coachworkCheckpoints[i][j][2]);
+                                drawCheckpoint(RED);
+
+                                // Part 2: Mirror (x2 to revert previous translation)
+                                glTranslatef(0.0, 0.0, -2*coachworkCheckpoints[i][j][2]);
+                                drawCheckpoint(GREEN);
+                            glPopMatrix();
+                        }
                     }
                 }
-            }
             glPopMatrix();
         }
 
@@ -226,6 +222,7 @@ void drawCoachwork(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat*
         // No locale control possible with a Bezier spline, as soon as 1 point of the
         // checkpoints is changed, the whole spline is different.
         // https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glMap2.xml
+        // Create Bezier spline map (checkpoints, limits, ...)
         glMap2f(
             GL_MAP2_VERTEX_3, // Type of vertex
             0.0, // uMin
@@ -238,7 +235,10 @@ void drawCoachwork(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat*
             COACHWORK_BEZIER_WIDTH, // vOrder: dimension of the checkpoints array (v axis)
             &coachworkCheckpoints[0][0][0] // checkpoints
         );
-        glEnable(GL_MAP2_VERTEX_3);
+
+        glEnable(GL_MAP2_VERTEX_3); // Enable Bezier spline
+
+        // Uniform Bezier spline using MapGrid
         glMapGrid2f(
             COACHWORK_BEZIER_SUBDIVIONS, // Subdivions of the Bezier spline
             0.0, // uMin
@@ -255,7 +255,7 @@ void drawCoachwork(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat*
             OpenGL should know which object comes first from the camera
             perspective to determine if you can see through the object or not.
             By making the depth buffer readonly we can avoid that newer objects
-            interfere with the blending functions.
+            interfere with the blending functions (p57).
             Solution:
                 1. Draw all normal objects
                 2. Make the depth buffer readonly
@@ -265,8 +265,10 @@ void drawCoachwork(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat*
         glDepthMask(GL_FALSE); // Disable depth mask before blending (p57)
     		glBlendFunc(GL_SRC_ALPHA, GL_DST_ALPHA); // You can pick here different things to get other types of blending
             for(GLint i=0; i < 2; i++) {
-                glScalef(partScale[i][0], partScale[i][1], partScale[i][2]); // mirror
-                glTranslatef(partTranslate[i][0], partTranslate[i][1], partTranslate[i][2]); // car is not centered on the axis
+                glScalef(partScale[i][0], partScale[i][1], partScale[i][2]); // Mirror
+                glTranslatef(partTranslate[i][0], partTranslate[i][1], partTranslate[i][2]); // Car is not centered on the axis
+
+                // Wireframe or not?
                 if(wireFrame) {
                     glEvalMesh2(GL_LINE, 0, COACHWORK_GRID, 0, COACHWORK_GRID);
                 }

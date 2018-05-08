@@ -25,6 +25,14 @@ several files.
 // Constants
 #define WINDOW_WIDTH 1024
 #define WINDOW_HEIGHT 720
+#define PROJECTION_XMIN -50.0
+#define PROJECTION_YMIN -50.0
+#define PROJECTION_XMAX 50.0
+#define PROJECTION_YMAX 50.0
+#define PROJECTION_NEAR 0.1
+#define PROJECTION_FAR 25.0
+#define PROJECTION_ANGLE 60.0
+#define PROJECTION_ASPECT_RATIO 1.0
 #define VIEW_RESET_POS 5.0
 #define AXIS_LENGTH 100.0
 #define AXIS_LINE_WIDTH 2.0
@@ -189,9 +197,10 @@ static GLfloat SPECULAR_LILA[] = {0.35, 0.15, 0.85, 1.0};
 
 // Functions
 void drawAxes(GLint axes);
+void drawCheckpoint(const GLfloat* color);
 void drawSuspension(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular);
 void drawTires(GLint wireFrame, GLfloat animationAngle, GLuint textureAddressing[], GLint texture);
 void drawCoachwork(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular, GLint clear, GLint checkpoints);
 void configureLights(GLint ambientLight, GLint diffuseLight, GLint specularLight, GLint spotLight, GLint spotAngle, GLint spotExponent, GLint spotHeight);
 void configureFog(GLint fog, GLint fogMode, GLfloat far);
-void drawFinish(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular, GLint competition, GLuint textureAddressing[], GLint texture, GLint checkpoints);
+void drawFinish(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular, GLuint textureAddressing[], GLint texture, GLint checkpoints);

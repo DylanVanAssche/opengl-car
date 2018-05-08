@@ -7,6 +7,7 @@
 */
 #include "car.h"
 
+// Draws the axes in the view
 void drawAxes(GLint axes) {
     if(axes) {
         printf("Drawing axes\n");
@@ -35,20 +36,15 @@ void drawAxes(GLint axes) {
     }
 }
 
-void drawCheckpoints(GLfloat*** checkpoints, GLfloat color[], GLint u, GLint v) {
-    for(GLint i=0; i < u; i++) {
-        for(GLint j=0; j < v; j++) {
-            glPushMatrix();
-                glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, color);
-                glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, color);
-                glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, color);
-                glTranslatef(checkpoints[i][j][0], checkpoints[i][j][1], checkpoints[i][j][2]); // Move above pillars
-                glutSolidSphere(CHECKPOINT_RADIUS, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
-            glPopMatrix();
-        }
-    }
+// Draws a single checkpoint
+void drawCheckpoint(const GLfloat* color) {
+    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, color);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, color);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, color);
+    glutSolidSphere(CHECKPOINT_RADIUS, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
 }
 
+// Configure all the light sources
 void configureLights(GLint ambientLight, GLint diffuseLight, GLint specularLight, GLint spotLight, GLint spotAngle, GLint spotExponent, GLint spotHeight) {
     // Update spot height
     posLight3[1] = spotHeight;
@@ -79,15 +75,20 @@ void configureLights(GLint ambientLight, GLint diffuseLight, GLint specularLight
     spotLight? glEnable(GL_LIGHT3): glDisable(GL_LIGHT3);
 }
 
+// Configures the fog
 void configureFog(GLint fog, GLint fogMode, GLfloat far) {
     fog? glEnable(GL_FOG): glDisable(GL_FOG);
     glFogfv(GL_FOG_COLOR, BLUE_GRAY);
 
     if(fogMode) {
+        // Exponent mode enabled
+        // No start or end must be defined in this mode
         glFogf(GL_FOG_MODE, GL_EXP); // GL_EXP2 is also an option
         glFogf(GL_FOG_DENSITY, FOG_DENSITY);
     }
     else {
+        // Lineair mode enabled
+        // No density must be defined in this mode
         glFogf(GL_FOG_MODE, GL_LINEAR);
         glFogf(GL_FOG_START, FOG_START);
         glFogf(GL_FOG_END, far);
