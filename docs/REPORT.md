@@ -1,4 +1,8 @@
-# opengl-car
+# Soapbox car
+- __Name__: Dylan Van Assche
+- __Date__: 24 May 2018
+- __Repo__: https://www.github.com/DylanVanAssche/opengl-car
+
 A futuristic soapbox car in OpenGL for the course Computergraphics by Herman Crauwels (Campus De Nayer, KU Leuven). This application provides a demo for several OpenGL functions and is written in ANSI C.
 
 ## Features
@@ -16,14 +20,6 @@ A futuristic soapbox car in OpenGL for the course Computergraphics by Herman Cra
 - [x] Texture support of the finish and the car
 - [x] Toggle the alpha value of the car
 - [x] Fog support
-
-## Screenshots
-
-### Competition mode with menu
-![Screenshot 1](./images/screenshot1.png)
-
-### Blending, different types of illumination and other features
-![Screenshot 2](./images/screenshot2.png)
 
 ## Shortcuts
 
@@ -65,6 +61,7 @@ A futuristic soapbox car in OpenGL for the course Computergraphics by Herman Cra
 | b   | Toggles light locking                    |
 | e/E | Manipulates the material shininess (+/-) |
 | q/Q | Quits the application                    |
+
 
 ## How to build
 
