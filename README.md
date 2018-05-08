@@ -164,6 +164,7 @@ A futuristic soapbox car in OpenGL for the course Computergraphics by Herman Cra
 3. Run `./car` to start the soapbox car.
 
 ## License
-- Everything (except for the images) in this repository is available under the GPLv3 license.
+- Everything (except for the images, `initJPG.c` and `initJPG.h`) in this repository is available under the GPLv3 license.
 
 - The images are available under separate licenses, see the folder `images` for more information.
+- For `initJPG.c` and `initJPG.h` files, please check the comments in the files for more information.
