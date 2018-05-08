@@ -19,10 +19,10 @@ A futuristic soapbox car in OpenGL for the course Computergraphics by Herman Cra
 
 ## Screenshots
 
-### Competition mode
+### Competition mode with menu
 ![Screenshot 1](./images/screenshot1.png)
 
-### Fog, blending and different types of illumination
+### Blending, different types of illumination and other features
 ![Screenshot 2](./images/screenshot2.png)
 
 ## Shortcuts
@@ -156,6 +156,12 @@ A futuristic soapbox car in OpenGL for the course Computergraphics by Herman Cra
         <td>Quits the application</td>
     </tr>
 </table>
+
+## How to build
+
+1. Install all OpenGL libraries via your package manager, you can find the dependencies in the MakeFile.
+2. Run `make` in the project directory.
+3. Run `./car` to start the soapbox car.
 
 ## License
 - Everything (except for the images) in this repository is available under the GPLv3 license.

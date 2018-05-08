@@ -7,12 +7,6 @@
 */
 #include "car.h"
 
-// Window
-GLint winWidth = 1024, winHeight = 720;
-
-// Viewport coordinates
-GLdouble xmin = -50.0, xmax = 50.0, ymin = -50.0, ymax = 50.0, near = 0.1, far = 25.0, angle = 60.0;
-
 // Enabled features
 GLint axes = 1;
 GLint flat = 1;
@@ -144,10 +138,10 @@ void init(void)
 {
 	// Background and depth
 	glClearColor(0.8, 0.8, 0.8, 0.0);
-	glClearDepth(1.0);
-	glEnable(GL_DEPTH_TEST);
+	glClearDepth(1.0); // Clear depth buffer completely
+	glEnable(GL_DEPTH_TEST); // Allow evaluating of the depth when drawing objects
 
-	// Light sources default values
+	// Light sources override default values
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, BLACK);
 	glLightfv(GL_LIGHT0, GL_AMBIENT, BLACK);
 	glLightfv(GL_LIGHT1, GL_AMBIENT, BLACK);
@@ -182,17 +176,17 @@ void init(void)
 	glutAddSubMenu("Finish", menuFinishID);
 	glutAddMenuEntry("quit", MENU_QUIT);
 
-	// Attach menu
+	// Attach menu to the mouse it's RIGHT BUTTON
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
 
 	// Load textures from JPG files
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-	glGenTextures(NUMBER_OF_TEXTURES, textureAddressing);
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // byte alignment for JPG's in memory
+	glGenTextures(NUMBER_OF_TEXTURES, textureAddressing); // texture pointers
 	for(GLint i=0; i < NUMBER_OF_TEXTURES; i++) {
 		tImageJPG *textureJPG;
-	    textureJPG = LoadJPG(nameTexture[i]);
-		glBindTexture(GL_TEXTURE_2D, textureAddressing[i]);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, textureJPG->sizeX, textureJPG->sizeY, 0, GL_RGB, GL_UNSIGNED_BYTE, textureJPG->data);
+	    textureJPG = LoadJPG(nameTexture[i]); // load jpg
+		glBindTexture(GL_TEXTURE_2D, textureAddressing[i]); // bind pointer to texture
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, textureJPG->sizeX, textureJPG->sizeY, 0, GL_RGB, GL_UNSIGNED_BYTE, textureJPG->data); // apply JPG on texture
 		printf("Loaded %s: %dx%d\n", nameTexture[i], textureJPG->sizeX, textureJPG->sizeY);
 	}
 }
@@ -216,8 +210,8 @@ void animation(GLint value) {
 		animationCarTranslation += ANIMATION_CAR_STEP;
 
 		// Reset when car is out of sight (far)
-		if(animationCarTranslation <= -far) {
-			animationCarTranslation = far;
+		if(animationCarTranslation <= -PROJECTION_FAR) {
+			animationCarTranslation = PROJECTION_FAR;
 		}
 	}
 
@@ -242,7 +236,7 @@ void keyboardWatcher(unsigned char key, int x, int y)
 		case 'Y': yLens--; break;
 		case 'z': zLens++; break;
 		case 'Z': zLens--; break;
-		case 'i': xLens = yLens = zLens = VIEW_RESET_POS; printf("View lens resetted\n"); break;
+		case 'i': xLens = yLens = zLens = VIEW_RESET_POS; printf("View lens reset OK\n"); break;
 
 		// Projection modes
 		case '1': ambientLight = !ambientLight; printf("Ambient light TOGGLE\n"); break;
@@ -307,58 +301,68 @@ void keyboardWatcher(unsigned char key, int x, int y)
 // OpenGL callback: draw function
 void displayFunction(void)
 {
+	// Clear color and depth buffers (avoid old data)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	// Modelview matrix used for translation, scaling and rotating
+	// (GP_PROJECTION is used only for the projection of the objects)
 	glMatrixMode(GL_MODELVIEW);
+	// Replace the current matrix in GL_MODELVIEW with an identity matrix
 	glLoadIdentity();
+	// Shading mode
 	glShadeModel(flat? GL_FLAT: GL_SMOOTH);
+	// Material property: shininess of the objects
 	glMaterialf(GL_FRONT, GL_SHININESS, materialShininess);
 
 	// Configure fog
-	configureFog(fog, fogMode, far);
+	configureFog(fog, fogMode, PROJECTION_FAR);
 
-	// Lights stay at the same place when set before gluLookAt
+	// Lights stay at the same place when configured before gluLookAt
 	if(lightsLocked) {
 		printf("Lights locked\n");
 		configureLights(ambientLight, diffuseLight, specularLight, spotLight, spotAngle, spotExponent, spotHeight);
 	}
+	/*
+	Set the position of the observer
+		- xLens, yLens, zLens: position of the eye point
+		- xRef, yRef, zRef: position of the reference point
+		- xVW, yVW, zVW: direction of the up vector (points to the upper side of the view)
+		  see https://stackoverflow.com/questions/10635947/what-exactly-is-the-up-vector-in-opengls-lookat-function
+	*/
 	gluLookAt(xLens, yLens, zLens, xRef, yRef, zRef, xVW, yVW, zVW);
 	if(!lightsLocked) {
 		printf("Lights unlocked\n");
 		configureLights(ambientLight, diffuseLight, specularLight, spotLight, spotAngle, spotExponent, spotHeight);
 	}
 
+	// Draw all static parts first (saves 1x glPushMatrix and glPopMatrix to increase performance)
+	// Draw axes in the view
 	drawAxes(axes);
 
 	// Elements where the lights will affect their appearence
 	glEnable(GL_NORMALIZE);
 	glEnable(GL_LIGHTING);
-
 		// Draw solid finish before blending functions are activated
-		drawFinish(wireFrame, finishAmbient, finishDiffuse, finishSpecular, competition, textureAddressing, texture, checkpoints);
+		drawFinish(wireFrame, finishAmbient, finishDiffuse, finishSpecular, textureAddressing, texture, checkpoints);
 
-		// Push matrix to isolate translation animation
-		glPushMatrix();
-			// Make sure the cars are in the center of the finish
-			competition? glTranslatef(animationCarTranslation, 0.0, -1.125): glTranslatef(animationCarTranslation, 0.0, -0.125);
+		// Make sure the cars are in the center of the finish
+		competition? glTranslatef(animationCarTranslation, 0.0, -1.125): glTranslatef(animationCarTranslation, 0.0, -0.125);
 
-			// soapbox car 1
+		// soapbox car 1
+		drawSuspension(wireFrame, suspensionAmbient, suspensionDiffuse, suspensionSpecular);
+		drawTires(wireFrame, animationWheelsAngle, textureAddressing, texture);
+		drawCoachwork(wireFrame, coachworkAmbient, coachworkDiffuse, coachworkSpecular, clear, checkpoints);
+
+		// soapbox car 2 (if enabled)
+		if(competition) {
+			glTranslatef(0.0, 0.0, 2.25); // 1.0 space between the cars
 			drawSuspension(wireFrame, suspensionAmbient, suspensionDiffuse, suspensionSpecular);
 			drawTires(wireFrame, animationWheelsAngle, textureAddressing, texture);
 			drawCoachwork(wireFrame, coachworkAmbient, coachworkDiffuse, coachworkSpecular, clear, checkpoints);
-
-			// soapbox car 2
-			if(competition) {
-				glTranslatef(0.0, 0.0, 2.25); // 1.0 space between the cars
-				drawSuspension(wireFrame, suspensionAmbient, suspensionDiffuse, suspensionSpecular);
-				drawTires(wireFrame, animationWheelsAngle, textureAddressing, texture);
-				drawCoachwork(wireFrame, coachworkAmbient, coachworkDiffuse, coachworkSpecular, clear, checkpoints);
-			}
-		glPopMatrix();
-
+		}
 	glDisable(GL_LIGHTING);
     glDisable(GL_NORMALIZE);
 
-	// Swap the buffers and flush
+	// Swap the buffers (animation) and flush
 	glutSwapBuffers();
 	glFlush();
 }
@@ -367,28 +371,30 @@ void displayFunction(void)
 void windowFunction(GLint newWidth, GLint newHeight)
 {
 	GLdouble border;
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
+	glMatrixMode(GL_PROJECTION); // Projection matrix mode, no projection functions in GL_MODELVIEW!
+	glLoadIdentity(); // Load identity matrix in GL_PROJECTION matrix
 
 	// Projection mode
 	switch(projectionMode)
 	{
 		// Orthogonal perspective
 		case 'o':
-				glOrtho(xmin, xmax,  ymin, ymax, near, far);
+				glOrtho(PROJECTION_XMIN, PROJECTION_XMAX, PROJECTION_YMIN, PROJECTION_YMAX, PROJECTION_NEAR, PROJECTION_FAR);
 				break;
 		// Symmetric perspective
 		case 's':
-				border = near*tan(M_PI*(angle/2.0)/180.0);
-				glFrustum(-border, border, -border, border, near, far);
+				border = PROJECTION_NEAR*tan(M_PI*(PROJECTION_ANGLE/2.0)/180.0); // Radians!
+				glFrustum(-border, border, -border, border, PROJECTION_NEAR, PROJECTION_FAR);
 				break;
 		// Default: General perspective
 		default:
 		case 'g':
-				gluPerspective(angle, 1.0,  near, far);
+				// 2nd argument = aspect ratio = width/height
+				gluPerspective(PROJECTION_ANGLE, PROJECTION_ASPECT_RATIO, PROJECTION_NEAR, PROJECTION_FAR);
 				break;
 	}
 
+	// 0,0 the lower left corner of the viewport rectangle in pixels
 	glViewport(0, 0, newWidth, newHeight);
 }
 
@@ -409,8 +415,8 @@ int main(int argc, char* argv[])
 
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
-	glutInitWindowPosition(100, 100);
-	glutInitWindowSize(winWidth, winHeight);
+	glutInitWindowPosition(100, 100); // 100 pixels from the top and from the left
+	glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 	glutCreateWindow("Soapbox car");
     init();
 	glutKeyboardFunc(keyboardWatcher);
