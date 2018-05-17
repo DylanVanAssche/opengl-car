@@ -4,10 +4,10 @@
 #	Van Assche Dylan - 3 ABA EI (2017 - 2018)			                      	#
 #	Computergraphics by Herman Crauwels (Campus De Nayer, KU Leuven)	        #
 #################################################################################
-
-INFO: the 'static' keyword is used to avoid multiple definitions across the
-several files.
 */
+
+#ifndef CAR_H
+#define CAR_H // include guard
 
 // Include libraries
 #include <stdio.h>
@@ -76,124 +76,61 @@ several files.
 #define FOG_START 0.0 // Linear mode only
 
 // Lights
-static GLfloat posLight0[] = {3.0, 3.0, 3.0, 1.0};
-static GLfloat posLight1[] = {3.0, 3.0, -3.0, 1.0};
-static GLfloat posLight2[] = {3.0, 3.0, 3.0, 1.0};
-static GLfloat posLight3[] = {5.0, SPOT_HEIGHT_DEFAULT, 1.0, 1.0};
-static GLfloat spotDirection[] = {-1.0, -1.0, 0.0};
+extern GLfloat posLight0[];
+extern GLfloat posLight1[];
+extern GLfloat posLight2[];
+extern GLfloat posLight3[];
+extern GLfloat spotDirection[];
 
 // Textures and complex surfaces
-static const char nameTexture[NUMBER_OF_TEXTURES][TEXTURE_NAME_LENGTH] = {"./images/tire.jpg", "./images/rim.jpg", "./images/finish.jpg"};
-static const char tireTexture[TEXTURE_NAME_LENGTH] = "./images/tire.jpg";
-static const char rimTexture[TEXTURE_NAME_LENGTH] = "./images/rim.jpg";
-static const char finishTexture[TEXTURE_NAME_LENGTH] = "./images/finish.jpg";
-static GLuint textureAddressing[NUMBER_OF_TEXTURES];
+extern const char nameTexture[NUMBER_OF_TEXTURES][TEXTURE_NAME_LENGTH];
+extern const char tireTexture[TEXTURE_NAME_LENGTH];
+extern const char rimTexture[TEXTURE_NAME_LENGTH];
+extern const char finishTexture[TEXTURE_NAME_LENGTH];
+extern GLuint textureAddressing[NUMBER_OF_TEXTURES];
 
 // Bezier surface 6x4 3D points (6 length (order n = 5), 4 width (order n = 3))
-static const GLfloat coachworkCheckpoints[COACHWORK_BEZIER_WIDTH][COACHWORK_BEZIER_LENGTH][COACHWORK_BEZIER_DIMENSIONS] = {
-    // 2 points extra for the length of the coachwork to provide a cutout for the seat
-   {
-       {0.5, 0.0, 0.33},
-       {1.0, 0.0, 0.66},
-       {1.5, 0.0, 0.66},
-       {1.7, 0.0, 0.66},
-       {1.9, 0.0, 0.66},
-       {2.0, 0.0, 0.66}
-   },
-   {
-       {0.0, 0.25, 0.33},
-       {0.5, 0.25, 0.66},
-       {1.5, 0.25, 0.66},
-       {1.7, 0.25, 0.66},
-       {1.9, 0.25, 0.66},
-       {2.0, 0.25, 0.66}
-   },
-   {
-       {0.0, 0.375, 0.33},
-       {0.5, 0.375, 0.66},
-       {1.5, 0.375, 0.66},
-       {1.7, 0.375, 0.66},
-       {1.9, 0.375, 0.66},
-       {2.0, 0.375, 0.66}
-   },
-   {
-       {0.0, 0.4, 0.125},
-       {0.5, 0.4, 0.125},
-       {1.5, 0.4, 0.125},
-       {1.8, 0.4, 0.125},
-       {1.9, 0.4, 0.45},
-       {2.5, 0.4, 0.5}
-   }
-};
+extern GLfloat coachworkCheckpoints[COACHWORK_BEZIER_WIDTH][COACHWORK_BEZIER_LENGTH][COACHWORK_BEZIER_DIMENSIONS];
 
 // B Spline order = 4 (degree = 3), C X C checkpoints where C >= 4
 // Circle math: X^2 + Y^2 = R^2 is required to figure out the checkpoints!
 // I splitted the 2 circle cords to keep it understandable...
-static GLfloat finishCheckpoints[FINISH_BSPLINE_ORDER][FINISH_BSPLINE_ORDER][FINISH_BSPLINE_DIMENSION] = {
-    {
-        // Half circle in XZ
-        {0.0, 0.0, -1.0+3.0},
-        {1.41, 0.0, -0.707+3.0},
-        {1.41, 0.0, 0.707+3.0},
-        {0.0, 0.0, 1.0+3.0}
-    },
-    {
-        // Half circle 30 degrees
-        {0.0, 1.5-0.5, -0.5+2.59},
-        {1.41, 1.5-0.10, -0.61+2.59},
-        {1.41, 1.5+0.10, 0.61+2.59},
-        {0.0, 1.5+0.5, 0.5+2.59}
-    },
-    {
-        // Half circle 60 degrees
-        {0.0, 2.59-0.5, -0.5+1.5},
-        {1.41, 2.59-0.61, -0.10+1.5},
-        {1.41, 2.59+0.61, 0.10+1.5},
-        {0.0, 2.59+0.5, 0.5+1.5}
-    },
-    {
-        // Half circle in XY
-        {0.0, 3.0-1.0, 0.0},
-        {1.41, 3.0-0.707, 0.0},
-        {1.41, 3.0+0.707, 0.0},
-        {0.0, 3.0+1.0, 0.0}
-    }
-};
+extern GLfloat finishCheckpoints[FINISH_BSPLINE_ORDER][FINISH_BSPLINE_ORDER][FINISH_BSPLINE_DIMENSION];
 // Knots: how heavy each point weights on the B Spline
-static GLfloat knots[2*FINISH_BSPLINE_ORDER] = {0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0};
+GLfloat knots[2*FINISH_BSPLINE_ORDER];
 
 // Colors
-static const GLfloat RED[] = {1.0, 0.0, 0.0, 1.0};
-static const GLfloat GREEN[] = {0.0, 1.0, 0.0, 1.0};
-static const GLfloat BLUE[] = {0.0, 0.0, 1.0, 1.0};
-static const GLfloat GREEN_BLUE[] = {0.0, 0.75, 0.75, 1.0};
-static const GLfloat YELLOW[] = {1.0, 1.0, 0.0, 1.0};
-static const GLfloat WHITE[] = {1.0, 1.0, 1.0, 1.0};
-static const GLfloat BLACK[] = {0.0, 0.0, 0.0, 1.0};
-static const GLfloat BLUE_GRAY[] = {0.44, 0.5, 0.56, 1.0};
+extern GLfloat RED[];
+extern GLfloat GREEN[];
+extern GLfloat BLUE[];
+extern GLfloat GREEN_BLUE[];
+extern GLfloat YELLOW[];
+extern GLfloat WHITE[];
+extern GLfloat BLACK[];
+extern GLfloat BLUE_GRAY[];
 
 // Materials
-static GLfloat AMBIENT_GRAY[] = {0.22, 0.22, 0.22, 1.0};
-static GLfloat DIFFUSE_GRAY[] = {0.33, 0.33, 0.33, 1.0};
-static GLfloat SPECULAR_GRAY[] = {0.11, 0.11, 0.11, 1.0};
-static GLfloat AMBIENT_BLACK[] = {0.11, 0.11, 0.11, 1.0};
-static GLfloat DIFFUSE_BLACK[] = {0.055, 0.055, 0.055, 1.0};
-static GLfloat SPECULAR_BLACK[] = {0.0275, 0.0275, 0.0275, 1.0};
-static GLfloat AMBIENT_WHITE[] = {0.66, 0.66, 0.66, 1.0};
-static GLfloat DIFFUSE_WHITE[] = {0.77, 0.77, 0.77, 1.0};
-static GLfloat SPECULAR_WHITE[] = {0.55, 0.55, 0.55, 1.0};
-static GLfloat AMBIENT_CHROME[] = {0.46, 0.58, 0.35, 1.0};
-static GLfloat DIFFUSE_CHROME[] = {0.23, 0.29, 0.17, 1.0};
-static GLfloat SPECULAR_CHROME[] = {0.69, 0.87, 0.52, 1.0};
-static GLfloat AMBIENT_BRONZE[] = {0.21, 0.13, 0.10, 1.0};
-static GLfloat DIFFUSE_BRONZE[] = {0.39, 0.27, 0.17, 1.0};
-static GLfloat SPECULAR_BRONZE[] = {0.71, 0.43, 0.18, 1.0};
-static GLfloat AMBIENT_YELLOW[] = {0.65, 0.55, 0.15, 1.0};
-static GLfloat DIFFUSE_YELLOW[] = {0.75, 0.45, 0.15, 1.0};
-static GLfloat SPECULAR_YELLOW[] = {0.85, 0.35, 0.15, 1.0};
-static GLfloat AMBIENT_LILA[] = {0.45, 0.15, 0.75, 1.0};
-static GLfloat DIFFUSE_LILA[] = {0.55, 0.15, 0.65, 1.0};
-static GLfloat SPECULAR_LILA[] = {0.35, 0.15, 0.85, 1.0};
+extern GLfloat AMBIENT_GRAY[];
+extern GLfloat DIFFUSE_GRAY[];
+extern GLfloat SPECULAR_GRAY[];
+extern GLfloat AMBIENT_BLACK[];
+extern GLfloat DIFFUSE_BLACK[];
+extern GLfloat SPECULAR_BLACK[];
+extern GLfloat AMBIENT_WHITE[];
+extern GLfloat DIFFUSE_WHITE[];
+extern GLfloat SPECULAR_WHITE[];
+extern GLfloat AMBIENT_CHROME[];
+extern GLfloat DIFFUSE_CHROME[];
+extern GLfloat SPECULAR_CHROME[];
+extern GLfloat AMBIENT_BRONZE[];
+extern GLfloat DIFFUSE_BRONZE[];
+extern GLfloat SPECULAR_BRONZE[];
+extern GLfloat AMBIENT_YELLOW[];
+extern GLfloat DIFFUSE_YELLOW[];
+extern GLfloat SPECULAR_YELLOW[];
+extern GLfloat AMBIENT_LILA[];
+extern GLfloat DIFFUSE_LILA[];
+extern GLfloat SPECULAR_LILA[];
 
 // Functions
 void drawAxes(GLint axes);
@@ -204,3 +141,5 @@ void drawCoachwork(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat*
 void configureLights(GLint ambientLight, GLint diffuseLight, GLint specularLight, GLint spotLight, GLint spotAngle, GLint spotExponent, GLint spotHeight);
 void configureFog(GLint fog, GLint fogMode, GLfloat far);
 void drawFinish(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular, GLuint textureAddressing[], GLint texture, GLint checkpoints);
+
+#endif // CAR_H
