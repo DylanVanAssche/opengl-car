@@ -36,6 +36,7 @@
 #define VIEW_RESET_POS 5.0
 #define AXIS_LENGTH 100.0
 #define AXIS_LINE_WIDTH 2.0
+#define POINT_LINE_WIDTH 5.0
 #define MENU_QUIT 0
 #define MENU_COACHWORK_GRAY 1
 #define MENU_COACHWORK_WHITE 2
@@ -84,9 +85,6 @@ extern GLfloat spotDirection[];
 
 // Textures and complex surfaces
 extern const char nameTexture[NUMBER_OF_TEXTURES][TEXTURE_NAME_LENGTH];
-extern const char tireTexture[TEXTURE_NAME_LENGTH];
-extern const char rimTexture[TEXTURE_NAME_LENGTH];
-extern const char finishTexture[TEXTURE_NAME_LENGTH];
 extern GLuint textureAddressing[NUMBER_OF_TEXTURES];
 
 // Bezier surface 6x4 3D points (6 length (order n = 5), 4 width (order n = 3))
@@ -97,7 +95,7 @@ extern GLfloat coachworkCheckpoints[COACHWORK_BEZIER_WIDTH][COACHWORK_BEZIER_LEN
 // I splitted the 2 circle cords to keep it understandable...
 extern GLfloat finishCheckpoints[FINISH_BSPLINE_ORDER][FINISH_BSPLINE_ORDER][FINISH_BSPLINE_DIMENSION];
 // Knots: how heavy each point weights on the B Spline
-GLfloat knots[2*FINISH_BSPLINE_ORDER];
+extern GLfloat knots[2*FINISH_BSPLINE_ORDER];
 
 // Colors
 extern GLfloat RED[];
@@ -137,8 +135,8 @@ void drawAxes(GLint axes);
 void drawCheckpoint(const GLfloat* color);
 void drawSuspension(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular);
 void drawTires(GLint wireFrame, GLfloat animationAngle, GLuint textureAddressing[], GLint texture);
-void drawCoachwork(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular, GLint clear, GLint checkpoints);
-void configureLights(GLint ambientLight, GLint diffuseLight, GLint specularLight, GLint spotLight, GLint spotAngle, GLint spotExponent, GLint spotHeight);
+void drawCoachwork(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular, GLint clear, GLint checkpoints, GLint texture);
+void configureLights(GLint ambientLight, GLint diffuseLight, GLint specularLight, GLint spotLight, GLint spotAngle, GLint spotExponent, GLint spotHeight, GLint drawPositions);
 void configureFog(GLint fog, GLint fogMode, GLfloat far);
 void drawFinish(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular, GLuint textureAddressing[], GLint texture, GLint checkpoints);
 

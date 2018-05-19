@@ -69,6 +69,7 @@ GLfloat finishCheckpoints[FINISH_BSPLINE_ORDER][FINISH_BSPLINE_ORDER][FINISH_BSP
         {0.0, 3.0+1.0, 0.0}
     }
 };
+GLfloat knots[2*FINISH_BSPLINE_ORDER] = {0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0};
 
 GLfloat coachworkCheckpoints[COACHWORK_BEZIER_WIDTH][COACHWORK_BEZIER_LENGTH][COACHWORK_BEZIER_DIMENSIONS] = {
     // 2 points extra for the length of the coachwork to provide a cutout for the seat
@@ -114,13 +115,11 @@ GLfloat spotDirection[] = {-1.0, -1.0, 0.0};
 
 // Textures and complex surfaces
 const char nameTexture[NUMBER_OF_TEXTURES][TEXTURE_NAME_LENGTH] = {"./images/tire.jpg", "./images/rim.jpg", "./images/finish.jpg"};
-const char tireTexture[TEXTURE_NAME_LENGTH] = "./images/tire.jpg";
-const char rimTexture[TEXTURE_NAME_LENGTH] = "./images/rim.jpg";
-const char finishTexture[TEXTURE_NAME_LENGTH] = "./images/finish.jpg";
 GLuint textureAddressing[NUMBER_OF_TEXTURES];
 
 // Enabled features
 GLint axes = 1;
+GLint lightsPosition = 1;
 GLint flat = 1;
 GLint checkpoints = 0;
 GLint wireFrame = 0;
@@ -363,6 +362,8 @@ void keyboardWatcher(unsigned char key, int x, int y)
 		case 'L': wireFrame = 1; printf("Wireframe ON\n"); break;
 		case 'j': axes = 0; printf("Axes OFF\n"); break;
 		case 'J': axes = 1; printf("Axes ON\n"); break;
+        case 'p': lightsPosition = 0; printf("Lights position OFF\n"); break;
+		case 'P': lightsPosition = 1; printf("Lights position ON\n"); break;
 		case 'k': checkpoints = 0; printf("Checkpoints surfaces OFF\n"); break;
 		case 'K': checkpoints = 1; printf("Checkpoints surfaces ON\n"); break;
 		case 'g': animateWheels = !animateWheels; printf("Animation wheels TOGGLE\n"); break;
@@ -431,7 +432,7 @@ void displayFunction(void)
 	// Lights stay at the same place when configured before gluLookAt
 	if(lightsLocked) {
 		printf("Lights locked\n");
-		configureLights(ambientLight, diffuseLight, specularLight, spotLight, spotAngle, spotExponent, spotHeight);
+		configureLights(ambientLight, diffuseLight, specularLight, spotLight, spotAngle, spotExponent, spotHeight, lightsPosition);
 	}
 	/*
 	Set the position of the observer
@@ -443,7 +444,7 @@ void displayFunction(void)
 	gluLookAt(xLens, yLens, zLens, xRef, yRef, zRef, xVW, yVW, zVW);
 	if(!lightsLocked) {
 		printf("Lights unlocked\n");
-		configureLights(ambientLight, diffuseLight, specularLight, spotLight, spotAngle, spotExponent, spotHeight);
+		configureLights(ambientLight, diffuseLight, specularLight, spotLight, spotAngle, spotExponent, spotHeight, lightsPosition);
 	}
 
 	// Draw all static parts first (saves 1x glPushMatrix and glPopMatrix to increase performance)
@@ -462,14 +463,14 @@ void displayFunction(void)
 		// soapbox car 1
 		drawSuspension(wireFrame, suspensionAmbient, suspensionDiffuse, suspensionSpecular);
 		drawTires(wireFrame, animationWheelsAngle, textureAddressing, texture);
-		drawCoachwork(wireFrame, coachworkAmbient, coachworkDiffuse, coachworkSpecular, clear, checkpoints);
+		drawCoachwork(wireFrame, coachworkAmbient, coachworkDiffuse, coachworkSpecular, clear, checkpoints, texture);
 
 		// soapbox car 2 (if enabled)
 		if(competition) {
 			glTranslatef(0.0, 0.0, 2.25); // 1.0 space between the cars
 			drawSuspension(wireFrame, suspensionAmbient, suspensionDiffuse, suspensionSpecular);
 			drawTires(wireFrame, animationWheelsAngle, textureAddressing, texture);
-			drawCoachwork(wireFrame, coachworkAmbient, coachworkDiffuse, coachworkSpecular, clear, checkpoints);
+			drawCoachwork(wireFrame, coachworkAmbient, coachworkDiffuse, coachworkSpecular, clear, checkpoints, texture);
 		}
 	glDisable(GL_LIGHTING);
     glDisable(GL_NORMALIZE);

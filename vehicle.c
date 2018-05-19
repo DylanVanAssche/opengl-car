@@ -171,12 +171,13 @@ void drawTires(GLint wireFrame, GLfloat animationAngle, GLuint textureAddressing
     	gluDeleteQuadric(wheelSide);
         gluDeleteQuadric(wheelTop);
         gluDeleteQuadric(wheelBottom);
+        glDisable(GL_TEXTURE_2D);
     }
 }
 
 // Draws the soapbox car coachwork
 // No separate function for the coachwork since the only drawing 'component' is glEvalMesh2, the rest are init functions
-void drawCoachwork(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular, GLint clear, GLint checkpoints) {
+void drawCoachwork(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular, GLint clear, GLint checkpoints, GLint texture) {
     GLfloat partScale[2][3] = { // 2 parts, 3D
         {1.0, 1.0, 1.0},
         {1.0, 1.0, -1.0} // Mirror
@@ -216,6 +217,10 @@ void drawCoachwork(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat*
         glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse);
         glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
 
+        // Texture binding
+        texture? glEnable(GL_TEXTURE_2D): glDisable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, textureAddressing[TEXTURE_RIM]); // Just funny to put a rim on a coachwork ;-)
+
         // Bezier spline: u € [0,1] and v € [0,1] (definition of the Bezier forumula)
         // Bezier start and end are completely defined by P_first and P_last.
         // All the points between the first and last points are to define the spline itself (see p66).
@@ -237,6 +242,27 @@ void drawCoachwork(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat*
         );
 
         glEnable(GL_MAP2_VERTEX_3); // Enable Bezier spline
+        // Bezier spline: u € [0,1] and v € [0,1] (definition of the Bezier forumula)
+        // Bezier start and end are completely defined by P_first and P_last.
+        // All the points between the first and last points are to define the spline itself (see p66).
+        // No locale control possible with a Bezier spline, as soon as 1 point of the
+        // checkpoints is changed, the whole spline is different.
+        // https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glMap2.xml
+        // Create Bezier spline map (checkpoints, limits, ...)
+        glMap2f(
+            GL_MAP2_TEXTURE_COORD_2, // Type of vertex
+            0.0, // uMin
+            1.0, // uMax
+            COACHWORK_BEZIER_DIMENSIONS, // uStride: number of floats or doubles between the beginning of control point Rij and the beginning of control point Ri(j+1)
+            COACHWORK_BEZIER_LENGTH, // uOrder: dimension of the checkpoints array (u axis)
+            0.0, // uMin
+            1.0, // uMax
+            COACHWORK_BEZIER_LENGTH*COACHWORK_BEZIER_DIMENSIONS, // vStride: number of floats or doubles between the beginning of control point Rij and the beginning of control point Ri(j+1)
+            COACHWORK_BEZIER_WIDTH, // vOrder: dimension of the checkpoints array (v axis)
+            &coachworkCheckpoints[0][0][0] // checkpoints
+        );
+
+        glEnable(GL_MAP2_TEXTURE_COORD_2);
 
         // Uniform Bezier spline using MapGrid
         glMapGrid2f(
@@ -276,8 +302,10 @@ void drawCoachwork(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat*
                     glEvalMesh2(GL_FILL, 0, COACHWORK_GRID, 0, COACHWORK_GRID);
                 }
             }
-        glDisable(GL_MAP2_VERTEX_3);
         glDepthMask(GL_TRUE); // Enable depth mask again
         glDisable(GL_BLEND); // Stop blending
+        glDisable(GL_MAP2_TEXTURE_COORD_2);
+        glDisable(GL_MAP2_VERTEX_3);
+        glDisable(GL_TEXTURE_2D);
     glPopMatrix();
 }

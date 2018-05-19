@@ -41,11 +41,14 @@ void drawCheckpoint(const GLfloat* color) {
     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, color);
     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, color);
     glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, color);
-    glutSolidSphere(CHECKPOINT_RADIUS, CAR_SUBDIVIONS, CAR_SUBDIVIONS);
+    glPointSize(POINT_LINE_WIDTH);
+    glBegin(GL_POINTS);
+        glVertex3d(0, 0, 0);
+    glEnd();
 }
 
 // Configure all the light sources
-void configureLights(GLint ambientLight, GLint diffuseLight, GLint specularLight, GLint spotLight, GLint spotAngle, GLint spotExponent, GLint spotHeight) {
+void configureLights(GLint ambientLight, GLint diffuseLight, GLint specularLight, GLint spotLight, GLint spotAngle, GLint spotExponent, GLint spotHeight, GLint drawPositions) {
     // Update spot height
     posLight3[1] = spotHeight;
 
@@ -67,6 +70,17 @@ void configureLights(GLint ambientLight, GLint diffuseLight, GLint specularLight
     glLightf(GL_LIGHT3, GL_SPOT_CUTOFF, spotAngle);
     glLightf(GL_LIGHT3, GL_SPOT_EXPONENT, spotExponent);
     glLightfv(GL_LIGHT3, GL_SPOT_DIRECTION, spotDirection);
+
+    // Draw positions if needed
+    if(drawPositions) {
+        glPointSize(POINT_LINE_WIDTH);
+        glBegin(GL_POINTS);
+            glVertex3fv(posLight0);
+            glVertex3fv(posLight1);
+            glVertex3fv(posLight2);
+            glVertex3fv(posLight3);
+        glEnd();
+    }
 
     // Enable several lights
     ambientLight? glEnable(GL_LIGHT0): glDisable(GL_LIGHT0);
