@@ -1,7 +1,7 @@
 # Soapbox car
 - __Name__: Dylan Van Assche
 - __Date__: 24 May 2018
-- __Repo__: https://www.github.com/DylanVanAssche/opengl-car
+- __Repo__: [https://www.github.com/DylanVanAssche/opengl-car](https://www.github.com/DylanVanAssche/opengl-car)
 
 A futuristic soapbox car in OpenGL for the course Computergraphics by Herman Crauwels (Campus De Nayer, KU Leuven). This application provides a demo for several OpenGL functions and is written in ANSI C.
 
@@ -46,6 +46,8 @@ A futuristic soapbox car in OpenGL for the course Computergraphics by Herman Cra
 | L   | Turn wireframe mode _OFF_                |
 | j   | Turn axes _ON_                           |
 | J   | Turn axes _OFF_                          |
+| p   | Turn light positions _ON_                |
+| P   | Turn light positions _OFF_               |
 | k   | Turn checkpoints _ON_                    |
 | K   | Turn checkpoints _OFF_                   |
 | g   | Toggle wheel animation                   |

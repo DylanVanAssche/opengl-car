@@ -50,6 +50,8 @@ A futuristic soapbox car in OpenGL for the course Computergraphics by Herman Cra
 | L   | Turn wireframe mode _OFF_                |
 | j   | Turn axes _ON_                           |
 | J   | Turn axes _OFF_                          |
+| p   | Turn light positions _ON_                |
+| P   | Turn light positions _OFF_               |
 | k   | Turn checkpoints _ON_                    |
 | K   | Turn checkpoints _OFF_                   |
 | g   | Toggle wheel animation                   |
