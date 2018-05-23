@@ -14,7 +14,11 @@ all All: $(TARGETS)
 INCPATH = -I/usr/local/include
 LIBPATH = -L. -L/usr/local/lib/hpux32
 LIBS = -lglut -lGLU -lGL -lGLw -lXt -lXext -lX11 -ljpeg -lm
+# Modern systems:
 CFLAGS = $(INCPATH) -std=c99
+# HPUX Laurel:
+# DEBUGFLAGS = +O3
+# CFLAGS = +DD32 $(DEBUGFLAGS) $(INCPATH)
 
 # Define the sources and object files
 SRCS = \

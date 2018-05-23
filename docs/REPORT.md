@@ -1,112 +1,110 @@
-# Soapbox car
-- __Name__: Dylan Van Assche
-- __Date__: 24 May 2018
-- __Repo__: [https://www.github.com/DylanVanAssche/opengl-car](https://www.github.com/DylanVanAssche/opengl-car)
+# Zeepkist
+- __Naam__: Dylan Van Assche
+- __Datum__: 24 mei 2018
+- __Repository__: [https://www.github.com/DylanVanAssche/opengl-car](https://www.github.com/DylanVanAssche/opengl-car)
 
-A futuristic soapbox car in OpenGL for the course Computergraphics by Herman Crauwels (Campus De Nayer, KU Leuven). This application provides a demo for several OpenGL functions and is written in ANSI C.
+Futuristische zeepkist in OpenGL voor het vak Computergrafieken van Herman Crauwels (Campus De Nayer, KU Leuven) geschreven in ANSI C.
 
 ## Features
-- [x] Basic car
-- [x] Basic finish
-- [x] Multiple 3D transformations (orthogonal, symmetric, ...)
-- [x] Multiple cars on the screen
-- [x] Show axes, light sources, ... controlled with a keyboard key
-- [x] Improved finish
-- [x] 4 different light sources
-- [x] Switch between several shade models
-- [x] Menu to configure the materials used to create the car
-- [x] Keyboard shortcuts
-- [x] Animates the wheels of the car
-- [x] Texture support of the finish and the car
-- [x] Toggle the alpha value of the car
-- [x] Fog support
+- [x] Basis zeepkist
+- [x] Basic aankomst
+- [x] Meerdere 3D transformaties (orthogonaal, symmetrisch, ...)
+- [x] Wedstrijd modus
+- [x] Assen, lichtbronnen posities, controlepunten, ... kunnen getoond worden
+- [x] Uitgebreide aankomst
+- [x] 4 verschillende soorten lichtbronnen
+- [x] Kiezen van shading modus
+- [x] Menu om de materialen en kleuren te configureren van de zeepkist
+- [x] Toetsenbord snelkoppelingen
+- [x] Animatie van de zeepkist
+- [x] Texturen op aankomst, wielen, ...
+- [x] Glas modus om het onderstel te kunnen zien
+- [x] Mist
 
-## Functions
+## Functies
 
-See the inline comments in the source files for more information about the arguments
-of each function.
+Bekijk de inline commentaar van de source code om de beschrijving te lezen van de
+verschillende argumenten van elke functie.
 
 ### car.c
-- `void menu(GLint id)`: Main menu callback to dispatch several other menus and handling the quit option.
-- `void coachworkMenu(GLint id)`: Coachwork menu callback to set the coachwork colors.
-- `void suspensionMenu(GLint id)`: Suspension menu callback to set the suspension colors.
-- `void finishMenu(GLint id)`: Finish menu callback to set the finish colors.
-- `void init(void)`: Init function to initialize several things before the OpenGL main loop has been started.
-- `void animation(GLint value)`: Callback for `glutTimerFunc` to animate the soapbox car.
-- `void keyboardWatcher(unsigned char key, int x, int y)`: Keyboard callback
-- `void displayFunction(void)`: Display callback
-- `void windowFunction(GLint newWidth, GLint newHeight)`: Window callback
-- `int main(int argc, char* argv[])`: Main function
+- `void menu(GLint id)`: Hoofdmenu callback welke de dispatching regelt voor andere
+submenu's en de quit optie afhandelt.
+- `void coachworkMenu(GLint id)`: Carrosserie menu om de kleuren ervan te kiezen.
+- `void suspensionMenu(GLint id)`: Onderstel menu om de kleuren ervan te kiezen.
+- `void finishMenu(GLint id)`: Aankomst menu om de kleuren ervan te kiezen.
+- `void init(void)`: Init functie om verscheidene zaken te initialiseren vooraleer de
+OpenGL main loop start
+- `void animation(GLint value)`: Callback voor `glutTimerFunc` animatie van de zeepkist
+- `void keyboardWatcher(unsigned char key, int x, int y)`: Toetsenbord callback
+- `void displayFunction(void)`: Teken callback
+- `void windowFunction(GLint newWidth, GLint newHeight)`: Scherm callback
+- `int main(int argc, char* argv[])`: Main functie
 
 ### finish.c
-- `void _drawFinishPart(GLint wireFrame)`: Private function to draw 1/4 of the finish arc.
-- `void drawFinish(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular, GLuint textureAddressing[], GLint texture, GLint checkpoints)`: Draws the complete finish arc.
-- `void drawCoachwork(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular, GLint clear, GLint checkpoints, GLint texture)`: Draws the coachwork.
+- `void _drawFinishPart(GLint wireFrame)`: Private functie om 1/4 van de aankomstboog te tekenen.
+- `void drawFinish(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular, GLuint textureAddressing[], GLint texture, GLint checkpoints)`: Tekent de volledige aankomstboog.
 
 ### vehicle.c
-- `void drawSuspension(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular)`: Draws the complete suspension.
-- `void drawTires(GLint wireFrame, GLfloat animationAngle, GLuint textureAddressing[], GLint texture)`: Draws the tires of the soapbox car.
+- `void drawSuspension(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular)`: Tekent het onderstel
+- `void drawTires(GLint wireFrame, GLfloat animationAngle, GLuint textureAddressing[], GLint texture)`: Tekent de wielen van de zeepkist
+- `void drawCoachwork(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular, GLint clear, GLint checkpoints, GLint texture)`: Tekent de carrosserie
 
 ### view.c
-- `void drawAxes(GLint axes)`: Draws the X,Y and Z-axis.
-- `void drawCheckpoint(const GLfloat* color)`: Draws a single checkpoint, used by the complex curves and light positions.
-- `void configureLights(GLint ambientLight, GLint diffuseLight, GLint specularLight, GLint spotLight, GLint spotAngle, GLint spotExponent, GLint spotHeight, GLint drawPositions)`: Configures the lights on the right position with the right colors.
-- `void configureFog(GLint fog, GLint fogMode, GLfloat far)`: Configures the fog and it's mode.
+- `void drawAxes(GLint axes)`: Tekent de assen: X, Y en Z.
+- `void drawCheckpoint(const GLfloat* color)`: Tekent een enkel controlepunt, gebruikt door
+o.a. de complexe oppervlakten en lichtbronnen positie.
+- `void configureLights(GLint ambientLight, GLint diffuseLight, GLint specularLight, GLint spotLight, GLint spotAngle, GLint spotExponent, GLint spotHeight, GLint drawPositions)`: Configueert de lichtbronnen.
+- `void configureFog(GLint fog, GLint fogMode, GLfloat far)`: Stelt de mist in en zijn modus.
 
-## Shortcuts
+## Snelkoppelingen
 
-### Mouse
-- Right click to show the menu where you can select several materials for each component of the car.
+### Muis
+- Rechtermuisknop toont een menu waar de kleuren van de verschillende delen van de zeepkist gekozen kunnen worden.
 
-- You can also quit the application from the menu if you like.
+- Je kan de applicatie ook afsluiten als je dat wenst.
 
-### Keyboard
+### Toetsenbord
 
-| Key | Description                              |
-|:---:| ---------------------------------------- |
-| x/X | Move camera (X axis +/-)                 |
-| y/Y | Move camera (Y axis +/-)                 |
-| z/Z | Move camera (Z axis +/-)                 |
-| i   | Move camera to it's initial position     |
-| 1   | Toggle ambient light (GL_LIGHT0)         |
-| 2   | Toggle diffuse light (GL_LIGHT1)         |
-| 3   | Toggle specular light (GL_LIGHT2)        |
-| 4   | Toggle spot light (GL_LIGHT3)            |
-| s   | Switch to shading mode _SMOOTH_          |
-| S   | Switch to shading mode _FLAT_            |
-| l   | Turn wireframe mode _ON_                 |
-| L   | Turn wireframe mode _OFF_                |
-| j   | Turn axes _ON_                           |
-| J   | Turn axes _OFF_                          |
-| p   | Turn light positions _ON_                |
-| P   | Turn light positions _OFF_               |
-| k   | Turn checkpoints _ON_                    |
-| K   | Turn checkpoints _OFF_                   |
-| g   | Toggle wheel animation                   |
-| G   | Toggle car animation                     |
-| t   | Toggle textures                          |
-| m   | Toggle fog                               |
-| M   | Toggle fog mode (_LINEAR / EXP_)         |
-| n   | Toggle competition mode                  |
-| f   | Toggles coachwork transparency           |
-| h/H | Moves the spot height (+/-)              |
-| v/V | Manipulates the spot angle (+/-)         |
-| w/W | Manipulates the spot exponent (+/-)      |
-| b   | Toggles light locking                    |
-| e/E | Manipulates the material shininess (+/-) |
-| q/Q | Quits the application                    |
+| Toets | Beschrijving                                 |
+|:-----:| -------------------------------------------- |
+| x/X   | Verplaats camera (X as +/-)                  |
+| y/Y   | Verplaats camera (Y as +/-)                  |
+| z/Z   | Verplaats camera (Z as +/-)                  |
+| i     | Verplaats camera naar zijn originele positie |
+| 1     | Toggle ambient licht (GL_LIGHT0)             |
+| 2     | Toggle diffuse licht (GL_LIGHT1)             |
+| 3     | Toggle specular licht (GL_LIGHT2)            |
+| 4     | Toggle spot licht (GL_LIGHT3)                |
+| s     | Schakel over naar shading mode _SMOOTH_      |
+| S     | Schakel over naar shading mode _FLAT_        |
+| l     | Schakel wireframe modus_AAN_                 |
+| L     | Schakel wireframe modus _UIT_                |
+| j     | Toon assen                                   |
+| J     | Toon assen niet                              |
+| p     | Toon licht posities                          |
+| P     | Toon licht posities niet                     |
+| k     | Schakel controlepunten _ON_                  |
+| K     | Schakel controlepunten _OFF_                 |
+| g     | Toggle wiel animatie                         |
+| G     | Toggle zeepkist animatie                     |
+| t     | Toggle texturen                              |
+| m     | Toggle mist                                  |
+| M     | Toggle mist modus (_LINEAR / EXP_)           |
+| n     | Toggle wedstrijd modus                       |
+| f     | Toggle carrosserie doorzichtigheid           |
+| h/H   | Manipuleer de spot hoogte (+/-)              |
+| v/V   | Manipuleer de spot hoek (+/-)                |
+| w/W   | Manipuleer de spot exponent (+/-)            |
+| b     | Toggle licht vergrendeling                   |
+| e/E   | Manipuleer de materiaal shininess (+/-)      |
+| q/Q   | Verlaat de applicatie                        |
 
+## Buildinstructies
 
-## How to build
+1. Clone het repository: `git clone https://github.com/DylanVanAssche/opengl-car.git`
+2. Ga in de map: `cd opengl-car`
+3. Installeer alle OpenGL afhankelijkheden, je kan deze terugvinden in de `makefile`.
+4. Voer `make` uit in de projectmap.
+5. Voer `./car` uit om de zeepkist te starten.
 
-1. Clone this repo: `git clone https://github.com/DylanVanAssche/opengl-car.git`
-2. Enter the directory: `cd opengl-car`
-3. Install all OpenGL libraries via your package manager, you can find the dependencies in the MakeFile.
-4. Run `make` in the project directory.
-5. Run `./car` to start the soapbox car.
-
-## License
-- Everything (except for the images, `initJPG.c` and `initJPG.h`) in this repository is available under the GPLv3 license.
-
-- The images are available under separate licenses, see the folder `images` for more information.
-- For `initJPG.c` and `initJPG.h` files, please check the comments in the files for more information.
+_Opmerking_: `-std=c99` optie is nodig om de zeepkist te compileren op moderne systemen. Het kan zijn dat dit een probleem geeft op de HPUX Laurel. De `makefile` is voorzien voor beide systemen, je hoeft enkel de juiste in commentaar te zetten.
