@@ -8,7 +8,11 @@
 #include "car.h"
 
 // Private function to draw 1/4 of the finish arc
-void _drawFinishPart(GLint wireFrame) {
+/*
+ * GLint wireFrame: wireframe enabled
+ */
+void _drawFinishPart(GLint wireFrame)
+{
     // Create GLUnurbsObj and configure it
     GLUnurbsObj *arcBSplinePart = gluNewNurbsRenderer();
     gluNurbsProperty(arcBSplinePart, GLU_SAMPLING_TOLERANCE, FINISH_BSPLINE_SAMPLING);
@@ -54,7 +58,17 @@ void _drawFinishPart(GLint wireFrame) {
 }
 
 // Draws the finish arc + pillars
-void drawFinish(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular, GLuint textureAddressing[], GLint texture, GLint checkpoints) {
+/*
+ * GLint wireFrame: wireframe enabled
+ * GLfloat* ambient: ambient color
+ * GLfloat* diffuse: diffuse color
+ * GLfloat* specular: specular color
+ * GLuint textureAddressing[]: texture addressing array
+ * GLint texture: texture enabled
+ * GLint checkpoints: show checkpoints of the complex curve
+ */
+void drawFinish(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular, GLuint textureAddressing[], GLint texture, GLint checkpoints)
+{
     GLfloat partScale[4][3] = { // 4 parts, 3D
         {1.0, 1.0, 1.0},
         {-1.0, 1.0, 1.0},

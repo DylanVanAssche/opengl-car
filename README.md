@@ -25,6 +25,38 @@ A futuristic soapbox car in OpenGL for the course Computergraphics by Herman Cra
 ### Blending, different types of illumination and other features
 ![Screenshot 2](./images/screenshot2.png)
 
+## Functions
+
+See the inline comments in the source files for more information about the arguments
+of each function.
+
+### car.c
+- `void menu(GLint id)`: Main menu callback to dispatch several other menus and handling the quit option.
+- `void coachworkMenu(GLint id)`: Coachwork menu callback to set the coachwork colors.
+- `void suspensionMenu(GLint id)`: Suspension menu callback to set the suspension colors.
+- `void finishMenu(GLint id)`: Finish menu callback to set the finish colors.
+- `void init(void)`: Init function to initialize several things before the OpenGL main loop has been started.
+- `void animation(GLint value)`: Callback for `glutTimerFunc` to animate the soapbox car.
+- `void keyboardWatcher(unsigned char key, int x, int y)`: Keyboard callback
+- `void displayFunction(void)`: Display callback
+- `void windowFunction(GLint newWidth, GLint newHeight)`: Window callback
+- `int main(int argc, char* argv[])`: Main function
+
+### finish.c
+- `void _drawFinishPart(GLint wireFrame)`: Private function to draw 1/4 of the finish arc.
+- `void drawFinish(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular, GLuint textureAddressing[], GLint texture, GLint checkpoints)`: Draws the complete finish arc.
+- `void drawCoachwork(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular, GLint clear, GLint checkpoints, GLint texture)`: Draws the coachwork.
+
+### vehicle.c
+- `void drawSuspension(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular)`: Draws the complete suspension.
+- `void drawTires(GLint wireFrame, GLfloat animationAngle, GLuint textureAddressing[], GLint texture)`: Draws the tires of the soapbox car.
+
+### view.c
+- `void drawAxes(GLint axes)`: Draws the X,Y and Z-axis.
+- `void drawCheckpoint(const GLfloat* color)`: Draws a single checkpoint, used by the complex curves and light positions.
+- `void configureLights(GLint ambientLight, GLint diffuseLight, GLint specularLight, GLint spotLight, GLint spotAngle, GLint spotExponent, GLint spotHeight, GLint drawPositions)`: Configures the lights on the right position with the right colors.
+- `void configureFog(GLint fog, GLint fogMode, GLfloat far)`: Configures the fog and it's mode.
+
 ## Shortcuts
 
 ### Mouse

@@ -164,7 +164,11 @@ GLdouble xRef = 1.0, yRef = 1.0, zRef = 0.0;
 GLdouble xVW = 0.0, yVW = 1.0, zVW = 0.0;
 
 // OpenGL callback: menu calls
-void menu(GLint id) {
+/*
+ * GLint id: select menu ID
+ */
+void menu(GLint id)
+{
 	printf("Selected item ID: %d in main menu\n", id);
 	switch(id) {
 		case MENU_QUIT:
@@ -178,7 +182,11 @@ void menu(GLint id) {
 	glutPostRedisplay();
 }
 
-void coachworkMenu(GLint id) {
+/*
+ * GLint id: select menu ID
+ */
+void coachworkMenu(GLint id)
+{
 	printf("Selected item ID: %d in coackworkMenu\n", id);
 	switch(id) {
 		case MENU_COACHWORK_GRAY:
@@ -200,7 +208,11 @@ void coachworkMenu(GLint id) {
 	glutPostRedisplay();
 }
 
-void suspensionMenu(GLint id) {
+/*
+ * GLint id: select menu ID
+ */
+void suspensionMenu(GLint id)
+{
 	printf("Selected item ID: %d in suspensionMenu\n", id);
 	switch(id) {
 		case MENU_SUSPENSION_BRONZE:
@@ -222,7 +234,11 @@ void suspensionMenu(GLint id) {
 	glutPostRedisplay();
 }
 
-void finishMenu(GLint id) {
+/*
+ * GLint id: select menu ID
+ */
+void finishMenu(GLint id)
+{
 	printf("Selected item ID: %d in finishMenu\n", id);
 	switch(id) {
 		case MENU_FINISH_YELLOW:
@@ -303,7 +319,11 @@ void init(void)
 }
 
 // OpenGL callback: timer animation
-void animation(GLint value) {
+/*
+ * GLint value: unused but required for glutTimerFunc
+ */
+void animation(GLint value)
+{
 	// Wheels movement
 	if(animateWheels) {
 		printf("The wheels on the soapbox car go round and round... ANGLE=%f\n", animationWheelsAngle);
@@ -336,6 +356,11 @@ void animation(GLint value) {
 }
 
 // OpenGL callback: keyboard input
+/*
+ * unsigned char key: ASCII code of the key
+ * int x: mouse X
+ * int y: mouse Y
+ */
 void keyboardWatcher(unsigned char key, int x, int y)
 {
 	switch(key)
@@ -463,14 +488,14 @@ void displayFunction(void)
 		// soapbox car 1
 		drawSuspension(wireFrame, suspensionAmbient, suspensionDiffuse, suspensionSpecular);
 		drawTires(wireFrame, animationWheelsAngle, textureAddressing, texture);
-		drawCoachwork(wireFrame, coachworkAmbient, coachworkDiffuse, coachworkSpecular, clear, checkpoints, texture);
+		drawCoachwork(wireFrame, coachworkAmbient, coachworkDiffuse, coachworkSpecular, clear, checkpoints, textureAddressing, texture);
 
 		// soapbox car 2 (if enabled)
 		if(competition) {
 			glTranslatef(0.0, 0.0, 2.25); // 1.0 space between the cars
 			drawSuspension(wireFrame, suspensionAmbient, suspensionDiffuse, suspensionSpecular);
 			drawTires(wireFrame, animationWheelsAngle, textureAddressing, texture);
-			drawCoachwork(wireFrame, coachworkAmbient, coachworkDiffuse, coachworkSpecular, clear, checkpoints, texture);
+			drawCoachwork(wireFrame, coachworkAmbient, coachworkDiffuse, coachworkSpecular, clear, checkpoints, textureAddressing, texture);
 		}
 	glDisable(GL_LIGHTING);
     glDisable(GL_NORMALIZE);
@@ -481,6 +506,10 @@ void displayFunction(void)
 }
 
 // OpenGL callback: reshape function
+/*
+ * GLint newWidth: new window width
+ * GLint newHeight: new window height
+ */
 void windowFunction(GLint newWidth, GLint newHeight)
 {
 	GLdouble border;
@@ -512,6 +541,10 @@ void windowFunction(GLint newWidth, GLint newHeight)
 }
 
 // Main loop
+/*
+ * int argc: number of arguments
+ * char* argv[]: arguments
+ */
 int main(int argc, char* argv[])
 {
 	// Selects projection mode

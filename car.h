@@ -135,7 +135,7 @@ void drawAxes(GLint axes);
 void drawCheckpoint(const GLfloat* color);
 void drawSuspension(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular);
 void drawTires(GLint wireFrame, GLfloat animationAngle, GLuint textureAddressing[], GLint texture);
-void drawCoachwork(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular, GLint clear, GLint checkpoints, GLint texture);
+void drawCoachwork(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular, GLint clear, GLint checkpoints, GLuint textureAddressing[], GLint texture);
 void configureLights(GLint ambientLight, GLint diffuseLight, GLint specularLight, GLint spotLight, GLint spotAngle, GLint spotExponent, GLint spotHeight, GLint drawPositions);
 void configureFog(GLint fog, GLint fogMode, GLfloat far);
 void drawFinish(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular, GLuint textureAddressing[], GLint texture, GLint checkpoints);

@@ -8,7 +8,11 @@
 #include "car.h"
 
 // Draws the axes in the view
-void drawAxes(GLint axes) {
+/*
+ * GLint axes: show axes
+ */
+void drawAxes(GLint axes)
+{
     if(axes) {
         printf("Drawing axes\n");
         glLineWidth(AXIS_LINE_WIDTH);
@@ -37,7 +41,11 @@ void drawAxes(GLint axes) {
 }
 
 // Draws a single checkpoint
-void drawCheckpoint(const GLfloat* color) {
+/*
+ * const GLfloat* color: color of the checkpoint
+ */
+void drawCheckpoint(const GLfloat* color)
+{
     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, color);
     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, color);
     glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, color);
@@ -48,6 +56,16 @@ void drawCheckpoint(const GLfloat* color) {
 }
 
 // Configure all the light sources
+/*
+ * GLint ambientLight: ambient light enabled
+ * GLint diffuseLight: diffuse light enabled
+ * GLint specularLight: specular light enabled
+ * GLint spotLight: spot light enabled
+ * GLint spotAngle: spot angle in degrees
+ * GLint spotExponent: spot exponent
+ * GLint spotHeight: spot height
+ * GLint drawPositions: show light positions
+ */
 void configureLights(GLint ambientLight, GLint diffuseLight, GLint specularLight, GLint spotLight, GLint spotAngle, GLint spotExponent, GLint spotHeight, GLint drawPositions) {
     // Update spot height
     posLight3[1] = spotHeight;
@@ -90,7 +108,13 @@ void configureLights(GLint ambientLight, GLint diffuseLight, GLint specularLight
 }
 
 // Configures the fog
-void configureFog(GLint fog, GLint fogMode, GLfloat far) {
+/*
+ * GLint fog: fog enabled
+ * GLint fogMode: type of fog
+ * GLfloat far: set the fog LINEAR END to far, we can't see further in projections
+ */
+void configureFog(GLint fog, GLint fogMode, GLfloat far)
+{
     fog? glEnable(GL_FOG): glDisable(GL_FOG);
     glFogfv(GL_FOG_COLOR, BLUE_GRAY);
 

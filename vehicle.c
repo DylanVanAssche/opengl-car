@@ -8,7 +8,14 @@
 #include "car.h"
 
 // Draws the vehicle suspension
-void drawSuspension(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular) {
+/*
+ * GLint wireFrame: wireframe enabled
+ * GLfloat* ambient: ambient color
+ * GLfloat* diffuse: diffuse color
+ * GLfloat* specular: specular color
+ */
+void drawSuspension(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular)
+{
     printf("Drawing suspension\n");
 
     // Materials
@@ -92,7 +99,14 @@ void drawSuspension(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat
 }
 
 // Draws the tires of the soapbox car
-void drawTires(GLint wireFrame, GLfloat animationAngle, GLuint textureAddressing[], GLint texture) {
+/*
+ * GLint wireFrame: wireframe enabled
+ * GLfloat animationAngle: angle of the tire due animation
+ * GLuint textureAddressing[]: texture addressing array
+ * GLint texture: texture enabled
+ */
+void drawTires(GLint wireFrame, GLfloat animationAngle, GLuint textureAddressing[], GLint texture)
+{
     GLfloat tirePos[3][3] = { // 3 tires, 3D
         {0.5, 0.5, 0.45},
         {11.25, 0.5, 0.75},
@@ -177,7 +191,18 @@ void drawTires(GLint wireFrame, GLfloat animationAngle, GLuint textureAddressing
 
 // Draws the soapbox car coachwork
 // No separate function for the coachwork since the only drawing 'component' is glEvalMesh2, the rest are init functions
-void drawCoachwork(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular, GLint clear, GLint checkpoints, GLint texture) {
+/*
+ * GLint wireFrame: wireframe enabled
+ * GLfloat* ambient: ambient color
+ * GLfloat* diffuse: diffuse color
+ * GLfloat* specular: specular color
+ * GLint clear: glass mode (blending)
+ * GLint checkpoints: show checkpoints of the complex curve
+ * GLuint textureAddressing[]: texture addressing array
+ * GLint texture: texture enabled
+ */
+void drawCoachwork(GLint wireFrame, GLfloat* ambient, GLfloat* diffuse, GLfloat* specular, GLint clear, GLint checkpoints, GLuint textureAddressing[], GLint texture)
+{
     GLfloat partScale[2][3] = { // 2 parts, 3D
         {1.0, 1.0, 1.0},
         {1.0, 1.0, -1.0} // Mirror
